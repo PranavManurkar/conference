@@ -1,0 +1,177 @@
+@import 'tailwindcss';
+
+:root {
+  --background: oklch(0.98 0.001 0);
+  --foreground: oklch(0.15 0.005 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0.005 260);
+  --primary: oklch(0.42 0.22 263);
+  --primary-foreground: oklch(0.98 0.001 0);
+  --secondary: oklch(0.65 0.15 280);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.92 0.001 0);
+  --muted-foreground: oklch(0.45 0.005 260);
+  --accent: oklch(0.92 0.05 55);
+  --accent-foreground: oklch(0.15 0.005 260);
+  --border: oklch(0.88 0.001 0);
+  --ring: oklch(0.42 0.22 263);
+  --destructive: oklch(0.62 0.27 29);
+  --destructive-foreground: oklch(0.98 0.001 0);
+  --sidebar-background: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.15 0.005 260);
+  --sidebar-primary: oklch(0.42 0.22 263);
+  --sidebar-primary-foreground: oklch(0.98 0.001 0);
+  --sidebar-accent: oklch(0.92 0.05 55);
+  --sidebar-accent-foreground: oklch(0.15 0.005 260);
+  --sidebar-border: oklch(0.88 0.001 0);
+  --sidebar-ring: oklch(0.42 0.22 263);
+  --input: oklch(0.92 0.001 0);
+}
+
+.dark {
+  --background: oklch(0.12 0.002 260);
+  --foreground: oklch(0.95 0.002 260);
+  --card: oklch(0.18 0.003 260);
+  --card-foreground: oklch(0.95 0.002 260);
+  --primary: oklch(0.65 0.15 280);
+  --primary-foreground: oklch(0.12 0.002 260);
+  --secondary: oklch(0.5 0.15 280);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.3 0.003 260);
+  --muted-foreground: oklch(0.75 0.005 260);
+  --accent: oklch(0.92 0.05 55);
+  --accent-foreground: oklch(0.15 0.005 260);
+  --border: oklch(0.25 0.005 260);
+  --ring: oklch(0.92 0.1 55);
+  --destructive: oklch(0.7 0.25 29);
+  --destructive-foreground: oklch(0.12 0.002 260);
+  --sidebar-background: oklch(0.15 0.003 260);
+  --sidebar-foreground: oklch(0.95 0.002 260);
+  --sidebar-primary: oklch(0.65 0.15 280);
+  --sidebar-primary-foreground: oklch(0.12 0.002 260);
+  --sidebar-accent: oklch(0.92 0.05 55);
+  --sidebar-accent-foreground: oklch(0.15 0.005 260);
+  --sidebar-border: oklch(0.25 0.005 260);
+  --sidebar-ring: oklch(0.92 0.1 55);
+  --input: oklch(0.25 0.005 260);
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+}
+
+@layer utilities {
+  .bg-background {
+    @apply bg-[--background];
+  }
+  .text-foreground {
+    @apply text-[--foreground];
+  }
+  .bg-card {
+    @apply bg-[--card];
+  }
+  .text-card-foreground {
+    @apply text-[--card-foreground];
+  }
+  .bg-primary {
+    @apply bg-[--primary];
+  }
+  .text-primary-foreground {
+    @apply text-[--primary-foreground];
+  }
+  .bg-secondary {
+    @apply bg-[--secondary];
+  }
+  .text-secondary-foreground {
+    @apply text-[--secondary-foreground];
+  }
+  .bg-muted {
+    @apply bg-[--muted];
+  }
+  .text-muted-foreground {
+    @apply text-[--muted-foreground];
+  }
+  .bg-accent {
+    @apply bg-[--accent];
+  }
+  .text-accent-foreground {
+    @apply text-[--accent-foreground];
+  }
+  .border-border {
+    @apply border-[--border];
+  }
+  .ring-ring {
+    @apply ring-[--ring];
+  }
+  .border-ring {
+    @apply border-[--ring];
+  }
+  .bg-destructive {
+    @apply bg-[--destructive];
+  }
+  .text-destructive-foreground {
+    @apply text-[--destructive-foreground];
+  }
+  .bg-input {
+    @apply bg-[--input];
+  }
+  .bg-sidebar-background {
+    @apply bg-[--sidebar-background];
+  }
+  .text-sidebar-foreground {
+    @apply text-[--sidebar-foreground];
+  }
+  .bg-sidebar-primary {
+    @apply bg-[--sidebar-primary];
+  }
+  .text-sidebar-primary-foreground {
+    @apply text-[--sidebar-primary-foreground];
+  }
+  .bg-sidebar-accent {
+    @apply bg-[--sidebar-accent];
+  }
+  .text-sidebar-accent-foreground {
+    @apply text-[--sidebar-accent-foreground];
+  }
+  .border-sidebar-border {
+    @apply border-[--sidebar-border];
+  }
+  .ring-sidebar-ring {
+    @apply ring-[--sidebar-ring];
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+  }
+
+  a {
+    transition: color 0.2s ease;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
+}
