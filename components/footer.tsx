@@ -116,12 +116,12 @@ export default function Footer() {
             <br />
             Website:{" "}
             <a
-              href="https://www.iiti.ac.in"
+              href="https://mems.iiti.ac.in/"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-white transition-colors"
             >
-              www.iiti.ac.in
+              www.mems.iiti.ac.in
             </a>
           </p>
         </div>

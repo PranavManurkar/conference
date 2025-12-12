@@ -14,10 +14,10 @@ export default function OrganisingCommitteeCarousel() {
   const [itemsPerSlide, setItemsPerSlide] = useState(4)
 
   const committee: CommitteeMember[] = [
-    { name: "Prof. Umesh V Waghmare", affiliation: "President, JNCASR Bangalore, India", initials: "UW" },
-    { name: "Prof. Kaustubh R. S. Priolkar", affiliation: "Director, UGC-DAE CSR, India", initials: "KP" },
-    { name: "Prof. Amlan J. Pal", affiliation: "Ex. Director UGC-DAE-CSR, India", initials: "AP" },
-    { name: "Prof. S. B. Ogale", affiliation: "Director TCG-CREST & IISER Pune, India", initials: "SO" },
+    { name: "Dr. Rupesh Devan", affiliation: "Indian Institute of Technology, Indore", initials: "RD" },
+    { name: "Dr. K.V Vamsi", affiliation: "Indian Institute of Technology, Indore", initials: "KV" },
+    { name: "Dr. Ravindra Jangir", affiliation: "Indian Institute of Technology, Indore", initials: "RJ" },
+    { name: "Dr. Ram J. Choudhary", affiliation: "Indian Institute of Technology, Indore", initials: "RC" },
     { name: "Mr. Unmesh D. Malshe", affiliation: "Director, RRCAT, India", initials: "UM" },
     { name: "Prof. Kalobarun Maiti", affiliation: "Director, IACS Kolkata, India", initials: "KM" },
     { name: "Dr. R. Balamuralikrishnan", affiliation: "Director, DMRL, India", initials: "RB" },

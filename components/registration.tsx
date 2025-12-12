@@ -2,44 +2,47 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import { ArrowRight, CheckCircle, CreditCard, FileText, UserPlus } from "lucide-react"
 
 export default function Registration() {
   const registrationData = [
     {
       type: "UG/PG Students",
-      saarcEarlyINR: "₹4,000",
-      saarcFinalINR: "₹4,500",
-      nonSaarcEarlyINR: "₹4,500",
-      nonSaarcFinalINR: "₹5,000",
-      earlyBirdUSD: "$75",
-      finalUSD: "$100-150",
+      IndianEarlyINR: "₹4,000",
+      IndianFinalINR: "₹4,500",
+      SaarcEarlyUSD: "$75",
+      SaarcFinalUSD: "$100",
+      NonSaarcEarlyUSD: "$125",
+      NonSaarcFinalUSD: "$150",
     },
     {
       type: "Research Scholars",
-      saarcEarlyINR: "₹6,000",
-      saarcFinalINR: "₹7,000",
-      nonSaarcEarlyINR: "₹6,500",
-      nonSaarcFinalINR: "₹7,500",
-      earlyBirdUSD: "$200",
-      finalUSD: "$250-300",
+      IndianEarlyINR: "₹6,000",
+      IndianFinalINR: "₹7,000",
+      SaarcEarlyUSD: "$200",
+      SaarcFinalUSD: "$250",
+      NonSaarcEarlyUSD: "$250",
+      NonSaarcFinalUSD: "$300",
     },
     {
       type: "Faculty",
-      saarcEarlyINR: "₹10,000",
-      saarcFinalINR: "₹12,000",
-      nonSaarcEarlyINR: "₹11,000",
-      nonSaarcFinalINR: "₹13,000",
-      earlyBirdUSD: "$300",
-      finalUSD: "$400-500",
+      IndianEarlyINR: "₹10,000",
+      IndianFinalINR: "₹12,000",
+      SaarcEarlyUSD: "$300",
+      SaarcFinalUSD: "$400",
+      NonSaarcEarlyUSD: "$400",
+      NonSaarcFinalUSD: "$500",
     },
     {
       type: "Industry",
-      saarcEarlyINR: "₹15,000",
-      saarcFinalINR: "₹17,000",
-      nonSaarcEarlyINR: "₹16,000",
-      nonSaarcFinalINR: "₹18,000",
-      earlyBirdUSD: "$500-700",
-      finalUSD: "$650-850",
+      IndianEarlyINR: "₹15,000",
+      IndianFinalINR: "₹17,000",
+      SaarcEarlyUSD: "$500",
+      SaarcFinalUSD: "$650",
+      NonSaarcEarlyUSD: "$700",
+      NonSaarcFinalUSD: "$850",
     },
   ]
 
@@ -58,24 +61,24 @@ export default function Registration() {
                 <TableHeader className="bg-blue-900 text-white">
                   <TableRow>
                     <TableHead className="text-white font-bold">Delegate Type</TableHead>
+                    <TableHead className="text-white font-bold">Indian (Early)</TableHead>
+                    <TableHead className="text-white font-bold">Indian (Final)</TableHead>
                     <TableHead className="text-white font-bold">SAARC (Early)</TableHead>
                     <TableHead className="text-white font-bold">SAARC (Final)</TableHead>
-                    <TableHead className="text-white font-bold">Non-SAARC (Early)</TableHead>
-                    <TableHead className="text-white font-bold">Non-SAARC (Final)</TableHead>
-                    <TableHead className="text-white font-bold">USD</TableHead>
+                    <TableHead className="text-white font-bold">NON-SAARC (Early)</TableHead>
+                    <TableHead className="text-white font-bold">NON-SAARC (Final)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {registrationData.map((row, idx) => (
                     <TableRow key={idx} className={idx % 2 === 0 ? "bg-white" : "bg-blue-50"}>
                       <TableCell className="font-semibold text-gray-900">{row.type}</TableCell>
-                      <TableCell className="text-gray-700">{row.saarcEarlyINR}</TableCell>
-                      <TableCell className="text-gray-700">{row.saarcFinalINR}</TableCell>
-                      <TableCell className="text-gray-700">{row.nonSaarcEarlyINR}</TableCell>
-                      <TableCell className="text-gray-700">{row.nonSaarcFinalINR}</TableCell>
-                      <TableCell className="text-gray-700 text-xs">
-                        {row.earlyBirdUSD} / {row.finalUSD}
-                      </TableCell>
+                      <TableCell className="text-gray-700">{row.IndianEarlyINR}</TableCell>
+                      <TableCell className="text-gray-700">{row.IndianFinalINR}</TableCell>
+                      <TableCell className="text-gray-700">{row.SaarcEarlyUSD}</TableCell>
+                      <TableCell className="text-gray-700">{row.SaarcFinalUSD}</TableCell>
+                      <TableCell className="text-gray-700">{row.NonSaarcEarlyUSD}</TableCell>
+                      <TableCell className="text-gray-700">{row.NonSaarcFinalUSD}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -132,6 +135,70 @@ export default function Registration() {
             </div>
           </div>
         </div>
+
+        <div className="mt-12 bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg shadow-lg p-8 text-white">
+          <h3 className="text-2xl font-bold mb-6">How to Register</h3>
+          <div className="grid md:grid-cols-4 gap-6">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
+                <CreditCard className="h-6 w-6" />
+              </div>
+              <div className="font-bold text-lg mb-2">Step 1</div>
+              <p className="text-blue-100 text-sm">
+                Pay the registration fee based on your delegate type and registration period using the bank details
+                above
+              </p>
+            </div>
+            <div className="flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
+                <UserPlus className="h-6 w-6" />
+              </div>
+              <div className="font-bold text-lg mb-2">Step 2</div>
+              <p className="text-blue-100 text-sm">
+                Create an account or login to your dashboard using the button below
+              </p>
+            </div>
+            <div className="flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
+                <FileText className="h-6 w-6" />
+              </div>
+              <div className="font-bold text-lg mb-2">Step 3</div>
+              <p className="text-blue-100 text-sm">
+                Fill in your details and enter the Transaction ID for payment verification
+              </p>
+            </div>
+            <div className="flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
+                <CheckCircle className="h-6 w-6" />
+              </div>
+              <div className="font-bold text-lg mb-2">Step 4</div>
+              <p className="text-blue-100 text-sm">
+                Once your payment is verified and status shows "Accepted", you can attend the conference
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
+              <Link href="/auth/sign-up">
+                Create Account
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="border-white text-white hover:bg-white/10 bg-transparent"
+            >
+              <Link href="/auth/login">
+                Login to Dashboard
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+        {/* End of How to Register section */}
       </div>
     </section>
   )

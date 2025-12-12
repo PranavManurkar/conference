@@ -5,7 +5,7 @@ export default function About() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              About the <span className="text-blue-600">Conference</span>
+          The <span className="text-blue-600">Conference</span>
             </h2>
             <p className="text-gray-700 leading-relaxed mb-4 text-lg">
               2D materials are far more than a scientific curiosity; they represent a transformative frontier in materials science, poised to redefine performance boundaries across diverse technological domains.
@@ -20,7 +20,7 @@ export default function About() {
 
           <div>
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              About <span className="text-blue-600">IIT Indore</span>
+            <span className="text-blue-600">IIT Indore</span>
             </h2>
             <p className="text-gray-700 leading-relaxed mb-4 text-lg">
               Indian Institute of Technology Indore (IIT Indore) is an Institute of National Importance established in 2009 by the Ministry of Education, Govt. of India.
