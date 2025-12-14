@@ -5,16 +5,17 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Registration
-from .serializers import RegisterSerializer,RegistrationSerializer,EmailTokenObtainPairSerializer
+from .serializers import RegisterSerializer, RegistrationSerializer, EmailTokenObtainPairSerializer
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.views import TokenViewBase
-from rest_framework.viewsets import ModelViewSet
-User = get_user_model()
+from rest_framework.views import APIView
 
+User = get_user_model()
 
 class EmailTokenObtainPairView(TokenViewBase):
     serializer_class = EmailTokenObtainPairSerializer
+
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def register_view(request):
@@ -25,7 +26,10 @@ def register_view(request):
     serializer.is_valid(raise_exception=True)
     user = serializer.save()
 
-    refresh = RefreshToken.for_user(user)
+    # ---> UPDATED: Use the custom serializer method to generate tokens
+    # This ensures the 'email' claim is added to the token payload immediately
+    refresh = EmailTokenObtainPairSerializer.get_token(user)
+
     data = {
         "user": {
             "id": user.id,
@@ -35,6 +39,7 @@ def register_view(request):
         "refresh": str(refresh),
     }
     return Response(data, status=status.HTTP_201_CREATED)
+
 class IsOwnerOrAdmin(permissions.BasePermission):
     """
     Allow access if the user is the owner (registration.user) or is staff.
@@ -42,9 +47,7 @@ class IsOwnerOrAdmin(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user and (request.user.is_staff or obj.user == request.user)
 
-
 # public-ish endpoint the frontend uses: check-by-email but only returns the registration if it belongs to the current user (or staff)
-from rest_framework.views import APIView
 class CheckByEmailView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -65,7 +68,6 @@ class CheckByEmailView(APIView):
         return Response(serializer.data)
 
 # Admin-only endpoint to change status and admin_notes
-from rest_framework.decorators import permission_classes
 class AdminUpdateStatusView(APIView):
     permission_classes = [permissions.IsAdminUser]
 
@@ -73,8 +75,10 @@ class AdminUpdateStatusView(APIView):
         reg = get_object_or_404(Registration, pk=pk)
         status_value = request.data.get("status")
         admin_notes = request.data.get("admin_notes", "")
+        
         if status_value not in dict(Registration.STATUS_CHOICES):
             return Response({"detail": "Invalid status"}, status=status.HTTP_400_BAD_REQUEST)
+            
         reg.status = status_value
         reg.admin_notes = admin_notes
         reg.save()
@@ -99,6 +103,3 @@ class RegistrationViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # attach authenticated user
         serializer.save(user=self.request.user)
-        
-
-

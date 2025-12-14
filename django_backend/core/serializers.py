@@ -1,10 +1,11 @@
 # core/serializers.py
 from rest_framework import serializers
 from .models import CustomUser, Registration
-from django.contrib.auth import get_user_model,authenticate
+from django.contrib.auth import get_user_model, authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 User = get_user_model()
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -27,9 +28,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         # create_user ensures password is hashed and user is created properly
         email = validated_data["email"]
         password = validated_data["password"]
+        
+        # We explicitly set username=email to ensure consistency
         user = User.objects.create_user(username=email, email=email, password=password)
-        return 
-    
+        
+        # ---> FIX 1: RETURN THE USER OBJECT <---
+        return user
+
 class EmailTokenObtainPairSerializer(serializers.Serializer):
     """
     Accepts { email, password } OR { username, password }.
@@ -38,6 +43,15 @@ class EmailTokenObtainPairSerializer(serializers.Serializer):
     email = serializers.CharField(required=False, write_only=True)
     username = serializers.CharField(required=False, write_only=True)
     password = serializers.CharField(write_only=True)
+
+    # ---> NEW: Helper method to generate tokens with Email Claim
+    @classmethod
+    def get_token(cls, user):
+        token = RefreshToken.for_user(user)
+        # Add email to the token so frontend can decode it
+        token['email'] = user.email 
+        token['username'] = user.username
+        return token
 
     def validate(self, attrs):
         password = attrs.get("password")
@@ -61,8 +75,9 @@ class EmailTokenObtainPairSerializer(serializers.Serializer):
         if user is None:
             raise serializers.ValidationError("No active account found with the given credentials")
 
-        # Build tokens
-        refresh = RefreshToken.for_user(user)
+        # ---> FIX 2: Use the helper method to include email in token
+        refresh = self.get_token(user)
+        
         access = str(refresh.access_token)
         refresh_str = str(refresh)
 
@@ -76,7 +91,7 @@ class EmailTokenObtainPairSerializer(serializers.Serializer):
                 "last_name": getattr(user, "last_name", ""),
             },
         }
-        
+
 class RegistrationSerializer(serializers.ModelSerializer):
     
     id = serializers.IntegerField(read_only=True)
