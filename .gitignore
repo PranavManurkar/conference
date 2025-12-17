@@ -1,2 +1,5 @@
 .next
 node_modules
+
+# Django database
+db.sqlite3
