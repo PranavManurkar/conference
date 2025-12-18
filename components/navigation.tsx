@@ -13,14 +13,22 @@ export default function Navigation() {
   const navItems = [
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },
-    { label: "Our Sponsors", href: "/sponsors" },
-    { label: "Paper Submission", href: "/paper-submission" },
-    { label: "Registration", href: "/registration" },
-    { label: "Committee", href: "/committee" },
-    { label: "Schedule", href: "/schedule" },
+    {
+      label: "Sponsorship Opportunities",
+      href: "/sponsorship",
+      children: [{ label: "Our Sponsors", href: "/sponsors" }],
+    },
+    {
+      label: "Registration",
+      href: "/registration",
+      children: [
+        { label: "Paper Submission", href: "/paper-submission" },
+        { label: "Accommodation", href: "/accommodation" },
+      ],
+    },
     { label: "Important Dates", href: "/important-dates" },
-    { label: "Accommodation", href: "/accommodation" },
-    { label: "Sponsorship Opportunities", href: "/sponsorship" },
+    { label: "Schedule", href: "/schedule" },
+    { label: "Committee", href: "/committee" },
   ]
 
   const isActive = (href: string) => {
@@ -71,21 +79,38 @@ export default function Navigation() {
           <div className="flex justify-between items-center">
             <div className="hidden lg:flex items-center flex-wrap justify-start flex-1">
               {navItems.map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={`px-3 py-4 text-sm font-semibold transition-all duration-300 border-b-4 whitespace-nowrap flex-1 text-center ${
-                    isActive(item.href)
-                      ? "text-blue-200 border-b-blue-400 bg-blue-800 bg-opacity-30"
-                      : "text-gray-200 border-b-transparent hover:text-blue-200 hover:border-b-blue-400 hover:bg-blue-800 hover:bg-opacity-20"
-                  }`}
-                >
-                  {item.label}
-                </Link>
+                <div key={item.label} className="relative group flex-shrink-0">
+                  <Link
+                    href={item.href}
+                    className={`px-3 py-4 text-sm font-semibold transition-all duration-300 border-b-4 whitespace-nowrap text-center block ${
+                      isActive(item.href)
+                        ? "text-blue-200 border-b-blue-400 bg-blue-800 bg-opacity-30"
+                        : "text-gray-200 border-b-transparent hover:text-blue-200 hover:border-b-blue-400 hover:bg-blue-800 hover:bg-opacity-20"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+
+                  {item.children && (
+                    <div className="absolute left-0 top-full mt-0 hidden group-hover:block bg-blue-900/95 shadow-lg z-50 min-w-max">
+                      {item.children.map((c) => (
+                        <Link
+                          key={c.label}
+                          href={c.href}
+                          className={`block px-4 py-3 text-sm font-semibold whitespace-nowrap transition-all duration-300 border-l-4 ${
+                            isActive(c.href) ? "text-blue-200 border-l-blue-400 bg-blue-800 bg-opacity-50" : "text-gray-200 border-l-transparent hover:text-blue-200 hover:border-l-blue-400 hover:bg-blue-800 hover:bg-opacity-40"
+                          }`}
+                        >
+                          {c.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
 
-            <div className="hidden md:block ml-4">
+            <div className="hidden lg:flex flex-shrink-0">
               <Link
                 href="/registration"
                 className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105"
@@ -98,18 +123,38 @@ export default function Navigation() {
           {isOpen && (
             <div className="lg:hidden pb-4 space-y-2 border-t border-blue-700 animate-in fade-in slide-in-from-top-4">
               {navItems.map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={`block px-4 py-3 rounded-lg text-base font-semibold transition-all duration-200 ${
-                    isActive(item.href)
-                      ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
-                      : "text-gray-200 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-800 hover:text-white"
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item.label}
-                </Link>
+                <div key={item.label}>
+                  <Link
+                    href={item.href}
+                    className={`block px-4 py-3 rounded-lg text-base font-semibold transition-all duration-200 ${
+                      isActive(item.href)
+                        ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
+                        : "text-gray-200 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-800 hover:text-white"
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+
+                  {item.children && (
+                    <div className="pl-6 mt-2 space-y-1">
+                      {item.children.map((c) => (
+                        <Link
+                          key={c.label}
+                          href={c.href}
+                          className={`block px-4 py-2 rounded-lg text-base font-medium transition-all duration-150 ${
+                            isActive(c.href)
+                              ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
+                              : "text-gray-200 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-800 hover:text-white"
+                          }`}
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {c.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           )}

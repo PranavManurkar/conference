@@ -57,9 +57,10 @@
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Source Code Pro', 'Courier New', monospace;
 }
+
 
 @layer utilities {
   .bg-background {
