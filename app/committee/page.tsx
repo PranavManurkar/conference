@@ -25,7 +25,7 @@ export default function CommitteePage() {
           </button>
           <button
             onClick={() => setActiveTab("organising")}
-            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+            className={`hidden px-6 py-3 rounded-lg font-semibold transition-all ${
               activeTab === "organising"
                 ? "bg-gradient-to-r from-slate-600 to-slate-800 text-white shadow-lg"
                 : "bg-white text-gray-900 border-2 border-slate-600 hover:bg-slate-50"
