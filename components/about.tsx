@@ -1,161 +1,204 @@
-// About.jsx
-// Note: install framer-motion if you haven't already:
-// npm install framer-motion
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 
-const slideUpVariant = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
-  visible: (delay = 0) => ({
+  visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: "easeOut", delay },
-  }),
+    transition: {
+      duration: 0.6,
+      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+    },
+  },
 };
+
 
 export default function About() {
   return (
     <section id="about" className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        {/* Top — existing content: Conference & IIT Indore */}
-        <div className="">
-          <motion.div
-            className="bg-white p-6 rounded-lg shadow-sm"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
 
-            <div className="mb-6">
-              <div className="h-1 w-12 bg-green-500 rounded mb-3" />
-              <h2 className="text-4xl font-bold text-gray-900">
-                The <span className="text-blue-600">Conference</span>
-              </h2>
-            </div>
-
-            <p className="text-gray-700 leading-relaxed mb-4">
-              2D materials are far more than a scientific curiosity; they represent a transformative frontier in materials science, poised to redefine performance boundaries across diverse technological domains.
-            </p>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              From the groundbreaking discovery of graphene to the emergence of advanced materials such as transition metal dichalcogenides, phosphorene, and MXenes, the 2D material landscape is reshaping the future of energy, healthcare, defense, electronics, photonics, flexible devices, aerospace, and quantum technologies.
-            </p>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              This conference aims to serve as a dynamic, interdisciplinary platform uniting scientists, engineers, industry leaders, and policymakers around the world.
-            </p>
-          </motion.div>
-
-          {/* <motion.div
-            className="bg-white p-6 rounded-lg shadow-sm"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-
-            <div className="mb-6">
-              <div className="h-1 w-12 bg-green-500 rounded mb-3" />
-              <h2 className="text-4xl font-bold text-gray-900">
-                <span className="text-blue-600">IIT Indore</span>
-              </h2>
-            </div>
-
-            <p className="text-gray-700 leading-relaxed mb-4 text-lg">
-              Indian Institute of Technology Indore (IIT Indore) is an Institute of National Importance established in 2009 by the Ministry of Education, Govt. of India.
-            </p>
-            <p className="text-gray-700 leading-relaxed mb-4 text-lg">
-              Over the years, IIT Indore has emerged as a leading center for teaching, research, and innovation. It has consistently ranked among the top engineering institutions in India and has earned recognition for its global impact in higher education.
-            </p>
-            <p className="text-gray-700 leading-relaxed text-lg">
-              The institute boasts cutting-edge research infrastructure, modern laboratories, and smart classrooms, fostering a vibrant environment for academic excellence and interdisciplinary collaboration.
-            </p>
-          </motion.div> */}
-        </div>
-
-        {/* New — About IIT Indore (full-width long content) */}
+        {/* SECTION 1 — Text left, Image right */}
         <motion.div
-          className="bg-white p-6 rounded-lg shadow-sm"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          className="bg-white rounded-lg shadow-sm grid md:grid-cols-5 overflow-hidden"
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          variants={fadeUp}
         >
-
-          <div className="mb-6">
-              <div className="h-1 w-12 bg-green-500 rounded mb-3" />
-              <h2 className="text-4xl font-bold text-gray-900">
-                About <span className="text-blue-600">IIT Indore</span>
-              </h2>
+          <div className="md:col-span-3 p-6">
+            <div className="mb-4">
+              <div className="h-1 w-10 bg-green-500 rounded mb-2" />
+              <h2 className="text-2xl font-semibold text-gray-900">The Conference</h2>
             </div>
-          <p className="text-gray-700 leading-relaxed mb-3">
-            Indian Institute of Technology Indore (IITI), established in 2009 by the Ministry of Human Resource Development (MHRD), Government of India, under The Institutes of Technology (Amendment) Act, is among the 2nd generation of IITs. Located at Simrol, its permanent campus spans 501.4 acres, including 200 acres of forest area. Initially functioning from temporary locations, the institute shifted to its permanent campus in December 2015.
-          </p>
 
-          <p className="text-gray-700 leading-relaxed mb-3">
-            IITI began with BTech programs in CSE, EE, and ME in 2009 and PhD programs in 2010, later expanding to offer 9 BTech programs, 19 PhD programs, 15 MTech programs, 5 MS (Research) programs, and 5 MSc (2-year) programs. It is also the first IIT to introduce an MS program in Data Science and Management in collaboration with IIM Indore and has established 8 interdisciplinary centers in futuristic areas.
-          </p>
+            <div className="space-y-3 text-base text-gray-700 leading-relaxed">
+              <p>
+                2D materials are far more than a scientific curiosity; they represent a
+                transformative frontier in materials science, poised to redefine
+                performance boundaries across diverse technological domains.
+              </p>
+              <p>
+                From graphene to transition metal dichalcogenides, phosphorene, and
+                MXenes, the 2D materials ecosystem is reshaping energy, electronics,
+                photonics, healthcare, aerospace, and quantum technologies.
+              </p>
+              <p>
+                This conference serves as an interdisciplinary platform connecting
+                academia, industry, and policy makers worldwide.
+              </p>
+            </div>
+          </div>
 
-          <p className="text-gray-700 leading-relaxed mb-3">
-            Renowned for academic and research excellence, IITI is one of India’s "Institutes of National Importance" and has consistently ranked among the top 16 in the NIRF rankings since 2016, peaking at 10 in 2020 and currently ranked 16 in 2024. With over 7,500 international publications and 165+ patents to its credit, the institute has developed close to 150 technologies at various TRL levels, ready for technology translation. Industry-sponsored Centers of Excellence have been established by renowned companies like Case New Holland, L&T, and Raj Ratan Gloabal Wires.
-          </p>
-
-          <p className="text-gray-700 leading-relaxed mb-3">
-            Additionally, under the National Mission for Interdisciplinary Cyber-Physical Systems (NM-ICPS), IITI has established the DRISHTI center focusing on modeling, simulation, and visualization of CPS. The campus, spread over 2.1 km² along Khandwa Road, is located 25 km from Indore, the financial capital of Madhya Pradesh and India's cleanest city. Boasting state-of-the-art facilities like the Central Laboratory, high-performance computing centers, and affiliated laboratories, the institute is home to 230 faculty members, 3,000 students, and 400 staff.
-          </p>
-
-          <p className="text-gray-700 leading-relaxed mb-0">
-            With over 4,500 undergraduates, 3,500 postgraduates, and 800 PhD scholars graduated in science, engineering, and social sciences disciplines, IITI continues to shape the future of higher education with its steadfast commitment to academic development, innovation, and industry engagement.
-          </p>
+          <div className="md:col-span-2 relative min-h-[260px]">
+            <Image
+              src="/images/conference.jpg"
+              alt="Conference"
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 40vw"
+            />
+          </div>
         </motion.div>
 
-        {/* New — Two-column: Indore city & Department of Mechanical Engineering */}
-        <div className="grid md:grid-cols-2 gap-8">
-          <motion.div
-            className="bg-white p-6 rounded-lg shadow-sm"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
+        {/* SECTION 2 — Video left, Text right */}
+        <motion.div
+          className="bg-white rounded-lg shadow-sm grid md:grid-cols-5 overflow-hidden"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+        >
+          <div className="md:col-span-2 relative min-h-[260px] bg-black flex items-center justify-center group cursor-pointer overflow-hidden">
+            <iframe
+              width="100%"
+              height="100%"
+              src="https://www.youtube.com/embed/jvU_frtZP3Y?si=BTo3fHtROxZoeegC&autoplay=1&mute=1&controls=0"
+              title="IIT Indore Video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="absolute inset-0"
+            />
+            <a
+              href="https://youtu.be/jvU_frtZP3Y?si=BTo3fHtROxZoeegC"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute inset-0 z-10"
+              aria-label="Open video on YouTube"
+            />
+            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-5" />
+          </div>
 
-            <div className="flex items-center mb-4">
-              <div className="h-1 w-12 bg-green-500 rounded mr-3" />
-              <h4 className="text-xl font-semibold text-gray-900">Indore city</h4>
+          <div className="md:col-span-3 p-6">
+            <div className="mb-4">
+              <div className="h-1 w-10 bg-green-500 rounded mb-2" />
+              <h2 className="text-2xl font-semibold text-gray-900">About IIT Indore</h2>
             </div>
 
-            <p className="text-gray-700 leading-relaxed mb-3">
-              Indore is the largest city and is the commercial capital of the state of Madhya Pradesh (MP). It is located in the western region of MP, also known as Malwa region. It was founded on the banks of Kanh and Saraswati rivers in the 16th century as a trading hub between the Deccan and Delhi.
-            </p>
+            <div className="space-y-3 text-base text-gray-700 leading-relaxed">
+              <p>
+                IIT Indore was established in 2009 as a second-generation IIT and is
+                located on a 501-acre permanent campus at Simrol. The institute shifted
+                fully to its permanent campus in 2015.
+              </p>
+              <p>
+                The institute offers undergraduate, postgraduate, doctoral, and
+                interdisciplinary programs and was the first IIT to launch an MS in
+                Data Science & Management with IIM Indore.
+              </p>
+              <p>
+                IIT Indore consistently ranks among India’s top institutes and has
+                produced over 7,500 international publications and 165+ patents.
+              </p>
+            </div>
+          </div>
+        </motion.div>
 
-            <p className="text-gray-700 leading-relaxed mb-0">
-              Indore city has many worth-visiting places namely Rajwada, Lalbag Palace, Gandhi Hall, Central Museum, Annapurna temple, Bada Ganpati temple, Khajrana Ganpati temple, Kanch Mandir, Gommatgiri Jain temples. Nearby tourist places include two Jyotirlingas (Mahakaleshwar — Ujjain) and Omkareshwar located at 60 km distance from Indore, Maheshwar, Mandu, Choral dam, Patalpani. Indore weather is pleasant during December with mild winter; warm sweaters, jackets, and blankets are sufficient for such weather.
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="bg-white p-6 rounded-lg shadow-sm"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-
-            <div className="flex items-center mb-4">
-              <div className="h-1 w-12 bg-green-500 rounded mr-3" />
-              <h4 className="text-xl font-semibold text-gray-900">Department of Mechanical Engineering</h4>
+        {/* SECTION 3 — Text left, Image right */}
+        <motion.div
+          className="bg-white rounded-lg shadow-sm grid md:grid-cols-5 overflow-hidden"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+        >
+          <div className="md:col-span-3 p-6">
+            <div className="mb-4">
+              <div className="h-1 w-10 bg-green-500 rounded mb-2" />
+              <h2 className="text-2xl font-semibold text-gray-900">Indore City</h2>
             </div>
 
-            <p className="text-gray-700 leading-relaxed mb-3">
-              The Mechanical Engineering Department was established in 2009. Presently it is the largest department of IIT Indore with 29 regular faculty members. It has many state-of-art research and teaching labs in the areas of design, industrial manufacturing, and thermal engineering including the Center of Excellence in Gear Engineering established under FIST program of the DST.
-            </p>
+            <div className="space-y-3 text-base text-gray-700 leading-relaxed">
+              <p>
+                Indore is the commercial capital of Madhya Pradesh and a major trading
+                hub since the 16th century, located in the Malwa region along the Kanh
+                and Saraswati rivers.
+              </p>
+              <p>
+                The city is known for its heritage, vibrant food culture, cleanliness,
+                and proximity to Ujjain, Omkareshwar, Mandu, and Maheshwar.
+              </p>
+            </div>
+          </div>
 
-            <p className="text-gray-700 leading-relaxed mb-0">
-              The Department offers BTech, PhD program, 4 MTech programs, and MS (R) program. Many faculty members contribute to different interdisciplinary centers.
-            </p>
-          </motion.div>
-        </div>
+          <div className="md:col-span-2 relative min-h-[260px]">
+            <Image
+              src="/indore.jpg"
+              alt="Indore City"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 40vw"
+            />
+          </div>
+        </motion.div>
+
+        {/* SECTION 4 — Image left, Text right */}
+        <motion.div
+          className="bg-white rounded-lg shadow-sm grid md:grid-cols-5 overflow-hidden"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+        >
+          <div className="md:col-span-2 relative min-h-[260px]">
+            <Image
+              src="/convocation.jpg"
+              alt="MEMS IIT Indore"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 40vw"
+            />
+          </div>
+
+          <div className="md:col-span-3 p-6">
+            <div className="mb-4">
+              <div className="h-1 w-10 bg-green-500 rounded mb-2" />
+              <h2 className="text-2xl font-semibold text-gray-900">
+                Department of Metallurgical Engineering and Materials Science
+              </h2>
+            </div>
+
+            <div className="space-y-3 text-base text-gray-700 leading-relaxed">
+              <p>
+                The MEMS department at IIT Indore was established in 2009 and focuses on
+                both fundamental and applied research in metallurgy and materials
+                science.
+              </p>
+              <p>
+                The department houses advanced laboratories in physical metallurgy,
+                nanomaterials, functional materials, biomaterials, and computational
+                materials science, and offers BTech, MTech, MS, and PhD programs.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
       </div>
     </section>
   );

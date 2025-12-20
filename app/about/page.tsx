@@ -1,5 +1,6 @@
 import About from "@/components/about"
 import KeyDates from "@/components/key-dates"
+import KeyAttraction from "@/components/keyattraction"
 
 export default function AboutPage() {
   return (
@@ -8,6 +9,8 @@ export default function AboutPage() {
         <h1 className="text-4xl font-bold text-gray-900 mb-8 pt-8">About Conference</h1>
       </div> */}
       <About />
+      
+      <KeyAttraction/>
       <KeyDates />
     </div>
   )

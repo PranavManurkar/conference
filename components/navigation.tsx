@@ -1,27 +1,33 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Menu, X } from "lucide-react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import Image from "next/image"
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 export default function Navigation() {
-  const [isOpen, setIsOpen] = useState(false)
-  const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false);
+  const [openSub, setOpenSub] = useState<Record<string, boolean>>({});
+  const pathname = usePathname();
 
   const navItems = [
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },
+    { label: "Invited Speakers", href: "/invited_speaker" },
     {
-      label: "Sponsorship Opportunities",
-      href: "/sponsorship",
-      children: [{ label: "Our Sponsors", href: "/sponsors" }],
+      label: "Sponsorship",
+      href: "/",
+      children: [
+        { label: "Our Sponsors", href: "/sponsors" },
+        { label: "Sponsorship Opportunities", href: "/sponsorship" },
+      ],
     },
     {
-      label: "Registration",
-      href: "/registration",
+      label: "Registration/Accommodation",
+      href: "/",
       children: [
+        { label: "Registration", href: "/registration" },
         { label: "Paper Submission", href: "/paper-submission" },
         { label: "Accommodation", href: "/accommodation" },
       ],
@@ -29,11 +35,13 @@ export default function Navigation() {
     { label: "Important Dates", href: "/important-dates" },
     { label: "Schedule", href: "/schedule" },
     { label: "Committee", href: "/committee" },
-  ]
+  ];
 
-  const isActive = (href: string) => {
-    return pathname === href
-  }
+  const isActive = (href: string) => pathname === href;
+
+  const toggleSub = (label: string) => {
+    setOpenSub((prev) => ({ ...prev, [label]: !prev[label] }));
+  };
 
   return (
     <nav className="sticky top-0 z-50">
@@ -41,13 +49,26 @@ export default function Navigation() {
         <div className="w-full px-6 lg:px-12">
           <div className="flex justify-between items-center h-24">
             {/* Left: IIT Indore Logo and Name */}
-            <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+            <Link
+              href="/"
+              className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
+            >
               <div className="w-16 h-16 relative flex-shrink-0">
-                <Image src="/iiti-logo.svg" alt="IIT Indore Logo" width={64} height={64} className="object-contain" />
+                <Image
+                  src="/iiti-logo.svg"
+                  alt="IIT Indore Logo"
+                  width={64}
+                  height={64}
+                  className="object-contain"
+                />
               </div>
               <div className="hidden sm:flex flex-col justify-center">
-                <h2 className="text-white font-bold text-sm leading-tight">भारतीय प्रौद्योगिकी संस्थान</h2>
-                <p className="text-blue-100 font-semibold text-xs">Indian Institute of Technology</p>
+                <h2 className="text-white font-bold text-sm leading-tight">
+                  भारतीय प्रौद्योगिकी संस्थान
+                </h2>
+                <p className="text-blue-100 font-semibold text-xs">
+                  Indian Institute of Technology
+                </p>
                 <p className="text-blue-100 font-semibold text-xs">Indore</p>
               </div>
             </Link>
@@ -57,7 +78,9 @@ export default function Navigation() {
             {/* Right: 2D MatTechGlobal Branding */}
             <div className="hidden lg:flex flex-col items-end justify-center space-y-1">
               <h1 className="text-xl font-bold text-white">2D MatTechGlobal</h1>
-              <p className="text-blue-100 text-xs font-semibold">Fundamentals to Applications</p>
+              <p className="text-blue-100 text-xs font-semibold">
+                Fundamentals to Applications
+              </p>
               <p className="text-blue-200 text-xs">June 24-26, 2026</p>
             </div>
 
@@ -66,6 +89,7 @@ export default function Navigation() {
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="inline-flex items-center justify-center p-2 rounded-lg text-white hover:bg-blue-800 transition-colors duration-200"
+                aria-label="Toggle navigation"
               >
                 {isOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
@@ -80,31 +104,51 @@ export default function Navigation() {
             <div className="hidden lg:flex items-center flex-wrap justify-start flex-1">
               {navItems.map((item) => (
                 <div key={item.label} className="relative group flex-shrink-0">
-                  <Link
-                    href={item.href}
-                    className={`px-3 py-4 text-sm font-semibold transition-all duration-300 border-b-4 whitespace-nowrap text-center block ${
-                      isActive(item.href)
-                        ? "text-blue-200 border-b-blue-400 bg-blue-800 bg-opacity-30"
-                        : "text-gray-200 border-b-transparent hover:text-blue-200 hover:border-b-blue-400 hover:bg-blue-800 hover:bg-opacity-20"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
+                  {/* If item has children, render non-navigating button for parent */}
+                  {item.children ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={(e) => e.preventDefault()}
+                        aria-expanded={!!openSub[item.label]}
+                        className={`px-3 py-4 text-sm font-semibold transition-all duration-300 border-b-4 whitespace-nowrap text-center block ${
+                          // If any child is active, show active style
+                          item.children.some((c) => isActive(c.href))
+                            ? "text-blue-200 border-b-blue-400 bg-blue-800 bg-opacity-30"
+                            : "text-gray-200 border-b-transparent hover:text-blue-200 hover:border-b-blue-400 hover:bg-blue-800 hover:bg-opacity-20"
+                        }`}
+                      >
+                        {item.label}
+                      </button>
 
-                  {item.children && (
-                    <div className="absolute left-0 top-full mt-0 hidden group-hover:block bg-blue-900/95 shadow-lg z-50 min-w-max">
-                      {item.children.map((c) => (
-                        <Link
-                          key={c.label}
-                          href={c.href}
-                          className={`block px-4 py-3 text-sm font-semibold whitespace-nowrap transition-all duration-300 border-l-4 ${
-                            isActive(c.href) ? "text-blue-200 border-l-blue-400 bg-blue-800 bg-opacity-50" : "text-gray-200 border-l-transparent hover:text-blue-200 hover:border-l-blue-400 hover:bg-blue-800 hover:bg-opacity-40"
-                          }`}
-                        >
-                          {c.label}
-                        </Link>
-                      ))}
-                    </div>
+                      {/* Desktop dropdown (hover) */}
+                      <div className="absolute left-0 top-full mt-0 hidden group-hover:block bg-blue-900/95 shadow-lg z-50 min-w-max">
+                        {item.children.map((c) => (
+                          <Link
+                            key={c.label}
+                            href={c.href}
+                            className={`block px-4 py-3 text-sm font-semibold whitespace-nowrap transition-all duration-300 border-l-4 ${
+                              isActive(c.href)
+                                ? "text-blue-200 border-l-blue-400 bg-blue-800 bg-opacity-50"
+                                : "text-gray-200 border-l-transparent hover:text-blue-200 hover:border-l-blue-400 hover:bg-blue-800 hover:bg-opacity-40"
+                            }`}
+                          >
+                            {c.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className={`px-3 py-4 text-sm font-semibold transition-all duration-300 border-b-4 whitespace-nowrap text-center block ${
+                        isActive(item.href)
+                          ? "text-blue-200 border-b-blue-400 bg-blue-800 bg-opacity-30"
+                          : "text-gray-200 border-b-transparent hover:text-blue-200 hover:border-b-blue-400 hover:bg-blue-800 hover:bg-opacity-20"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
                   )}
                 </div>
               ))}
@@ -124,35 +168,53 @@ export default function Navigation() {
             <div className="lg:hidden pb-4 space-y-2 border-t border-blue-700 animate-in fade-in slide-in-from-top-4">
               {navItems.map((item) => (
                 <div key={item.label}>
-                  <Link
-                    href={item.href}
-                    className={`block px-4 py-3 rounded-lg text-base font-semibold transition-all duration-200 ${
-                      isActive(item.href)
-                        ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
-                        : "text-gray-200 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-800 hover:text-white"
-                    }`}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
+                  {/* Parent item: if has children, render a toggle button, otherwise a Link */}
+                  {item.children ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => toggleSub(item.label)}
+                        className={`w-full text-left px-4 py-3 rounded-lg text-base font-semibold transition-all duration-200 ${
+                          item.children.some((c) => isActive(c.href))
+                            ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
+                            : "text-gray-200 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-800 hover:text-white"
+                        }`}
+                        aria-expanded={!!openSub[item.label]}
+                      >
+                        {item.label}
+                      </button>
 
-                  {item.children && (
-                    <div className="pl-6 mt-2 space-y-1">
-                      {item.children.map((c) => (
-                        <Link
-                          key={c.label}
-                          href={c.href}
-                          className={`block px-4 py-2 rounded-lg text-base font-medium transition-all duration-150 ${
-                            isActive(c.href)
-                              ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
-                              : "text-gray-200 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-800 hover:text-white"
-                          }`}
-                          onClick={() => setIsOpen(false)}
-                        >
-                          {c.label}
-                        </Link>
-                      ))}
-                    </div>
+                      {openSub[item.label] && (
+                        <div className="pl-6 mt-2 space-y-1">
+                          {item.children.map((c) => (
+                            <Link
+                              key={c.label}
+                              href={c.href}
+                              className={`block px-4 py-2 rounded-lg text-base font-medium transition-all duration-150 ${
+                                isActive(c.href)
+                                  ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
+                                  : "text-gray-200 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-800 hover:text-white"
+                              }`}
+                              onClick={() => setIsOpen(false)}
+                            >
+                              {c.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className={`block px-4 py-3 rounded-lg text-base font-semibold transition-all duration-200 ${
+                        isActive(item.href)
+                          ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
+                          : "text-gray-200 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-800 hover:text-white"
+                      }`}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
                   )}
                 </div>
               ))}
@@ -161,5 +223,5 @@ export default function Navigation() {
         </div>
       </div>
     </nav>
-  )
+  );
 }
