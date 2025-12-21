@@ -93,10 +93,15 @@ class EmailTokenObtainPairSerializer(serializers.Serializer):
         }
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    
     id = serializers.IntegerField(read_only=True)
     status = serializers.CharField(read_only=True)        # server-controlled
     admin_notes = serializers.CharField(read_only=True)   # server-controlled
+
+    # explicitly declare to control requirements/blank behavior
+    is_presenter = serializers.BooleanField(required=False)
+    abstract_id = serializers.CharField(
+        required=False, allow_blank=True, allow_null=True
+    )
 
     class Meta:
         model = Registration
@@ -105,27 +110,58 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         """
-        Prevent creating a second active registration for the same user.
-        Allow creation only if user has no registration or their latest registration is Rejected.
+        - Prevent creating a second active registration for the same user.
+        - Enforce: if is_presenter True -> abstract_id must be provided.
+        - If is_presenter False -> clear any abstract_id.
         """
         request = self.context.get("request")
-        # We only enforce on creation (no instance)
+
+        # Enforce unique-in-progress registration on creation (existing logic)
         if request and request.method in ("POST",) and request.user and request.user.is_authenticated:
             user = request.user
-            # Query user's registrations excluding 'Rejected'
             existing = Registration.objects.filter(user=user).exclude(status=Registration.STATUS_REJECTED).exists()
             if existing:
                 raise serializers.ValidationError(
                     "You already have a registration in process or accepted. You cannot submit another until it is rejected or deleted."
                 )
+
+        # Now handle presenter/abstract logic:
+        is_presenter = attrs.get("is_presenter")
+        abstract_id = attrs.get("abstract_id")
+
+        # If this is an update (partial) and the field is not provided, we must consider instance
+        if self.instance is not None:
+            # For partial updates if `is_presenter` not provided, use current value
+            if is_presenter is None:
+                is_presenter = getattr(self.instance, "is_presenter", False)
+            # If abstract_id not provided in payload, keep existing value for presenter,
+            # but if is_presenter is False, we'll clear it below.
+            if "abstract_id" not in attrs:
+                abstract_id = getattr(self.instance, "abstract_id", None)
+
+        # If user *is* a presenter, abstract_id must exist and be non-empty
+        if is_presenter:
+            if not abstract_id:
+                raise serializers.ValidationError({"abstract_id": "This field is required when is_presenter is true."})
+        else:
+            # Clear abstract_id when not a presenter
+            attrs["abstract_id"] = None
+
         return super().validate(attrs)
 
     def create(self, validated_data):
-        # If viewset already passed `user` via serializer.save(user=request.user), it will be in validated_data
-        # Otherwise attach request.user if present.
+        # Attach authenticated user if available
         request = self.context.get("request")
         if request and request.user and request.user.is_authenticated:
             validated_data["user"] = validated_data.get("user", request.user)
             if not validated_data.get("email"):
                 validated_data["email"] = request.user.email
+
+        # Ensure abstract_id logic already enforced in validate(); just create
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        # If is_presenter was set False, ensure abstract_id is cleared
+        if validated_data.get("is_presenter") is False:
+            validated_data["abstract_id"] = None
+        return super().update(instance, validated_data)

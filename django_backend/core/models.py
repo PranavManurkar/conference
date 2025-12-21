@@ -26,6 +26,8 @@ class Registration(models.Model):
     full_name = models.CharField(max_length=255)
     email = models.EmailField()
     phone = models.CharField(max_length=50, blank=True)
+    is_presenter = models.BooleanField(default=False)
+    abstract_id = models.CharField(max_length=255, null=True, blank=True)
     institution_organization = models.CharField(max_length=255, blank=True)
     designation = models.CharField(max_length=255, blank=True)
     country = models.CharField(max_length=100, blank=True)

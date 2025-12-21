@@ -3,7 +3,6 @@ import type { Metadata } from "next"
 
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-
 import Navigation from "@/components/navigation"
 import Footer from "@/components/footer"
 
