@@ -5,8 +5,8 @@ import Link from "next/link"
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-400 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid md:grid-cols-3 gap-16 mb-8 place-items-center md:place-items-center">
           <div>
             <h4 className="text-white font-bold mb-4">Navigation</h4>
             <ul className="space-y-2 text-sm">
@@ -67,7 +67,7 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-          <div>
+          {/* <div>
             <h4 className="text-white font-bold mb-4">Resources</h4>
             <ul className="space-y-2 text-sm">
               <li>
@@ -86,13 +86,13 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
 
         <div className="border-t border-gray-700 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="flex flex-col md:flex-row justify-center items-center">
             <p className="text-sm mb-4 md:mb-0">© 2025-2026 2D MatTechGlobal Conference. All rights reserved.</p>
-            <div className="flex space-x-6 text-sm">
+            {/* <div className="flex space-x-6 text-sm">
               <Link href="/privacy-policy" className="hover:text-white transition-colors">
                 Privacy Policy
               </Link>
@@ -102,7 +102,7 @@ export default function Footer() {
               <Link href="/code-of-conduct" className="hover:text-white transition-colors">
                 Code of Conduct
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
 

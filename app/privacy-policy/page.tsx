@@ -6,7 +6,7 @@ import Footer from "@/components/footer"
 export default function PrivacyPolicy() {
   return (
     <>
-      <Navigation />
+      {/* <Navigation /> */}
       <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
         <div className="max-w-4xl mx-auto px-4 py-16">
           <h1 className="text-4xl font-bold text-slate-900 mb-8">Privacy Policy</h1>
@@ -46,7 +46,7 @@ export default function PrivacyPolicy() {
           </div>
         </div>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 }
