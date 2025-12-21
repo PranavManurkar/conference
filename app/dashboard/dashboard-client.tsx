@@ -82,11 +82,11 @@
 //     const fetchRegistrationStatus = async () => {
 //       // 1. DEBUG: Log the user object to see if email exists
 //       console.log("DEBUG: User Object received:", user);
-      
+
 //       // If user is missing or email is missing, we log it but DON'T return yet 
 //       // just to test if the fetch works.
 //       const userEmail = user?.email || ""; 
-      
+
 //       if (!userEmail) {
 //          console.error("CRITICAL: User email is missing. Check your auth logic.");
 //          // We will try to fetch anyway using the 'list' endpoint which relies on Token, not email param
@@ -94,16 +94,16 @@
 
 //       try {
 //         console.log("DEBUG: Attempting to fetch list from:", `${DJANGO_API_URL}/api/registrations/`);
-        
+
 //         // Try listing registrations (This relies on the Token in headers, not the email variable)
 //         const listRes = await authFetch(`${DJANGO_API_URL}/api/registrations/`, { method: "GET" });
-        
+
 //         console.log("DEBUG: List Fetch Status:", listRes.status);
 
 //         if (listRes.ok) {
 //           const listData = await listRes.json();
 //           console.log("DEBUG: List Data received:", listData);
-          
+
 //           const reg = Array.isArray(listData) ? listData[0] ?? null : listData;
 //           if (reg) {
 //             setExistingRegistration(reg);
@@ -117,7 +117,7 @@
 //         if (userEmail) {
 //             console.log("DEBUG: Attempting check-by-email for:", userEmail);
 //             const response = await authFetch(`${DJANGO_API_URL}/api/registrations/check-by-email/?email=${encodeURIComponent(userEmail)}`);
-            
+
 //             if (response.ok) {
 //               const data = await response.json();
 //               setExistingRegistration(data);
@@ -1386,12 +1386,36 @@ export default function DashboardClient({ user }: { user: User }) {
                         <SelectValue placeholder="Select delegate type" />
                       </SelectTrigger>
 
-                      <SelectContent className="bg-white ">
-                        <SelectItem value="UG/PG Student">UG/PG Student</SelectItem>
-                        <SelectItem value="Research Scholar">Research Scholar</SelectItem>
-                        <SelectItem value="Faculty">Faculty</SelectItem>
-                        <SelectItem value="Industry">Industry</SelectItem>
+                      <SelectContent className="bg-white rounded-lg shadow-lg border border-gray-200 p-1">
+                        <SelectItem
+                          value="UG/PG Student"
+                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                        >
+                          UG/PG Student
+                        </SelectItem>
+
+                        <SelectItem
+                          value="Research Scholar"
+                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                        >
+                          Research Scholar
+                        </SelectItem>
+
+                        <SelectItem
+                          value="Faculty"
+                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                        >
+                          Faculty
+                        </SelectItem>
+
+                        <SelectItem
+                          value="Industry"
+                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                        >
+                          Industry
+                        </SelectItem>
                       </SelectContent>
+
                     </Select>
                   </div>
 
@@ -1408,9 +1432,14 @@ export default function DashboardClient({ user }: { user: User }) {
                       <SelectTrigger id="registration_period" className="h-12 border-2 focus:border-purple-500">
                         <SelectValue placeholder="Select period" />
                       </SelectTrigger>
-                      <SelectContent className="bg-white"> 
-                        <SelectItem value="Early Bird">Early Bird (until May 5, 2026)</SelectItem>
-                        <SelectItem value="Final">Final (after May 5, 2026)</SelectItem>
+                      <SelectContent className="bg-white">
+                        <SelectItem value="Early Bird"
+                           className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                        >Early Bird (until May 5, 2026)</SelectItem>
+
+                        <SelectItem value="Final"
+                         className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                        >Final (after May 5, 2026)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -1429,9 +1458,15 @@ export default function DashboardClient({ user }: { user: User }) {
                         <SelectValue placeholder="Select region" />
                       </SelectTrigger>
                       <SelectContent className="bg-white">
-                        <SelectItem value="Indian">Indian</SelectItem>
-                        <SelectItem value="SAARC">SAARC</SelectItem>
-                        <SelectItem value="Non-SAARC">Non-SAARC</SelectItem>
+                        <SelectItem value="Indian"
+                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                        >Indian</SelectItem>
+                        <SelectItem value="SAARC"
+                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                        >SAARC</SelectItem>
+                        <SelectItem value="Non-SAARC"
+                         className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                        >Non-SAARC</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
