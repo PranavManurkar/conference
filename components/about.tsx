@@ -116,6 +116,17 @@ export default function About() {
                 IIT Indore consistently ranks among India’s top institutes and has
                 produced over 7,500 international publications and 165+ patents.
               </p>
+                <p>
+                For more information, visit the{" "}
+                <a
+                  href="https://iiti.ac.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline hover:text-blue-800"
+                >
+                 IIT Indore website
+                </a>.
+              </p>
             </div>
           </div>
         </motion.div>
@@ -194,6 +205,17 @@ export default function About() {
                 The department houses advanced laboratories in physical metallurgy,
                 nanomaterials, functional materials, biomaterials, and computational
                 materials science, and offers BTech, MTech, MS, and PhD programs.
+              </p>
+              <p>
+                For more information, visit the{" "}
+                <a
+                  href="https://mems.iiti.ac.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline hover:text-blue-800"
+                >
+                  MEMS IIT Indore website
+                </a>.
               </p>
             </div>
           </div>
