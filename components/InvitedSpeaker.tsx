@@ -5,6 +5,7 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 import type { Variants } from "framer-motion"
 import { Mail, Globe, Briefcase } from "lucide-react"
+import Link from "next/link"
 
 interface Speaker {
   id?: number
@@ -148,7 +149,9 @@ export default function InvitedSpeaker() {
             More speakers and session details coming soon. Stay tuned for updates!
           </p>
           <button className="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-md hover:shadow-lg">
+            <Link href="/schedule">
             View Full Schedule
+            </Link>
           </button>
         </motion.div>
       </div>

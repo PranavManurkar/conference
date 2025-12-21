@@ -46,7 +46,7 @@ export default function KeyAttraction() {
         "A grand palace showcasing the lifestyle and legacy of the Holkar dynasty, surrounded by landscaped gardens.",
       icon: <MapPin className="h-6 w-6" />,
       accent: "bg-green-50",
-      image: "/images/lalbagh.jpg",
+      image: "/LALBAGH-PALACE-INDORE.png",
       googleMapsLink: "https://www.google.com/maps/place/Lal+Bagh+Palace,+Indore/",
     },
     {
@@ -55,7 +55,8 @@ export default function KeyAttraction() {
       description:
         "One of Indore’s most revered temples, attracting devotees and visitors throughout the year.",
       icon: <Globe className="h-6 w-6" />,
-      accent: "bg-blue-50",      image: "/images/khajrana.jpg",
+      accent: "bg-blue-50",   
+       image: "/kha.jpg",
       googleMapsLink: "https://www.google.com/maps/place/Khajrana+Ganesh+Temple,+Indore/",    },
     {
       id: "sarafa",
@@ -64,7 +65,7 @@ export default function KeyAttraction() {
         "Famous food streets of Indore, known for vibrant night markets and authentic local cuisine.",
       icon: <Star className="h-6 w-6" />,
       accent: "bg-green-50",
-      image: "/images/sarafa.jpg",
+      image: "/CHAPPAN-DUKAN-FAMOUS-FOODS.png",
       googleMapsLink: "https://www.google.com/maps/place/Sarafa+Bazar,+Indore/",
     },
   ];

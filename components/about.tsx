@@ -33,7 +33,7 @@ export default function About() {
         >
           <div className="md:col-span-3 p-6 order-last md:order-none">
             <div className="mb-4">
-              <div className="h-1 w-10 bg-green-500 rounded mb-2" />
+              <div className="h-1 w-10 bg-blue-500 rounded mb-2" />
               <h2 className="text-2xl font-semibold text-gray-900">The Conference</h2>
             </div>
 
@@ -97,7 +97,7 @@ export default function About() {
 
           <div className="md:col-span-3 p-6 md:order-none order-last">
             <div className="mb-4">
-              <div className="h-1 w-10 bg-green-500 rounded mb-2" />
+              <div className="h-1 w-10 bg-blue-500 rounded mb-2" />
               <h2 className="text-2xl font-semibold text-gray-900">About IIT Indore</h2>
             </div>
 
@@ -130,7 +130,7 @@ export default function About() {
         >
           <div className="md:col-span-3 p-6 order-last md:order-none">
             <div className="mb-4">
-              <div className="h-1 w-10 bg-green-500 rounded mb-2" />
+              <div className="h-1 w-10 bg-blue-500 rounded mb-2" />
               <h2 className="text-2xl font-semibold text-gray-900">Indore City</h2>
             </div>
 
@@ -178,7 +178,7 @@ export default function About() {
 
           <div className="md:col-span-3 p-6 md:order-none order-last">
             <div className="mb-4">
-              <div className="h-1 w-10 bg-green-500 rounded mb-2" />
+              <div className="h-1 w-10 bg-blue-500 rounded mb-2" />
               <h2 className="text-2xl font-semibold text-gray-900">
                 Department of Metallurgical Engineering and Materials Science
               </h2>
