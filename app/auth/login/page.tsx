@@ -43,7 +43,7 @@ export default function LoginPage() {
       <main className="login-main" role="main">
         <div className="back-row">
           <Button asChild>
-            <Link href="/register" className="back-link" aria-label="Back to register">
+            <Link href="/registration" className="back-link" aria-label="Back to register">
               <ArrowLeft className="back-icon" />
               Back
             </Link>

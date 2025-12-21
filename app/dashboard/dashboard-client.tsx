@@ -1385,7 +1385,8 @@ export default function DashboardClient({ user }: { user: User }) {
                       <SelectTrigger id="delegate_type" className="h-12 border-2 focus:border-purple-500">
                         <SelectValue placeholder="Select delegate type" />
                       </SelectTrigger>
-                      <SelectContent>
+
+                      <SelectContent className="bg-white ">
                         <SelectItem value="UG/PG Student">UG/PG Student</SelectItem>
                         <SelectItem value="Research Scholar">Research Scholar</SelectItem>
                         <SelectItem value="Faculty">Faculty</SelectItem>
@@ -1407,7 +1408,7 @@ export default function DashboardClient({ user }: { user: User }) {
                       <SelectTrigger id="registration_period" className="h-12 border-2 focus:border-purple-500">
                         <SelectValue placeholder="Select period" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-white"> 
                         <SelectItem value="Early Bird">Early Bird (until May 5, 2026)</SelectItem>
                         <SelectItem value="Final">Final (after May 5, 2026)</SelectItem>
                       </SelectContent>
@@ -1427,7 +1428,7 @@ export default function DashboardClient({ user }: { user: User }) {
                       <SelectTrigger id="participant_region" className="h-12 border-2 focus:border-purple-500">
                         <SelectValue placeholder="Select region" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-white">
                         <SelectItem value="Indian">Indian</SelectItem>
                         <SelectItem value="SAARC">SAARC</SelectItem>
                         <SelectItem value="Non-SAARC">Non-SAARC</SelectItem>

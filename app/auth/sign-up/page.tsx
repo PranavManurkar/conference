@@ -54,7 +54,7 @@ export default function SignUpPage() {
       <main className="auth-main">
         <div className="back-row">
           <Button asChild>
-            <Link href="/register" className="back-link">
+            <Link href="/registration" className="back-link">
               <ArrowLeft className="back-icon" />
               Back
             </Link>

@@ -23,15 +23,15 @@ export default function About() {
     <section id="about" className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
 
-        {/* SECTION 1 — Text left, Image right */}
+        {/* SECTION 1 — Image top (mobile only), Text left, Image right (desktop) */}
         <motion.div
-          className="bg-white rounded-lg shadow-sm grid md:grid-cols-5 overflow-hidden"
+          className="bg-white rounded-lg shadow-sm flex flex-col md:grid md:grid-cols-5 overflow-hidden"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeUp}
         >
-          <div className="md:col-span-3 p-6">
+          <div className="md:col-span-3 p-6 order-last md:order-none">
             <div className="mb-4">
               <div className="h-1 w-10 bg-green-500 rounded mb-2" />
               <h2 className="text-2xl font-semibold text-gray-900">The Conference</h2>
@@ -55,7 +55,7 @@ export default function About() {
             </div>
           </div>
 
-          <div className="md:col-span-2 relative min-h-[260px]">
+          <div className="md:col-span-2 relative min-h-[260px] order-first md:order-none">
             <Image
               src="/images/conference.jpg"
               alt="Conference"
@@ -67,15 +67,15 @@ export default function About() {
           </div>
         </motion.div>
 
-        {/* SECTION 2 — Video left, Text right */}
+        {/* SECTION 2 — Video top (mobile only), Text right (desktop) */}
         <motion.div
-          className="bg-white rounded-lg shadow-sm grid md:grid-cols-5 overflow-hidden"
+          className="bg-white rounded-lg shadow-sm flex flex-col md:grid md:grid-cols-5 overflow-hidden"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeUp}
         >
-          <div className="md:col-span-2 relative min-h-[260px] bg-black flex items-center justify-center group cursor-pointer overflow-hidden">
+          <div className="md:col-span-2 relative min-h-[260px] bg-black flex items-center justify-center group cursor-pointer overflow-hidden md:order-none order-first">
             <iframe
               width="100%"
               height="100%"
@@ -95,7 +95,7 @@ export default function About() {
             <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-5" />
           </div>
 
-          <div className="md:col-span-3 p-6">
+          <div className="md:col-span-3 p-6 md:order-none order-last">
             <div className="mb-4">
               <div className="h-1 w-10 bg-green-500 rounded mb-2" />
               <h2 className="text-2xl font-semibold text-gray-900">About IIT Indore</h2>
@@ -120,15 +120,15 @@ export default function About() {
           </div>
         </motion.div>
 
-        {/* SECTION 3 — Text left, Image right */}
+        {/* SECTION 3 — Image top (mobile only), Text left, Image right (desktop) */}
         <motion.div
-          className="bg-white rounded-lg shadow-sm grid md:grid-cols-5 overflow-hidden"
+          className="bg-white rounded-lg shadow-sm flex flex-col md:grid md:grid-cols-5 overflow-hidden"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeUp}
         >
-          <div className="md:col-span-3 p-6">
+          <div className="md:col-span-3 p-6 order-last md:order-none">
             <div className="mb-4">
               <div className="h-1 w-10 bg-green-500 rounded mb-2" />
               <h2 className="text-2xl font-semibold text-gray-900">Indore City</h2>
@@ -147,7 +147,7 @@ export default function About() {
             </div>
           </div>
 
-          <div className="md:col-span-2 relative min-h-[260px]">
+          <div className="md:col-span-2 relative min-h-[260px] order-first md:order-none">
             <Image
               src="/indore.jpg"
               alt="Indore City"
@@ -158,15 +158,15 @@ export default function About() {
           </div>
         </motion.div>
 
-        {/* SECTION 4 — Image left, Text right */}
+        {/* SECTION 4 — Image top (mobile only), Image left, Text right (desktop) */}
         <motion.div
-          className="bg-white rounded-lg shadow-sm grid md:grid-cols-5 overflow-hidden"
+          className="bg-white rounded-lg shadow-sm flex flex-col md:grid md:grid-cols-5 overflow-hidden"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeUp}
         >
-          <div className="md:col-span-2 relative min-h-[260px]">
+          <div className="md:col-span-2 relative min-h-[260px] md:order-none order-first">
             <Image
               src="/convocation.jpg"
               alt="MEMS IIT Indore"
@@ -176,7 +176,7 @@ export default function About() {
             />
           </div>
 
-          <div className="md:col-span-3 p-6">
+          <div className="md:col-span-3 p-6 md:order-none order-last">
             <div className="mb-4">
               <div className="h-1 w-10 bg-green-500 rounded mb-2" />
               <h2 className="text-2xl font-semibold text-gray-900">

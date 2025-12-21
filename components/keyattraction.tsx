@@ -36,7 +36,7 @@ export default function KeyAttraction() {
         "Historic seven-storey palace blending Maratha and French architecture, located in the heart of old Indore.",
       icon: <Star className="h-6 w-6" />,
       accent: "bg-blue-50",
-      image: "/images/rajwada.jpg",
+      image: "/indore.jpg",
       googleMapsLink: "https://www.google.com/maps/place/Rajwada+Palace,+Indore/",
     },
     {

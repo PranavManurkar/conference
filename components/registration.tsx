@@ -189,7 +189,7 @@ export default function Registration() {
               asChild
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white/10 bg-transparent"
+              className="border-white text-white hover:text-blue-100 hover:bg-white"
             >
               <Link href="/auth/login">
                 Login to Dashboard
