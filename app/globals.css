@@ -5,7 +5,7 @@
   --foreground: oklch(0.15 0.005 260);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.15 0.005 260);
-  --primary: oklch(0.42 0.22 263);
+  --primary: #AB4494;
   --primary-foreground: oklch(0.98 0.001 0);
   --secondary: oklch(0.65 0.15 280);
   --secondary-foreground: oklch(1 0 0);
@@ -26,8 +26,26 @@
   --sidebar-border: oklch(0.88 0.001 0);
   --sidebar-ring: oklch(0.42 0.22 263);
   --input: oklch(0.92 0.001 0);
+
   --dark: #595959;
-  --custom_purple: #AB4494; 
+
+
+  --nav: #444444; /* Custom nav gray (similar to palette dark gray #424242) */
+  --navhover: #595959; /* Custom nav hover gray */
+  --offwhite: #dcc8cd; /* Custom offwhite (similar to palette light pink #fce4ec) */
+  --lightpurple: #cf9ac4; /* Custom light purple (similar to palette medium purple #ce93d8) */
+
+  /* Palette colors added below - only unique ones not closely matching existing */
+  --palette-orange: #ff6b35; /* Warm orange accent from palette */
+  --palette-main-purple: #9c27b0; /* Main deep purple from palette */
+  --palette-black: #000000; /* Pure black from palette (matches foreground) - added for explicit use */
+  --palette-light-pink: #fce4ec; /* Soft light pink highlight from palette */
+  --palette-vibrant-pink: #e91e63; /* Vibrant pink accent from palette */
+  --palette-medium-gray: #bdbdbd; /* Medium gray neutral from palette */
+  --palette-dark-gray: #424242; /* Dark gray text/shadow from palette */
+  --palette-light-purple: #e1bee7; /* Subtle light purple from palette */
+  --palette-medium-purple: #ce93d8; /* Medium purple variant from palette */
+  --palette-very-light-purple: #f3e5f5; /* Very light purple background tint from palette */
 }
 
 .dark {
