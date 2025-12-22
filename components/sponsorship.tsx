@@ -69,9 +69,9 @@ export default function Sponsorship() {
   ]
 
   const otherSponsorship = [
+    {title: 'Banquet Sponsorship', amount: '₹3,50,000', features: ['2 full-page advertisements in Souvenir', 'Free entry for 6 delegates'] },
     { title: 'Silver Sponsorship', amount: '₹3,00,000', features: ['1 booth', '½ page advertisement in Souvenir', 'Free entry for 4 delegates'] },
     { title: 'Bronze Sponsorship', amount: '₹2,50,000', features: ['1 booth', '½ page advertisement in Souvenir', 'Free entry for 2 delegates'] },
-    { title: 'Banquet Sponsorship', amount: '₹3,50,000', features: ['2 full-page advertisements in Souvenir', 'Free entry for 6 delegates'] },
     { title: 'Conference Kit Sponsorship', amount: '₹2,00,000', features: ['2 full-page advertisements in Souvenir', 'Free entry for 5 delegates'] },
     { title: 'Exhibition Booth', amount: '₹50,000', features: ['Single booth in exhibition area'] },
   ]

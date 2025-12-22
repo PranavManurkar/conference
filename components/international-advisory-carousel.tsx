@@ -94,13 +94,13 @@ export default function InternationalAdvisoryCarousel() {
 
               {/* Avatar Section */}
               <div className="h-32 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                <div className="relative h-24 w-24 rounded-full bg-white p-1 shadow-md">
+                <div className="relative h-32 w-32 rounded-full bg-white p-1 shadow-md">
                   {member.image ? (
                     <Image
                       src={member.image}
                       alt={member.name}
                       fill
-                      sizes="96px"
+                      sizes="400px"
                       className="rounded-full object-contain"
                     />
                   ) : (

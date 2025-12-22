@@ -46,8 +46,8 @@ export default function SchedulePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="max-w-6xl mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center">Conference Schedule</h1>
-        <p className="text-gray-600 text-center mb-12">2D MatTechGlobal 2026 - June 24-26, 2026</p>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center">Coming Soon</h1>
+        {/* <p className="text-gray-600 text-center mb-12">2D MatTechGlobal 2026 - June 24-26, 2026</p>
 
         <div className="space-y-8">
           {schedule.map((day, dayIndex) => (
@@ -83,7 +83,7 @@ export default function SchedulePage() {
             <li>• All sessions will be held at IIT Indore campus</li>
             <li>• Accommodation available at nearby hotels</li>
           </ul>
-        </div>
+        </div> */}
       </div>
     </div>
   )

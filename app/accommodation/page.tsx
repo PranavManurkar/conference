@@ -4,10 +4,11 @@ export default function Accommodation() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="max-w-7xl mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold text-slate-900 mb-8">Accommodation</h1>
+        {/* <h1 className="text-4xl font-bold text-slate-900 mb-8">Accommodation</h1> */}
 
         <div className="bg-white rounded-lg shadow-lg p-8 space-y-6">
-          <section>
+          <h1 className="text-4xl font-bold text-slate-900 mb-8">Coming Soon</h1>
+          {/* <section>
             <h2 className="text-2xl font-bold text-slate-800 mb-4">Hotel Recommendations</h2>
             <p className="text-slate-700 mb-4">
               We have negotiated special rates with several hotels in Indore. Participants can book through our
@@ -56,7 +57,7 @@ export default function Accommodation() {
                 <span className="font-semibold">Address:</span> IIT Indore, Khandwa Road, Simrol, Indore 453552, India
               </p>
             </div>
-          </section>
+          </section> */}
         </div>
       </div>
     </main>

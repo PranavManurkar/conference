@@ -37,7 +37,7 @@ export default function KeyAttraction() {
       icon: <Star className="h-6 w-6" />,
       accent: "bg-blue-50",
       image: "/indore.jpg",
-      googleMapsLink: "https://www.google.com/maps/place/Rajwada+Palace,+Indore/",
+      googleMapsLink: "https://www.madhya-pradesh-tourism.com/destination/Rajwada-Palace-60",
     },
     {
       id: "lalbagh",
@@ -47,28 +47,62 @@ export default function KeyAttraction() {
       icon: <MapPin className="h-6 w-6" />,
       accent: "bg-green-50",
       image: "/LALBAGH-PALACE-INDORE.png",
-      googleMapsLink: "https://www.google.com/maps/place/Lal+Bagh+Palace,+Indore/",
+      googleMapsLink: "https://www.madhya-pradesh-tourism.com/destination/Lalbagh-Palace-Museum-84",
+    },
+  
+    // New entries
+    {
+      id: "ralamandal",
+      title: "Ralamandal Wildlife Sanctuary",
+      description:
+        "A peaceful sanctuary and hilltop trekking spot just outside Indore — good for short hikes, birdwatching and views (close to IIT Indore direction).",
+      icon: <MapPin className="h-6 w-6" />,
+      accent: "bg-blue-50",
+      image: "/ralamandal.jpg",
+      googleMapsLink: "https://ramadaencoreindore.com/ralamandal-wildlife-sanctuary-a-nature-lovers-haven-in-indore/",
     },
     {
-      id: "khajrana",
-      title: "Khajrana Ganesh Temple",
+      id: "omkareshwar",
+      title: "Omkareshwar",
       description:
-        "One of Indore’s most revered temples, attracting devotees and visitors throughout the year.",
+        "One of the 12 Jyotirlinga shrines on an island in the Narmada river — a major pilgrimage town with temples and ghats.",
       icon: <Globe className="h-6 w-6" />,
-      accent: "bg-blue-50",   
-       image: "/kha.jpg",
-      googleMapsLink: "https://www.google.com/maps/place/Khajrana+Ganesh+Temple,+Indore/",    },
+      accent: "bg-green-50",
+      image: "/omkareshwar.jpg",
+      googleMapsLink: "https://www.mptourism.com/destination-omkareshwar.php",
+    },
     {
-      id: "sarafa",
-      title: "Sarafa & Chappan Dukan",
+      id: "mandu",
+      title: "Mandu (Jahaz Mahal & Forts)",
       description:
-        "Famous food streets of Indore, known for vibrant night markets and authentic local cuisine.",
+        "Historic hill-fort complex with Jahaz Mahal, Hindola Mahal, Rani Roopmati Pavilion and many medieval fortifications — a major heritage site near Indore.",
+      icon: <Star className="h-6 w-6" />,
+      accent: "bg-blue-50",
+      image: "/mandu.jpg",
+      googleMapsLink: "https://www.mptourism.com/destination-mandu.php",
+    },
+    {
+      id: "maheshwar",
+      title: "Maheshwar (Ahilya Fort)",
+      description:
+        "Riverside town on the Narmada known for the Ahilya Fort, ghats, handloom weaving and Holkar-era heritage.",
       icon: <Star className="h-6 w-6" />,
       accent: "bg-green-50",
-      image: "/CHAPPAN-DUKAN-FAMOUS-FOODS.png",
-      googleMapsLink: "https://www.google.com/maps/place/Sarafa+Bazar,+Indore/",
+      image: "/maheshwar.jpg",
+      googleMapsLink: "https://www.mptourism.com/destination-maheshwar.php",
+    },
+    {
+      id: "patalpani",
+      title: "Patalpani Waterfall",
+      description:
+        "Popular waterfall and picnic/trekking spot near Mhow (Indore district); best visited during/after monsoon when the flow is strong.",
+      icon: <MapPin className="h-6 w-6" />,
+      accent: "bg-blue-50",
+      image: "/patalpani.jpg",
+      googleMapsLink: "https://www.mptourism.com/patalpani-waterfall-place-to-visit-near-indore-in-madhya-pradesh.html",
     },
   ];
+  
 
   return (
     <>

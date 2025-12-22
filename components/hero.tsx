@@ -58,7 +58,7 @@ export default function Hero() {
           <div className="space-y-6 md:pr-8">
             <div>
               <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
-                2D MatTechGlobal 2026
+                2D MatTechGlobal (2DMTG)
               </h1>
               <h2 className="text-xl md:text-2xl font-semibold text-blue-100 mt-2">
                 Fundamentals to Applications

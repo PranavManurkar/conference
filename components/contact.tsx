@@ -61,7 +61,7 @@ export default function Contact() {
             For general questions and registration support, please contact:
           </p>
           <a href="mailto:arrnd@iiti.ac.in" className="text-blue-600 font-bold text-lg hover:text-blue-700">
-            arrnd@iiti.ac.in
+          2dmtg@iiti.ac.in
           </a>
         </div>
       </div>
