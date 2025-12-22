@@ -45,11 +45,11 @@ export default function Hero() {
     return pathname === href
   }
   return (
-    <section id="home" className="relative overflow-hidden py-16 md:py-24 bg-gradient-to-br from-blue-900 via-blue-800 to-slate-900">
+    <section id="home" className="relative overflow-hidden py-16 md:py-24 bg-[color:var(--lightpurple)]">
       {/* Decorative background elements */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl" />
+        {/* <div className="absolute top-0 right-0 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl" /> */}
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,7 +60,7 @@ export default function Hero() {
               <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
                 2D MatTechGlobal (2DMTG)
               </h1>
-              <h2 className="text-xl md:text-2xl font-semibold text-blue-100 mt-2">
+              <h2 className="text-xl md:text-2xl font-semibold text-white mt-2">
                 Fundamentals to Applications
               </h2>
             </div>
@@ -71,7 +71,7 @@ export default function Hero() {
               </div>
             </div>
 
-            <p className="text-lg text-blue-100 max-w-xl leading-relaxed">
+            <p className="text-lg text-white max-w-xl leading-relaxed">
               Join leading scientists, engineers, and industry experts for an interdisciplinary exploration of 2D materials and their transformative applications across energy, healthcare, electronics, and quantum technologies.
             </p>
 
@@ -90,7 +90,7 @@ export default function Hero() {
               </button>
             </div>
 
-            <p className="text-sm text-blue-200 pt-2">
+            <p className="text-sm text-white pt-2">
               📍 Indian Institute of Technology Indore | Khandwa Road, Simrol, Indore, India
             </p>
           </div>

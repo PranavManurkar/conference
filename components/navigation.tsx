@@ -19,8 +19,9 @@ export default function Navigation() {
       label: "Sponsorship",
       href: "/",
       children: [
-        { label: "Our Sponsors", href: "/sponsors" },
         { label: "Sponsorship Opportunities", href: "/sponsorship" },
+        { label: "Our Sponsors", href: "/sponsors" },
+        
       ],
     },
     {
@@ -62,7 +63,7 @@ export default function Navigation() {
                   className="object-contain mt-2 pt-2"
                 />
               </div>
-              <div className="hidden sm:flex flex-col hover:opacity-80 justify-center">
+              <div className="hidden sm:flex flex-col  hover:opacity-80 justify-center">
                 <h2 className="text-[color:var(--nav)] font-bold text-sm leading-tight">
                   भारतीय प्रौद्योगिकी संस्थान
                 </h2>
@@ -98,7 +99,7 @@ export default function Navigation() {
         </div>
       </div>
 
-      <div className="bg-[color:var(--nav)] shadow-xl ">
+      <div className="bg-[color:var(--nav)] shadow-3xl ">
         <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
           <div className="flex justify-between items-center">
             <div className="hidden lg:flex items-center flex-wrap justify-start flex-1">
@@ -114,23 +115,23 @@ export default function Navigation() {
                         className={`px-3 py-4 text-sm font-semibold transition-all duration-300 border-b-4 whitespace-nowrap text-center block ${
                           // If any child is active, show active style
                           item.children.some((c) => isActive(c.href))
-                            ? "text-blue-200 border-[color:var(--primary)] bg-[color:var(--nav)] bg-opacity-30"
-                            : "text-gray-200 border-b-transparent hover:text-blue-200 hover:border-b-[color:var(--primary)] hover:bg-[color:var(--nav)] hover:bg-opacity-20"
+                            ? "text-white border-b-[color:var(--primary)] bg-[color:var(--navhover)]"
+                            : "text-white border-b-transparent hover:text-white hover:border-b-[color:var(--primary)] hover:bg-[color:var(--navhover)]"
                         }`}
                       >
                         {item.label}
                       </button>
 
                       {/* Desktop dropdown (hover) */}
-                      <div className="absolute left-0 top-full mt-0 hidden group-hover:block bg-[color:var(--nav)]/95 shadow-lg z-50 min-w-max">
+                      <div className="absolute left-0 top-full mt-0 hidden group-hover:block bg-[color:var(--navhover)]/95 shadow-lg z-50 min-w-max border-t-2 border-[color:var(--primary)]">
                         {item.children.map((c) => (
                           <Link
                             key={c.label}
                             href={c.href}
                             className={`block px-4 py-3 text-sm font-semibold whitespace-nowrap transition-all duration-300 border-l-4 ${
                               isActive(c.href)
-                                ? "text-blue-200 border-l-[color:var(--primary)] bg-[color:var(--nav)] bg-opacity-50"
-                                : "text-gray-200 border-l-transparent hover:text-blue-200 hover:border-l-[color:var(--primary)] hover:bg-[color:var(--nav)] hover:bg-opacity-40"
+                                ? "text-white border-l-[color:var(--primary)] bg-[color:var(--nav)]"
+                                : "text-white border-l-transparent hover:text-white hover:border-l-[color:var(--primary)] hover:bg-[color:var(--nav)]"
                             }`}
                           >
                             {c.label}
@@ -143,8 +144,8 @@ export default function Navigation() {
                       href={item.href}
                       className={`px-3 py-4 text-sm font-semibold transition-all duration-300 border-b-4 whitespace-nowrap text-center block ${
                         isActive(item.href)
-                          ? "text-blue-200 border-b-[color:var(--primary)] bg-[color:var(--nav)] bg-opacity-30"
-                          : "text-gray-200 border-b-transparent hover:text-blue-200 hover:border-b-[color:var(--primary)] hover:bg-[color:var(--nav)] hover:bg-opacity-20"
+                          ? "text-white border-b-[color:var(--primary)] bg-[color:var(--navhover)]"
+                          : "text-white border-b-transparent hover:text-white hover:border-b-[color:var(--primary)] hover:bg-[color:var(--navhover)]"
                       }`}
                     >
                       {item.label}
@@ -157,7 +158,7 @@ export default function Navigation() {
             <div className="hidden lg:flex flex-shrink-0">
               <Link
                 href="/registration"
-                className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105"
+                className="px-6 py-2.5 bg-[color:var(--primary)] hover:opacity-90 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105"
               >
                 Register
               </Link>
@@ -165,7 +166,7 @@ export default function Navigation() {
           </div>
 
           {isOpen && (
-            <div className="lg:hidden pb-4 space-y-2 border-t border-blue-700 animate-in fade-in slide-in-from-top-4">
+            <div className="lg:hidden pb-4 space-y-2 animate-in fade-in slide-in-from-top-4 mt-2">
               {navItems.map((item) => (
                 <div key={item.label}>
                   {/* Parent item: if has children, render a toggle button, otherwise a Link */}
@@ -176,8 +177,8 @@ export default function Navigation() {
                         onClick={() => toggleSub(item.label)}
                         className={`w-full text-left px-4 py-3 rounded-lg text-base font-semibold transition-all duration-200 ${
                           item.children.some((c) => isActive(c.href))
-                            ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
-                            : "text-gray-200 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-800 hover:text-white"
+                            ? "bg-[color:var(--primary)] text-white"
+                            : "text-white hover:bg-[color:var(--navhover)] hover:text-white"
                         }`}
                         aria-expanded={!!openSub[item.label]}
                       >
@@ -192,8 +193,8 @@ export default function Navigation() {
                               href={c.href}
                               className={`block px-4 py-2 rounded-lg text-base font-medium transition-all duration-150 ${
                                 isActive(c.href)
-                                  ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
-                                  : "text-gray-200 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-800 hover:text-white"
+                                  ? "bg-[color:var(--primary)] text-[color:var(--offwhite)]"
+                                  : "text-white hover:bg-[color:var(--navhover)] hover:text-white"
                               }`}
                               onClick={() => setIsOpen(false)}
                             >
@@ -208,8 +209,8 @@ export default function Navigation() {
                       href={item.href}
                       className={`block px-4 py-3 rounded-lg text-base font-semibold transition-all duration-200 ${
                         isActive(item.href)
-                          ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
-                          : "text-gray-200 hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-800 hover:text-white"
+                          ? "bg-[color:var(--primary)] text-white"
+                          : "text-white hover:bg-[color:var(--navhover)] hover:text-white"
                       }`}
                       onClick={() => setIsOpen(false)}
                     >

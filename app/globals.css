@@ -27,14 +27,13 @@
   --sidebar-ring: oklch(0.42 0.22 263);
   --input: oklch(0.92 0.001 0);
 
-  --dark: #595959;
-
 
   --nav: #444444; /* Custom nav gray (similar to palette dark gray #424242) */
   --navhover: #595959; /* Custom nav hover gray */
   --offwhite: #dcc8cd; /* Custom offwhite (similar to palette light pink #fce4ec) */
-  --lightpurple: #cf9ac4; /* Custom light purple (similar to palette medium purple #ce93d8) */
-
+  --lightpurple: #bc6aa6; /* Custom light purple (similar to palette medium purple #ce93d8) */
+  --verylightpurple: #cf9ac4; /* Custom very light purple (similar to palette very light purple #f3e5f5) */
+  
   /* Palette colors added below - only unique ones not closely matching existing */
   --palette-orange: #ff6b35; /* Warm orange accent from palette */
   --palette-main-purple: #9c27b0; /* Main deep purple from palette */
