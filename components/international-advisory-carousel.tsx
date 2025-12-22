@@ -90,11 +90,11 @@ export default function InternationalAdvisoryCarousel() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {committeeMembers.map((member, idx) => (
           <div key={idx} className="group">
-            <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-100 hover:border-blue-300">
+            <div className="bg-[color:var(--primary-foreground)] rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-[color:var(--nav)]/10 hover:border-[color:var(--primary)]">
 
               {/* Avatar Section */}
-              <div className="h-32 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                <div className="relative h-32 w-32 rounded-full bg-white p-1 shadow-md">
+              <div className="h-32 bg-gradient-to-br from-[color:var(--primary)] to-[color:var(--nav)] flex items-center justify-center p-4">
+                <div className="relative h-32 w-32 rounded-full bg-[color:var(--primary-foreground)] p-1 shadow-md">
                   {member.image ? (
                     <Image
                       src={member.image}
@@ -104,7 +104,7 @@ export default function InternationalAdvisoryCarousel() {
                       className="rounded-full object-contain"
                     />
                   ) : (
-                    <div className="flex items-center justify-center h-full w-full rounded-full bg-slate-200 text-slate-700 font-semibold text-lg">
+                    <div className="flex items-center justify-center h-full w-full rounded-full bg-[color:var(--nav)]/10 text-[color:var(--nav)] font-semibold text-lg">
                       {member.initials}
                     </div>
                   )}
@@ -113,10 +113,10 @@ export default function InternationalAdvisoryCarousel() {
 
               {/* Text Section */}
               <div className="p-6">
-                <h3 className="font-bold text-slate-900 text-base mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="font-bold text-[color:var(--nav)] text-base mb-2 line-clamp-2 group-hover:text-[color:var(--primary)] transition-colors">
                   {member.name}
                 </h3>
-                <p className="text-sm text-slate-600 line-clamp-2">
+                <p className="text-sm text-[color:var(--nav)]/80 line-clamp-2">
                   {member.affiliation}
                 </p>
               </div>

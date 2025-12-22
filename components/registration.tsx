@@ -47,38 +47,38 @@ export default function Registration() {
   ]
 
   return (
-    <section id="registration" className="py-20 bg-gray-50">
+    <section id="registration" className="py-20 bg-[var(--background)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-center text-gray-900 mb-4">
-          <span className="text-blue-600">Registration</span> Fees
+        <h2 className="text-4xl font-bold text-center text-[var(--foreground)] mb-4">
+          <span className="text-[var(--primary)]">Registration</span> Fees
         </h2>
-        <p className="text-center text-gray-600 mb-12 text-lg">Early Bird rates available until May 5, 2026</p>
+        <p className="text-center text-[var(--muted-foreground)] mb-12 text-lg">Early Bird rates available until May 5, 2026</p>
 
-        <Card className="border-0 shadow-lg">
+        <Card className="border-0 shadow-lg bg-[var(--card)]">
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table>
-                <TableHeader className="bg-blue-900 text-white">
+                <TableHeader className="bg-[var(--nav)] text-[var(--primary-foreground)]">
                   <TableRow>
-                    <TableHead className="text-white font-bold">Delegate Type</TableHead>
-                    <TableHead className="text-white font-bold">Indian (Early)</TableHead>
-                    <TableHead className="text-white font-bold">Indian (Final)</TableHead>
-                    <TableHead className="text-white font-bold">SAARC (Early)</TableHead>
-                    <TableHead className="text-white font-bold">SAARC (Final)</TableHead>
-                    <TableHead className="text-white font-bold">NON-SAARC (Early)</TableHead>
-                    <TableHead className="text-white font-bold">NON-SAARC (Final)</TableHead>
+                    <TableHead className="text-[var(--primary-foreground)] font-bold">Delegate Type</TableHead>
+                    <TableHead className="text-[var(--primary-foreground)] font-bold">Indian (Early)</TableHead>
+                    <TableHead className="text-[var(--primary-foreground)] font-bold">Indian (Final)</TableHead>
+                    <TableHead className="text-[var(--primary-foreground)] font-bold">SAARC (Early)</TableHead>
+                    <TableHead className="text-[var(--primary-foreground)] font-bold">SAARC (Final)</TableHead>
+                    <TableHead className="text-[var(--primary-foreground)] font-bold">NON-SAARC (Early)</TableHead>
+                    <TableHead className="text-[var(--primary-foreground)] font-bold">NON-SAARC (Final)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {registrationData.map((row, idx) => (
-                    <TableRow key={idx} className={idx % 2 === 0 ? "bg-white" : "bg-blue-50"}>
-                      <TableCell className="font-semibold text-gray-900">{row.type}</TableCell>
-                      <TableCell className="text-gray-700">{row.IndianEarlyINR}</TableCell>
-                      <TableCell className="text-gray-700">{row.IndianFinalINR}</TableCell>
-                      <TableCell className="text-gray-700">{row.SaarcEarlyUSD}</TableCell>
-                      <TableCell className="text-gray-700">{row.SaarcFinalUSD}</TableCell>
-                      <TableCell className="text-gray-700">{row.NonSaarcEarlyUSD}</TableCell>
-                      <TableCell className="text-gray-700">{row.NonSaarcFinalUSD}</TableCell>
+                    <TableRow key={idx} className={idx % 2 === 0 ? "bg-[var(--card)]" : "bg-[var(--muted)]"}>
+                      <TableCell className="font-semibold text-[var(--foreground)]">{row.type}</TableCell>
+                      <TableCell className="text-[var(--muted-foreground)]">{row.IndianEarlyINR}</TableCell>
+                      <TableCell className="text-[var(--muted-foreground)]">{row.IndianFinalINR}</TableCell>
+                      <TableCell className="text-[var(--muted-foreground)]">{row.SaarcEarlyUSD}</TableCell>
+                      <TableCell className="text-[var(--muted-foreground)]">{row.SaarcFinalUSD}</TableCell>
+                      <TableCell className="text-[var(--muted-foreground)]">{row.NonSaarcEarlyUSD}</TableCell>
+                      <TableCell className="text-[var(--muted-foreground)]">{row.NonSaarcFinalUSD}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -87,12 +87,12 @@ export default function Registration() {
           </CardContent>
         </Card>
 
-        <div className="mt-12 bg-white rounded-lg shadow-md p-8">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">Payment Information</h3>
+        <div className="mt-12 bg-[var(--card)] rounded-lg shadow-md p-8">
+          <h3 className="text-2xl font-bold text-[var(--foreground)] mb-6">Payment Information</h3>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h4 className="font-bold text-gray-900 mb-4">Bank Details</h4>
-              <ul className="space-y-3 text-gray-700">
+              <h4 className="font-bold text-[var(--foreground)] mb-4">Bank Details</h4>
+              <ul className="space-y-3 text-[var(--muted-foreground)]">
                 <li>
                   <span className="font-semibold">Bank:</span> Canara Bank
                 </li>
@@ -114,8 +114,8 @@ export default function Registration() {
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-gray-900 mb-4">Account Information</h4>
-              <ul className="space-y-3 text-gray-700">
+              <h4 className="font-bold text-[var(--foreground)] mb-4">Account Information</h4>
+              <ul className="space-y-3 text-[var(--muted-foreground)]">
                 <li>
                   <span className="font-semibold">GST No:</span> 23AAAAI7115H122
                 </li>
@@ -136,50 +136,50 @@ export default function Registration() {
           </div>
         </div>
 
-        <div className="mt-12 bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg shadow-lg p-8 text-white">
+        <div className="mt-12 bg-[var(--primary)] rounded-lg shadow-lg p-8 text-[var(--primary-foreground)]">
           <h3 className="text-2xl font-bold mb-6">How to Register</h3>
           <div className="grid md:grid-cols-4 gap-6">
             <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
-                <CreditCard className="h-6 w-6" />
+              <div className="w-12 h-12 rounded-full bg-[var(--primary-foreground)]/20 flex items-center justify-center mb-4">
+                <CreditCard className="h-6 w-6 text-[var(--primary-foreground)]" />
               </div>
               <div className="font-bold text-lg mb-2">Step 1</div>
-              <p className="text-blue-100 text-sm">
+              <p className="text-[var(--primary-foreground)]/80 text-sm">
                 Pay the registration fee based on your delegate type and registration period using the bank details
                 above
               </p>
             </div>
             <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
-                <UserPlus className="h-6 w-6" />
+              <div className="w-12 h-12 rounded-full bg-[var(--primary-foreground)]/20 flex items-center justify-center mb-4">
+                <UserPlus className="h-6 w-6 text-[var(--primary-foreground)]" />
               </div>
               <div className="font-bold text-lg mb-2">Step 2</div>
-              <p className="text-blue-100 text-sm">
+              <p className="text-[var(--primary-foreground)]/80 text-sm">
                 Create an account or login to your dashboard using the button below
               </p>
             </div>
             <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
-                <FileText className="h-6 w-6" />
+              <div className="w-12 h-12 rounded-full bg-[var(--primary-foreground)]/20 flex items-center justify-center mb-4">
+                <FileText className="h-6 w-6 text-[var(--primary-foreground)]" />
               </div>
               <div className="font-bold text-lg mb-2">Step 3</div>
-              <p className="text-blue-100 text-sm">
+              <p className="text-[var(--primary-foreground)]/80 text-sm">
                 Fill in your details and enter the Transaction ID for payment verification
               </p>
             </div>
             <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
-                <CheckCircle className="h-6 w-6" />
+              <div className="w-12 h-12 rounded-full bg-[var(--primary-foreground)]/20 flex items-center justify-center mb-4">
+                <CheckCircle className="h-6 w-6 text-[var(--primary-foreground)]" />
               </div>
               <div className="font-bold text-lg mb-2">Step 4</div>
-              <p className="text-blue-100 text-sm">
+              <p className="text-[var(--primary-foreground)]/80 text-sm">
                 Once your payment is verified and status shows "Accepted", you can attend the conference
               </p>
             </div>
           </div>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
+            <Button asChild size="lg" className="bg-[var(--primary-foreground)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)]">
               <Link href="/auth/sign-up">
                 Create Account
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -189,7 +189,7 @@ export default function Registration() {
               asChild
               size="lg"
               variant="outline"
-              className="border-white text-white hover:text-blue-100 hover:bg-white"
+              className="border-[var(--primary-foreground)] text-[var(--primary-foreground)] hover:text-[var(--primary)] hover:bg-[var(--primary-foreground)]"
             >
               <Link href="/auth/login">
                 Login to Dashboard

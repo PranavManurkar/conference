@@ -27,11 +27,11 @@ export default function SponsorsPage() {
       key: "title",
       name: "Title Sponsors",
       icon: Building2,
-      color: "from-blue-900 to-blue-700",
-      textColor: "text-white",
+      color: "",
+      textColor: "text-[color:var(--primary-foreground)]",
       gridCols: "md:grid-cols-1",
-      borderColor: "border-blue-400",
-      bgColor: "bg-gradient-to-r from-blue-900 to-blue-700",
+      borderColor: "border-[color:var(--primary)]",
+      bgColor: "bg-[color:var(--primary)]",
       amount: "₹1,200,000",
       benefits: [
         "35-min presentation to entire audience",
@@ -45,11 +45,11 @@ export default function SponsorsPage() {
       key: "diamond",
       name: "Diamond Sponsors",
       icon: Award,
-      color: "from-cyan-600 to-blue-600",
-      textColor: "text-white",
+      color: "",
+      textColor: "text-[color:var(--primary-foreground)]",
       gridCols: "md:grid-cols-2",
-      borderColor: "border-cyan-300",
-      bgColor: "bg-gradient-to-r from-cyan-600 to-blue-600",
+      borderColor: "border-[color:var(--primary)]/80",
+      bgColor: "bg-[color:var(--primary)]/90",
       amount: "₹1,000,000",
       benefits: [
         "25-min presentation to audience",
@@ -62,11 +62,11 @@ export default function SponsorsPage() {
       key: "platinum",
       name: "Platinum Sponsors",
       icon: Zap,
-      color: "from-purple-600 to-blue-600",
-      textColor: "text-white",
+      color: "",
+      textColor: "text-[color:var(--primary-foreground)]",
       gridCols: "md:grid-cols-3",
-      borderColor: "border-purple-300",
-      bgColor: "bg-gradient-to-r from-purple-600 to-blue-600",
+      borderColor: "border-[color:var(--primary)]/60",
+      bgColor: "bg-[color:var(--nav)]",
       amount: "₹700,000",
       benefits: ["20-min presentation", "2 exhibition booths", "Full-page souvenir ad", "Free entry for 4 delegates"],
     },
@@ -74,23 +74,23 @@ export default function SponsorsPage() {
       key: "gold",
       name: "Gold Sponsors",
       icon: Target,
-      color: "from-yellow-500 to-orange-500",
-      textColor: "text-white",
+      color: "",
+      textColor: "text-[color:var(--primary-foreground)]",
       gridCols: "md:grid-cols-4",
-      borderColor: "border-yellow-300",
-      bgColor: "bg-gradient-to-r from-yellow-500 to-orange-500",
+      borderColor: "border-[color:var(--primary)]/40",
+      bgColor: "bg-[color:var(--nav)]/90",
       amount: "₹500,000",
       benefits: ["15-min presentation", "1 exhibition booth", "½ page souvenir ad", "Free entry for 3 delegates"],
     },
   ]
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 pt-8">
+    <main className="min-h-screen bg-[color:var(--nav)]/5 pt-8">
       <div className="max-w-7xl mx-auto px-4 py-16">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-slate-900 mb-4">Our Sponsors</h1>
-          <p className="text-xl text-slate-700 max-w-3xl mx-auto">
+          <h1 className="text-5xl font-bold text-[color:var(--nav)] mb-4">Our Sponsors</h1>
+          <p className="text-xl text-[color:var(--nav)]/80 max-w-3xl mx-auto">
             We are grateful to our sponsors who make the 2D MatTechGlobal 2026 Conference possible. Their support
             enables us to bring together the world's leading experts in 2D materials research and applications.
           </p>
@@ -99,12 +99,12 @@ export default function SponsorsPage() {
         {tierConfig.map((tier) => (
           <section key={tier.key} className="mb-16">
             <div className="flex items-center gap-4 mb-8">
-              <div className={`bg-gradient-to-r ${tier.color} p-3 rounded-lg`}>
-                <tier.icon className="w-8 h-8 text-white" />
+              <div className={`p-3 rounded-lg bg-[color:var(--primary)]`}>
+                <tier.icon className="w-8 h-8 text-[color:var(--primary-foreground)]" />
               </div>
               <div>
-                <h2 className="text-3xl font-bold text-slate-900">{tier.name}</h2>
-                <p className="text-slate-600 text-sm">{tier.amount}</p>
+                <h2 className="text-3xl font-bold text-[color:var(--nav)]">{tier.name}</h2>
+                <p className="text-[color:var(--primary)] text-sm">{tier.amount}</p>
               </div>
             </div>
 
@@ -120,23 +120,23 @@ export default function SponsorsPage() {
                 ))}
               </div>
             ) : (
-              <div className={`bg-white rounded-lg p-8 border-2 border-dashed border-slate-300 text-center mb-8`}>
-                <p className="text-slate-600 text-lg">No sponsors in this category yet</p>
-                <p className="text-slate-500 text-sm mt-2">Be the first to sponsor at this level!</p>
+              <div className={`bg-[color:var(--primary-foreground)] rounded-lg p-8 border-2 border-dashed border-[color:var(--nav)]/30 text-center mb-8`}>
+                <p className="text-[color:var(--nav)]/80 text-lg">No sponsors in this category yet</p>
+                <p className="text-[color:var(--nav)]/60 text-sm mt-2">Be the first to sponsor at this level!</p>
               </div>
             )}
 
             {/* Benefits for this tier */}
-            <div className="bg-white rounded-lg p-6 shadow-md">
-              <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <span className={`inline-block w-3 h-3 rounded-full bg-gradient-to-r ${tier.color}`}></span>
+            <div className="bg-[color:var(--primary-foreground)] rounded-lg p-6 shadow-md">
+              <h3 className="font-bold text-[color:var(--nav)] mb-4 flex items-center gap-2">
+                <span className={`inline-block w-3 h-3 rounded-full bg-[color:var(--primary)]`}></span>
                 What's Included
               </h3>
               <ul className="grid md:grid-cols-2 gap-3">
                 {tier.benefits.map((benefit, idx) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <span className={`text-blue-600 font-bold flex-shrink-0`}>✓</span>
-                    <span className="text-slate-700">{benefit}</span>
+                    <span className={`text-[color:var(--primary)] font-bold flex-shrink-0`}>✓</span>
+                    <span className="text-[color:var(--nav)]/80">{benefit}</span>
                   </li>
                 ))}
               </ul>
@@ -146,7 +146,7 @@ export default function SponsorsPage() {
 
         {/* Additional Sponsorship Options */}
         <section className="mt-16">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8">Other Sponsorship Opportunities</h2>
+          <h2 className="text-3xl font-bold text-[color:var(--nav)] mb-8">Other Sponsorship Opportunities</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[
               { name: "Banquet Sponsorship", amount: "₹350,000" },
@@ -155,25 +155,25 @@ export default function SponsorsPage() {
             ].map((option, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-lg p-6 shadow-md border border-slate-200 hover:shadow-lg transition-shadow"
+                className="bg-[color:var(--primary-foreground)] rounded-lg p-6 shadow-md border border-[color:var(--nav)]/10 hover:scale-105 hover:shadow-2xl transition-transform duration-200"
               >
-                <h3 className="text-xl font-bold text-slate-900 mb-2">{option.name}</h3>
-                <p className="text-blue-600 font-semibold">{option.amount}</p>
+                <h3 className="text-xl font-bold text-[color:var(--nav)] mb-2">{option.name}</h3>
+                <p className="text-[color:var(--primary)] font-semibold">{option.amount}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* Call to Action */}
-        <section className="mt-16 bg-gradient-to-r from-blue-900 to-blue-700 rounded-lg shadow-lg p-12 text-center text-white">
+        <section className="mt-16 bg-[color:var(--primary)] rounded-lg shadow-lg p-12 text-center text-[color:var(--primary-foreground)]">
           <h3 className="text-3xl font-bold mb-4">Become a Sponsor</h3>
-          <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-[color:var(--primary-foreground)]/80 mb-8 max-w-2xl mx-auto">
             Showcase your organization to leading scientists, engineers, and industry experts from around the world.
             Partner with us and make a lasting impact on the future of 2D materials research and innovation.
           </p>
           <a
             href="/sponsorship"
-            className="inline-block bg-white text-blue-900 px-8 py-3 rounded-lg font-bold hover:bg-blue-50 transition-colors"
+            className="inline-block bg-[color:var(--primary-foreground)] text-[color:var(--primary)] px-8 py-3 rounded-lg font-bold hover:bg-[color:var(--nav)] hover:text-[color:var(--primary-foreground)] transition-colors"
           >
             View Sponsorship Opportunities
           </a>

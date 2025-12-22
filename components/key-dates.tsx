@@ -5,21 +5,21 @@ import { Calendar } from 'lucide-react'
 const DateItem = ({ date, label }: { date: string; label: string }) => (
   <div className="flex items-start space-x-4">
     <div className="flex-shrink-0">
-      <Calendar className="h-6 w-6 text-blue-600 mt-1" />
+      <Calendar className="h-6 w-6 text-[color:var(--primary)] mt-1" />
     </div>
     <div>
-      <p className="text-lg font-semibold text-blue-900">{date}</p>
-      <p className="text-gray-600">{label}</p>
+      <p className="text-lg font-semibold text-[color:var(--primary)]">{date}</p>
+      <p className="text-[color:var(--nav)]/80">{label}</p>
     </div>
   </div>
 )
 
 export default function KeyDates() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-[color:var(--primary-foreground)]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">
-          <span className="text-blue-600">Important</span> Dates
+        <h2 className="text-4xl font-bold text-center text-[color:var(--nav)] mb-12">
+          <span className="text-[color:var(--primary)]">Important</span> Dates
         </h2>
 
         <div className="grid md:grid-cols-2 gap-8">

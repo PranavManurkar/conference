@@ -20,12 +20,12 @@ const fadeUp: Variants = {
 
 export default function About() {
   return (
-    <section id="about" className="py-20 bg-gray-50">
+    <section id="about" className="py-20 bg-[color:var(--nav)]/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
 
         {/* SECTION 1 — Image top (mobile only), Text left, Image right (desktop) */}
         <motion.div
-          className="bg-white rounded-lg shadow-sm flex flex-col md:grid md:grid-cols-5 overflow-hidden"
+          className="bg-[color:var(--primary-foreground)] rounded-lg shadow flex flex-col md:grid md:grid-cols-5 overflow-hidden"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -33,11 +33,11 @@ export default function About() {
         >
           <div className="md:col-span-3 p-6 order-last md:order-none">
             <div className="mb-4">
-              <div className="h-1 w-10 bg-blue-500 rounded mb-2" />
-              <h2 className="text-2xl font-semibold text-gray-900">The Conference</h2>
+              <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
+              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">The Conference</h2>
             </div>
 
-            <div className="space-y-3 text-base text-gray-700 leading-relaxed">
+            <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
               <p>
                 2D materials are far more than a scientific curiosity; they represent a
                 transformative frontier in materials science, poised to redefine
@@ -69,7 +69,7 @@ export default function About() {
 
         {/* SECTION 2 — Video top (mobile only), Text right (desktop) */}
         <motion.div
-          className="bg-white rounded-lg shadow-sm flex flex-col md:grid md:grid-cols-5 overflow-hidden"
+          className="bg-[color:var(--primary-foreground)] rounded-lg shadow flex flex-col md:grid md:grid-cols-5 overflow-hidden"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -97,11 +97,11 @@ export default function About() {
 
           <div className="md:col-span-3 p-6 md:order-none order-last">
             <div className="mb-4">
-              <div className="h-1 w-10 bg-blue-500 rounded mb-2" />
-              <h2 className="text-2xl font-semibold text-gray-900">About IIT Indore</h2>
+              <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
+              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">About IIT Indore</h2>
             </div>
 
-            <div className="space-y-3 text-base text-gray-700 leading-relaxed">
+            <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
               <p>
                 IIT Indore was established in 2009 as a second-generation IIT and is
                 located on a 501-acre permanent campus at Simrol. The institute shifted
@@ -122,7 +122,7 @@ export default function About() {
                   href="https://iiti.ac.in"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 underline hover:text-blue-800"
+                  className="text-[color:var(--primary)] underline hover:text-[color:var(--nav)]"
                 >
                  IIT Indore website
                 </a>.
@@ -133,7 +133,7 @@ export default function About() {
 
         {/* SECTION 3 — Image top (mobile only), Text left, Image right (desktop) */}
         <motion.div
-          className="bg-white rounded-lg shadow-sm flex flex-col md:grid md:grid-cols-5 overflow-hidden"
+          className="bg-[color:var(--primary-foreground)] rounded-lg shadow flex flex-col md:grid md:grid-cols-5 overflow-hidden"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -141,11 +141,11 @@ export default function About() {
         >
           <div className="md:col-span-3 p-6 order-last md:order-none">
             <div className="mb-4">
-              <div className="h-1 w-10 bg-blue-500 rounded mb-2" />
-              <h2 className="text-2xl font-semibold text-gray-900">Indore City</h2>
+              <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
+              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">Indore City</h2>
             </div>
 
-            <div className="space-y-3 text-base text-gray-700 leading-relaxed">
+            <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
               <p>
                 Indore is the commercial capital of Madhya Pradesh and a major trading
                 hub since the 16th century, located in the Malwa region along the Kanh
@@ -171,7 +171,7 @@ export default function About() {
 
         {/* SECTION 4 — Image top (mobile only), Image left, Text right (desktop) */}
         <motion.div
-          className="bg-white rounded-lg shadow-sm flex flex-col md:grid md:grid-cols-5 overflow-hidden"
+          className="bg-[color:var(--primary-foreground)] rounded-lg shadow flex flex-col md:grid md:grid-cols-5 overflow-hidden"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -189,13 +189,13 @@ export default function About() {
 
           <div className="md:col-span-3 p-6 md:order-none order-last">
             <div className="mb-4">
-              <div className="h-1 w-10 bg-blue-500 rounded mb-2" />
-              <h2 className="text-2xl font-semibold text-gray-900">
+              <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
+              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">
                 Department of Metallurgical Engineering and Materials Science
               </h2>
             </div>
 
-            <div className="space-y-3 text-base text-gray-700 leading-relaxed">
+            <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
               <p>
                 The MEMS department at IIT Indore was established in 2009 and focuses on
                 both fundamental and applied research in metallurgy and materials
@@ -212,7 +212,7 @@ export default function About() {
                   href="https://mems.iiti.ac.in/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 underline hover:text-blue-800"
+                  className="text-[color:var(--primary)] underline hover:text-[color:var(--nav)]"
                 >
                   MEMS IIT Indore website
                 </a>.

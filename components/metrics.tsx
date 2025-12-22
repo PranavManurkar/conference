@@ -14,29 +14,29 @@ const MetricsCard = ({ icon: Icon, label, value }: { icon: any; label: string; v
   }, [value])
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 text-center border border-slate-100 hover:shadow-xl transition-shadow duration-300">
+    <div className="bg-[color:var(--primary-foreground)] rounded-2xl shadow-lg p-8 text-center border border-[color:var(--nav)]/10 hover:shadow-xl transition-shadow duration-300">
       <div className="flex justify-center mb-4">
-        <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-50 rounded-2xl flex items-center justify-center">
-          <Icon size={32} className="text-blue-600" />
+        <div className="w-16 h-16 bg-gradient-to-br from-[color:var(--primary)]/10 to-[color:var(--nav)]/10 rounded-2xl flex items-center justify-center">
+          <Icon size={32} className="text-[color:var(--primary)]" />
         </div>
       </div>
-      <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent mb-2">
+      <div className="text-4xl font-bold bg-gradient-to-r from-[color:var(--primary)] to-[color:var(--nav)] bg-clip-text text-transparent mb-2">
         {count.toLocaleString()}+
       </div>
-      <p className="text-slate-600 font-semibold text-lg">{label}</p>
+      <p className="text-[color:var(--nav)]/80 font-semibold text-lg">{label}</p>
     </div>
   )
 }
 
 export default function Metrics() {
   return (
-    <section className="py-20 bg-gradient-to-b from-slate-50 to-white">
+    <section className="py-20 bg-gradient-to-b from-[color:var(--primary-foreground)] to-[color:var(--primary-foreground)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-[color:var(--nav)] mb-4">
             Conference Impact
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg text-[color:var(--nav)]/80 max-w-2xl mx-auto">
             Join a global community of materials science experts and innovators
           </p>
         </div>

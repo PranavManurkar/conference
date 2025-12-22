@@ -8,11 +8,11 @@ type DateItemProps = { date: string; label: string };
 const DateItem = ({ date, label }: DateItemProps) => (
   <div className="flex items-start space-x-4">
     <div className="flex-shrink-0">
-      <Calendar className="h-6 w-6 text-blue-600 mt-1" />
+      <Calendar className="h-6 w-6 text-[color:var(--primary)] mt-1" />
     </div>
     <div>
-      <p className="text-lg font-semibold text-blue-900">{date}</p>
-      <p className="text-gray-600">{label}</p>
+      <p className="text-lg font-semibold text-[color:var(--primary)]">{date}</p>
+      <p className="text-[color:var(--nav)]/80">{label}</p>
     </div>
   </div>
 );
@@ -108,13 +108,13 @@ export default function KeyAttraction() {
     <>
 
       {/* Indore Key Attractions Section */}
-      <section className="py-8 bg-gray-50">
+      <section className="py-8 bg-[color:var(--nav)]/5">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <h3 className="text-3xl font-bold text-gray-900">
-              Key <span className="text-blue-600">Attractions</span> of Indore
+            <h3 className="text-3xl font-bold text-[color:var(--nav)]">
+              Key <span className="text-[color:var(--primary)]">Attractions</span> of Indore
             </h3>
-            <p className="mt-2 text-gray-600 max-w-2xl mx-auto">
+            <p className="mt-2 text-[color:var(--nav)]/80 max-w-2xl mx-auto">
               Prominent landmarks and experiences that represent Indore’s heritage,
               culture, and cuisine.
             </p>
@@ -124,7 +124,7 @@ export default function KeyAttraction() {
             {attractions.map((a) => (
               <article
                 key={a.id}
-                className="bg-white border border-gray-100 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-200"
+                className="bg-[color:var(--primary-foreground)] border border-[color:var(--nav)]/10 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-200"
               >
                 <div className="relative h-48 w-full">
                   <Image
@@ -138,10 +138,10 @@ export default function KeyAttraction() {
                 <div className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <h4 className="text-lg font-semibold text-blue-900">
+                      <h4 className="text-lg font-semibold text-[color:var(--primary)]">
                         {a.title}
                       </h4>
-                      <p className="mt-2 text-sm text-gray-700">
+                      <p className="mt-2 text-sm text-[color:var(--nav)]/80">
                         {a.description}
                       </p>
                     </div>
@@ -149,7 +149,7 @@ export default function KeyAttraction() {
                       href={a.googleMapsLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ml-3 flex-shrink-0 p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+                      className="ml-3 flex-shrink-0 p-2 text-[color:var(--primary)] hover:bg-[color:var(--nav)]/10 rounded-lg transition-colors duration-200"
                       aria-label={`View ${a.title} on Google Maps`}
                     >
                       <ExternalLink className="h-5 w-5" />

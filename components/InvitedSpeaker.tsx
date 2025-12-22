@@ -90,7 +90,7 @@ export default function InvitedSpeaker() {
 
 
   return (
-    <section id="invited-speakers" className="py-20 bg-gray-50">
+    <section id="invited-speakers" className="py-20 bg-[var(--background)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -101,12 +101,12 @@ export default function InvitedSpeaker() {
           variants={fadeUp}
         >
           <div className="inline-block mb-4">
-            <div className="h-1 w-12 bg-blue-600 rounded" />
+            <div className="h-1 w-12 bg-[var(--primary)] rounded" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            <span className="text-blue-600">Invited</span> Speakers
+          <h2 className="text-4xl md:text-5xl font-bold text-[var(--foreground)] mb-4">
+            <span className="text-[var(--primary)]">Invited</span> Speakers
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-[var(--muted-foreground)] max-w-3xl mx-auto">
             Distinguished experts and thought leaders from around the world sharing insights on
             cutting-edge research and applications in 2D materials technology.
           </p>
@@ -123,29 +123,26 @@ export default function InvitedSpeaker() {
           {speakers.map((speaker, idx) => (
             <motion.div
               key={idx}
-              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-300"
+              className="bg-[var(--card)] rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-[var(--border)] hover:border-[var(--primary)]"
               variants={fadeUp}
             >
               {/* Image Section */}
-              <div className="relative h-64 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center overflow-hidden">
+              <div className="flex items-center justify-center py-6 bg-gradient-to-br from-[color:var(--primary)] to-[color:var(--nav)]">
                 {speaker.image ? (
-                  <div className="relative w-full h-full">
+                  <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-[color:var(--primary-foreground)] shadow-lg flex-shrink-0 bg-white">
                     <Image
                       src={speaker.image}
                       alt={speaker.name}
                       fill
-                      className="object-contain p-2"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover"
+                      sizes="128px"
                       priority={false}
                     />
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-gray-300 to-gray-400">
-                    <div className="text-center">
-                      <Briefcase className="h-16 w-16 text-white mx-auto mb-3 opacity-70" />
-                      <span className="text-white text-sm font-medium opacity-80">No Photo</span>
-                      <span className="text-white text-xs opacity-60 mt-1 block">Available</span>
-                    </div>
+                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[color:var(--nav)]/10 to-[color:var(--nav)]/30 flex flex-col items-center justify-center border-4 border-[color:var(--primary-foreground)] shadow-lg">
+                    <Briefcase className="h-12 w-12 text-white opacity-70 mb-2" />
+                    <span className="text-white text-xs opacity-60">No Photo</span>
                   </div>
                 )}
               </div>
@@ -153,19 +150,19 @@ export default function InvitedSpeaker() {
               {/* Content Section */}
               <div className="p-6">
                 {/* Name */}
-                <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+                <h3 className="text-lg font-bold text-[var(--foreground)] mb-2 line-clamp-2">
                   {speaker.name}
                 </h3>
 
                 {/* Title and Affiliation */}
                 <div className="space-y-2 mb-4">
-                  <p className="text-sm font-semibold text-blue-600">{speaker.title}</p>
-                  <p className="text-sm text-gray-700 font-medium">{speaker.affiliation}</p>
+                  <p className="text-sm font-semibold text-[var(--primary)]">{speaker.title}</p>
+                  <p className="text-sm text-[var(--muted-foreground)] font-medium">{speaker.affiliation}</p>
                 </div>
 
                 {/* Divider */}
-                {/* <div className="border-t border-gray-200 pt-4">
-                  <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">
+                {/* <div className="border-t border-[var(--border)] pt-4">
+                  <p className="text-xs text-[var(--muted-foreground)] uppercase tracking-wide font-semibold">
                     Distinguished Speaker
                   </p>
                 </div> */}
@@ -182,14 +179,14 @@ export default function InvitedSpeaker() {
           viewport={{ once: true }}
           variants={fadeUp}
         >
-          <p className="text-gray-600 mb-6">
+          <p className="text-[var(--muted-foreground)] mb-6">
             More speakers and session details coming soon. Stay tuned for updates!
           </p>
-          <button className="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-md hover:shadow-lg">
-            <Link href="/schedule">
-            View Full Schedule
-            </Link>
-          </button>
+          <Link href="/schedule">
+            <button className="inline-block px-8 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold rounded-lg hover:bg-[var(--nav)] hover:text-[var(--primary)] transition-colors duration-200 shadow-md hover:shadow-lg">
+              View Full Schedule
+            </button>
+          </Link>
         </motion.div>
       </div>
     </section>

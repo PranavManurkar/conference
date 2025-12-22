@@ -45,7 +45,7 @@ export default function Hero() {
     return pathname === href
   }
   return (
-    <section id="home" className="relative overflow-hidden py-16 md:py-24 bg-[color:var(--lightpurple)]">
+    <section id="home" className="relative overflow-hidden py-16 md:py-24 bg-[color:var(--primary)]">
       {/* Decorative background elements */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         {/* <div className="absolute top-0 right-0 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl" />

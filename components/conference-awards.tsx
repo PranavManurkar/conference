@@ -22,18 +22,18 @@ const AwardCard = ({
   note?: string;
 }) => {
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 border border-slate-200 hover:shadow-lg transition-shadow duration-300">
+    <div className="bg-[color:var(--primary-foreground)] rounded-xl shadow-md p-6 border border-[color:var(--nav)]/10 hover:shadow-lg transition-shadow duration-300">
       <div className="flex items-start gap-4 mb-3">
-        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
-          <Icon size={24} className="text-blue-600" />
+        <div className="w-12 h-12 bg-[color:var(--primary)]/10 rounded-lg flex items-center justify-center shrink-0">
+          <Icon size={24} className="text-[color:var(--primary)]" />
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
-          <p className="text-slate-600 text-sm leading-relaxed mt-1">{description}</p>
+          <h3 className="text-lg font-semibold text-[color:var(--nav)]">{title}</h3>
+          <p className="text-[color:var(--nav)]/80 text-sm leading-relaxed mt-1">{description}</p>
         </div>
       </div>
 
-      {note && <div className="mt-4 text-xs text-slate-500">{note}</div>}
+      {note && <div className="mt-4 text-xs text-[color:var(--nav)]/60">{note}</div>}
     </div>
   );
 };
@@ -45,11 +45,11 @@ const AwardCard = ({
  */
 export default function ConferenceAwards() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-[color:var(--primary-foreground)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Conference Awards</h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-[color:var(--nav)] mb-4">Conference Awards</h2>
+          <p className="text-lg text-[color:var(--nav)]/80 max-w-2xl mx-auto">
             Recognizing outstanding contributions — awards will be presented during the closing ceremony.
           </p>
         </div>

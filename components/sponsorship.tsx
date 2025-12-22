@@ -5,17 +5,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
 const SponsorshipCard = ({ title, amount, benefits, featured }: { title: string; amount: string; benefits: string[]; featured?: boolean }) => (
-  <Card className={`border-2 ${featured ? 'border-blue-600 shadow-lg scale-105' : 'border-gray-200'}`}>
-    <CardHeader className={featured ? 'bg-blue-50' : 'bg-gray-50'}>
-      <CardTitle className={featured ? 'text-blue-900' : 'text-gray-900'}>{title}</CardTitle>
-      <p className={`text-2xl font-bold mt-2 ${featured ? 'text-blue-600' : 'text-gray-700'}`}>{amount}</p>
+  <Card className={`border-2 ${featured ? 'border-[color:var(--primary)] shadow-lg scale-105' : 'border-[color:var(--nav)]/10'}`}>
+    <CardHeader className={featured ? 'bg-[color:var(--primary)]/10' : 'bg-[color:var(--nav)]/5'}>
+      <CardTitle className={featured ? 'text-[color:var(--primary)]' : 'text-[color:var(--nav)]'}>{title}</CardTitle>
+      <p className={`text-2xl font-bold mt-2 ${featured ? 'text-[color:var(--primary)]' : 'text-[color:var(--nav)]/80'}`}>{amount}</p>
     </CardHeader>
     <CardContent className="pt-6">
-      {featured && <Badge className="bg-blue-600 mb-4">Most Popular</Badge>}
+      {featured && <Badge className="bg-[color:var(--primary)] mb-4">Most Popular</Badge>}
       <ul className="space-y-2">
         {benefits.map((benefit, idx) => (
-          <li key={idx} className="flex items-start text-sm text-gray-700">
-            <span className="text-blue-600 mr-3 mt-1">✓</span>
+          <li key={idx} className="flex items-start text-sm text-[color:var(--nav)]/80">
+            <span className="text-[color:var(--primary)] mr-3 mt-1">✓</span>
             <span>{benefit}</span>
           </li>
         ))}
@@ -77,13 +77,13 @@ export default function Sponsorship() {
   ]
 
   return (
-    <section id="sponsorship" className="py-20 bg-white">
+    <section id="sponsorship" className="py-20 bg-[color:var(--primary-foreground)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            <span className="text-blue-600">Sponsorship</span> Opportunities
+          <h2 className="text-4xl font-bold text-[color:var(--nav)] mb-4">
+            <span className="text-[color:var(--primary)]">Sponsorship</span> Opportunities
           </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <p className="text-[color:var(--nav)]/80 text-lg max-w-2xl mx-auto">
             Partner with us to reach leading scientists and decision-makers in materials science and engineering.
           </p>
         </div>
@@ -97,19 +97,19 @@ export default function Sponsorship() {
 
         {/* Other Sponsorship Options */}
         <div className="mt-16">
-          <h3 className="text-2xl font-bold text-gray-900 mb-8">Other Sponsorship Options</h3>
+          <h3 className="text-2xl font-bold text-[color:var(--nav)] mb-8">Other Sponsorship Options</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
             {otherSponsorship.map((sponsor, idx) => (
-              <Card key={idx} className="border-gray-200">
+              <Card key={idx} className="border-[color:var(--nav)]/10">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">{sponsor.title}</CardTitle>
-                  <p className="text-blue-600 font-bold mt-2">{sponsor.amount}</p>
+                  <CardTitle className="text-lg text-[color:var(--nav)]">{sponsor.title}</CardTitle>
+                  <p className="text-[color:var(--primary)] font-bold mt-2">{sponsor.amount}</p>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-1 text-xs text-gray-600">
+                  <ul className="space-y-1 text-xs text-[color:var(--nav)]/80">
                     {sponsor.features.map((feature, fidx) => (
                       <li key={fidx} className="flex items-start">
-                        <span className="text-blue-600 mr-2">•</span>
+                        <span className="text-[color:var(--primary)] mr-2">•</span>
                         <span>{feature}</span>
                       </li>
                     ))}

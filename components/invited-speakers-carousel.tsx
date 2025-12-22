@@ -86,14 +86,14 @@ export default function InvitedSpeakersCarousel() {
   const visibleSpeakers = speakers.slice(currentSlide * itemsToShow, (currentSlide + 1) * itemsToShow)
 
   return (
-    <div className="w-full bg-white py-16">
+    <div className="w-full bg-[color:var(--primary-foreground)] py-16">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-4xl font-bold text-gray-900 mb-12 text-center">Invited Speakers</h2>
+        <h2 className="text-4xl font-bold text-[color:var(--nav)] mb-12 text-center">Invited Speakers</h2>
 
         <div className="flex items-center justify-between gap-4">
           <button
             onClick={handlePrevious}
-            className="flex-shrink-0 p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+            className="flex-shrink-0 p-2 rounded-full bg-[color:var(--primary)] text-white hover:bg-[color:var(--nav)] transition-colors"
           >
             <ChevronLeft size={24} />
           </button>
@@ -102,12 +102,12 @@ export default function InvitedSpeakersCarousel() {
             {visibleSpeakers.map((speaker, index) => (
               <div
                 key={currentSlide * itemsToShow + index}
-                className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow border border-gray-200"
+                className="bg-[color:var(--primary-foreground)] rounded-lg overflow-hidden hover:shadow-lg transition-shadow border border-[color:var(--nav)]/10"
               >
                 {/* Image Section */}
-                <div className="w-full h-48 bg-gradient-to-br from-blue-700 to-indigo-700 flex items-center justify-center p-4">
+                <div className="w-full h-48 bg-gradient-to-br from-[color:var(--primary)] to-[color:var(--nav)] flex items-center justify-center p-4">
                   {speaker.image ? (
-                    <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg flex-shrink-0">
+                    <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-[color:var(--primary-foreground)] shadow-lg flex-shrink-0">
                       <Image
                         src={speaker.image}
                         alt={speaker.name}
@@ -117,7 +117,7 @@ export default function InvitedSpeakersCarousel() {
                       />
                     </div>
                   ) : (
-                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-gray-300 to-gray-400 flex flex-col items-center justify-center border-4 border-white shadow-lg">
+                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[color:var(--nav)]/10 to-[color:var(--nav)]/30 flex flex-col items-center justify-center border-4 border-[color:var(--primary-foreground)] shadow-lg">
                       <User className="h-12 w-12 text-white opacity-70 mb-2" />
                       <span className="text-white text-xs opacity-60">No Photo</span>
                     </div>
@@ -126,9 +126,9 @@ export default function InvitedSpeakersCarousel() {
 
                 {/* Content Section */}
                 <div className="p-4 text-center">
-                  <h3 className="font-bold text-gray-900 text-sm mb-1 line-clamp-2">{speaker.name}</h3>
-                  <p className="text-blue-600 text-xs font-semibold mb-1">{speaker.title}</p>
-                  <p className="text-gray-600 text-xs line-clamp-2">{speaker.affiliation}</p>
+                  <h3 className="font-bold text-[color:var(--nav)] text-sm mb-1 line-clamp-2">{speaker.name}</h3>
+                  <p className="text-[color:var(--primary)] text-xs font-semibold mb-1">{speaker.title}</p>
+                  <p className="text-[color:var(--nav)]/80 text-xs line-clamp-2">{speaker.affiliation}</p>
                 </div>
               </div>
             ))}
@@ -136,7 +136,7 @@ export default function InvitedSpeakersCarousel() {
 
           <button
             onClick={handleNext}
-            className="flex-shrink-0 p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+            className="flex-shrink-0 p-2 rounded-full bg-[color:var(--primary)] text-white hover:bg-[color:var(--nav)] transition-colors"
           >
             <ChevronRight size={24} />
           </button>
@@ -148,7 +148,7 @@ export default function InvitedSpeakersCarousel() {
               key={index}
               onClick={() => setCurrentSlide(index)}
               className={`w-3 h-3 rounded-full transition-colors ${
-                index === currentSlide ? "bg-blue-600" : "bg-gray-300"
+                index === currentSlide ? "bg-[color:var(--primary)]" : "bg-[color:var(--nav)]/20"
               }`}
             />
           ))}
