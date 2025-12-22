@@ -57,19 +57,19 @@ export default function Navigation() {
                 <Image
                   src="/new_logo.png"
                   alt="IIT Indore Logo"
-                  width={64}
-                  height={64}
-                  className="object-contain"
+                  width={74}
+                  height={74}
+                  className="object-contain mt-2 pt-2"
                 />
               </div>
               <div className="hidden sm:flex flex-col hover:opacity-80 justify-center">
-                <h2 className="text-[color:var(--dark)] font-bold text-sm leading-tight">
+                <h2 className="text-[color:var(--nav)] font-bold text-sm leading-tight">
                   भारतीय प्रौद्योगिकी संस्थान
                 </h2>
-                <p className="text-[color:var(--dark)] font-semibold text-xs">
+                <p className="text-[color:var(--nav)] font-semibold text-xs">
                   Indian Institute of Technology
                 </p>
-                <p className="text-[color:var(--dark)] font-semibold text-xs">Indore</p>
+                <p className="text-[color:var(--nav)] font-semibold text-xs">Indore</p>
               </div>
             </Link>
 
@@ -77,18 +77,18 @@ export default function Navigation() {
 
             {/* Right: 2D MatTechGlobal Branding */}
             <div className="hidden lg:flex flex-col items-end justify-center space-y-1">
-              <h1 className="text-xl font-bold text-[color:var(--dark)]">2D MatTechGlobal</h1>
-              <p className="text-[color:var(--dark)] text-xs font-semibold">
+              <h1 className="text-xl font-bold text-[color:var(--nav)]">2D MatTechGlobal</h1>
+              <p className="text-[color:var(--nav)] text-xs font-semibold">
                 Fundamentals to Applications
               </p>
-              <p className="text-[color:var(--dark)] text-xs">June 24-26, 2026</p>
+              <p className="text-[color:var(--nav)] text-xs">June 24-26, 2026</p>
             </div>
 
             {/* Mobile menu button */}
             <div className="lg:hidden ml-4">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-lg text-[color:var(--dark)] hover:bg-blue-800 transition-colors duration-200"
+                className="inline-flex items-center justify-center p-2 rounded-lg  text-[color:var(--offwhite)] hover:bg-[color:var(--navhover)] transition-colors duration-200"
                 aria-label="Toggle navigation"
               >
                 {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -98,7 +98,7 @@ export default function Navigation() {
         </div>
       </div>
 
-      <div className="bg-white shadow-xl border-t border-[color:var(--custom_purple)]">
+      <div className="bg-[color:var(--nav)] shadow-xl ">
         <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
           <div className="flex justify-between items-center">
             <div className="hidden lg:flex items-center flex-wrap justify-start flex-1">
@@ -114,23 +114,23 @@ export default function Navigation() {
                         className={`px-3 py-4 text-sm font-semibold transition-all duration-300 border-b-4 whitespace-nowrap text-center block ${
                           // If any child is active, show active style
                           item.children.some((c) => isActive(c.href))
-                            ? "text-[color:var(--dark)] border-b-[color:var(--custom_purple)] bg-white bg-opacity-30"
-                            : "text-gray-200 border-b-transparent hover:text-blue-200 hover:border-b-blue-400 hover:bg-blue-800 hover:bg-opacity-20"
+                            ? "text-blue-200 border-[color:var(--primary)] bg-[color:var(--nav)] bg-opacity-30"
+                            : "text-gray-200 border-b-transparent hover:text-blue-200 hover:border-b-[color:var(--primary)] hover:bg-[color:var(--nav)] hover:bg-opacity-20"
                         }`}
                       >
                         {item.label}
                       </button>
 
                       {/* Desktop dropdown (hover) */}
-                      <div className="absolute left-0 top-full mt-0 hidden group-hover:block bg-blue-900/95 shadow-lg z-50 min-w-max">
+                      <div className="absolute left-0 top-full mt-0 hidden group-hover:block bg-[color:var(--nav)]/95 shadow-lg z-50 min-w-max">
                         {item.children.map((c) => (
                           <Link
                             key={c.label}
                             href={c.href}
                             className={`block px-4 py-3 text-sm font-semibold whitespace-nowrap transition-all duration-300 border-l-4 ${
                               isActive(c.href)
-                                ? "text-blue-200 border-l-blue-400 bg-blue-800 bg-opacity-50"
-                                : "text-gray-200 border-l-transparent hover:text-blue-200 hover:border-l-blue-400 hover:bg-blue-800 hover:bg-opacity-40"
+                                ? "text-blue-200 border-l-[color:var(--primary)] bg-[color:var(--nav)] bg-opacity-50"
+                                : "text-gray-200 border-l-transparent hover:text-blue-200 hover:border-l-[color:var(--primary)] hover:bg-[color:var(--nav)] hover:bg-opacity-40"
                             }`}
                           >
                             {c.label}
@@ -143,8 +143,8 @@ export default function Navigation() {
                       href={item.href}
                       className={`px-3 py-4 text-sm font-semibold transition-all duration-300 border-b-4 whitespace-nowrap text-center block ${
                         isActive(item.href)
-                          ? "text-blue-200 border-b-blue-400 bg-blue-800 bg-opacity-30"
-                          : "text-gray-200 border-b-transparent hover:text-blue-200 hover:border-b-blue-400 hover:bg-blue-800 hover:bg-opacity-20"
+                          ? "text-blue-200 border-b-[color:var(--primary)] bg-[color:var(--nav)] bg-opacity-30"
+                          : "text-gray-200 border-b-transparent hover:text-blue-200 hover:border-b-[color:var(--primary)] hover:bg-[color:var(--nav)] hover:bg-opacity-20"
                       }`}
                     >
                       {item.label}
