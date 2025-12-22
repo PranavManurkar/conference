@@ -26,6 +26,8 @@
   --sidebar-border: oklch(0.88 0.001 0);
   --sidebar-ring: oklch(0.42 0.22 263);
   --input: oklch(0.92 0.001 0);
+  --dark: #595959;
+  --custom_purple: #AB4494; 
 }
 
 .dark {
