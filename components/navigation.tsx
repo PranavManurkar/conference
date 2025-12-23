@@ -80,7 +80,7 @@ export default function Navigation() {
             <div className="hidden lg:flex flex-col items-end justify-center space-y-1">
                 <div className="w-28 h-28 relative mb-2 -mr-4">
                 <Image
-                  src="/2D_MTG-removebg-preview.png"
+                  src="/lolo.png"
                   alt="2D MatTechGlobal Logo"
                   width={120}
                   height={120}
