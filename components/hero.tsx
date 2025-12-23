@@ -45,7 +45,7 @@ export default function Hero() {
     return pathname === href
   }
   return (
-    <section id="home" className="relative overflow-hidden py-16 md:py-24 bg-[color:var(--primary)]">
+    <section id="home" className="relative overflow-hidden py-16 md:py-24 bg-[color:var(--primary-foreground)] shadow-lg">
       {/* Decorative background elements */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         {/* <div className="absolute top-0 right-0 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl" />
@@ -57,10 +57,10 @@ export default function Hero() {
           {/* Left: Text content */}
           <div className="space-y-6 md:pr-8">
             <div>
-              <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+              <h1 className="text-4xl md:text-6xl font-bold text-[color:var(--primary)] leading-tight">
                 2D MatTechGlobal (2DMTG)
               </h1>
-              <h2 className="text-xl md:text-2xl font-semibold text-white mt-2">
+              <h2 className="text-xl md:text-2xl font-semibold text-[color:var(--primary)] mt-2">
                 Fundamentals to Applications
               </h2>
             </div>
@@ -71,7 +71,7 @@ export default function Hero() {
               </div>
             </div>
 
-            <p className="text-lg text-white max-w-xl leading-relaxed">
+            <p className="text-lg text-[color:var(--primary)] max-w-xl leading-relaxed">
               Join leading scientists, engineers, and industry experts for an interdisciplinary exploration of 2D materials and their transformative applications across energy, healthcare, electronics, and quantum technologies.
             </p>
 
@@ -84,13 +84,13 @@ export default function Hero() {
 
               <button
                 onClick={handleDownloadBrochure}
-                className="border-2 border-white text-white hover:bg-white hover:text-blue-900 font-bold text-lg px-6 py-3 rounded-lg transition-all duration-150 hover:shadow-lg"
+                className="border-2 border-[color:var(--primary)] text-[color:var(--primary)] hover:bg-[color:var(--primary)] hover:text-white font-bold text-lg px-6 py-3 rounded-lg transition-all duration-150 hover:shadow-lg"
               >
                 Download Brochure
               </button>
             </div>
 
-            <p className="text-sm text-white pt-2">
+            <p className="text-sm text-[color:var(--primary)] pt-2">
               📍 Indian Institute of Technology Indore | Khandwa Road, Simrol, Indore, India
             </p>
           </div>

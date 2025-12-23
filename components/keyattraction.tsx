@@ -112,7 +112,7 @@ export default function KeyAttraction() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h3 className="text-3xl font-bold text-[color:var(--nav)]">
-              Key <span className="text-[color:var(--primary)]">Attractions</span> of Indore
+              Tourist <span className="text-[color:var(--primary)]">Attractions</span> of Indore
             </h3>
             <p className="mt-2 text-[color:var(--nav)]/80 max-w-2xl mx-auto">
               Prominent landmarks and experiences that represent Indore’s heritage,

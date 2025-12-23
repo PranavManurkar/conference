@@ -46,7 +46,7 @@ export default function Navigation() {
 
   return (
     <nav className="sticky top-0 z-50">
-      <div className="bg-white shadow-2xl">
+      <div className="bg-[color:var(--primary-foreground)] shadow-lg">
         <div className="w-full px-6 lg:px-12">
           <div className="flex justify-between items-center h-24">
             {/* Left: IIT Indore Logo and Name */}
@@ -58,8 +58,8 @@ export default function Navigation() {
                 <Image
                   src="/new_logo.png"
                   alt="IIT Indore Logo"
-                  width={74}
-                  height={74}
+                  width={94}
+                  height={94}
                   className="object-contain mt-2 pt-2"
                 />
               </div>
@@ -78,11 +78,16 @@ export default function Navigation() {
 
             {/* Right: 2D MatTechGlobal Branding */}
             <div className="hidden lg:flex flex-col items-end justify-center space-y-1">
-              <h1 className="text-xl font-bold text-[color:var(--nav)]">2D MatTechGlobal</h1>
-              <p className="text-[color:var(--nav)] text-xs font-semibold">
-                Fundamentals to Applications
-              </p>
-              <p className="text-[color:var(--nav)] text-xs">June 24-26, 2026</p>
+                <div className="w-28 h-28 relative mb-2 -mr-4">
+                <Image
+                  src="/2D_MTG-removebg-preview.png"
+                  alt="2D MatTechGlobal Logo"
+                  width={120}
+                  height={120}
+                  className="object-contain -mt-3 "
+                />
+                </div>
+              {/* <p className="text-[color:var(--nav)] text-xs -mt-1">June 24-26, 2026</p> */}
             </div>
 
             {/* Mobile menu button */}

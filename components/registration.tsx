@@ -136,7 +136,7 @@ export default function Registration() {
           </div>
         </div>
 
-        <div className="mt-12 bg-[var(--primary)] rounded-lg shadow-lg p-8 text-[var(--primary-foreground)]">
+        <div className="mt-12 bg-[var(--lightpurple)] rounded-lg shadow-lg p-8 text-[var(--primary-foreground)]">
           <h3 className="text-2xl font-bold mb-6">How to Register</h3>
           <div className="grid md:grid-cols-4 gap-6">
             <div className="flex flex-col items-center text-center">
@@ -189,7 +189,7 @@ export default function Registration() {
               asChild
               size="lg"
               variant="outline"
-              className="border-[var(--primary-foreground)] text-[var(--primary-foreground)] hover:text-[var(--primary)] hover:bg-[var(--primary-foreground)]"
+              className="border-[var(--primary-foreground)] text-[var(--primary-foreground)] hover:text-white hover:bg-[var(--primary-foreground)]"
             >
               <Link href="/auth/login">
                 Login to Dashboard

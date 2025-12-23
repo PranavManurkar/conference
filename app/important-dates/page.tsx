@@ -35,7 +35,11 @@ export default function ImportantDatesPage() {
     <div className="min-h-screen bg-[color:var(--nav)]/5">
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-[color:var(--nav)] mb-4">Important Dates</h1>
+          <div className="inline-block mb-4">
+            <div className="h-1 w-12 bg-[var(--primary)] rounded" />
+          </div>
+          <h1 className="text-4xl font-bold text-[color:var(--nav)] mb-4">
+            <span className="text-[color:var(--primary)]">Important </span>Dates</h1>
           <p className="text-[color:var(--nav)]/80 text-lg">Key milestones and deadlines for the 2D MatTechGlobal 2026 Conference</p>
         </div>
 

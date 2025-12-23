@@ -98,7 +98,8 @@ export default function About() {
           <div className="md:col-span-3 p-6 md:order-none order-last">
             <div className="mb-4">
               <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
-              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">About IIT Indore</h2>
+              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">About 
+                <span className="text-[color:var(--primary)]"> IIT Indore</span></h2>
             </div>
 
             <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">

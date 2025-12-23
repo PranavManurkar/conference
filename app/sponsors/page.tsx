@@ -85,11 +85,15 @@ export default function SponsorsPage() {
   ]
 
   return (
-    <main className="min-h-screen bg-[color:var(--nav)]/5 pt-8">
+    <main className="min-h-screen bg-[color:var(--nav)]/5 pt-4">
       <div className="max-w-7xl mx-auto px-4 py-16">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-[color:var(--nav)] mb-4">Our Sponsors</h1>
+          <div className="inline-block mb-4">
+            <div className="h-1 w-12 bg-[var(--primary)] rounded" />
+          </div>
+          <h1 className="text-5xl font-bold text-[color:var(--nav)] mb-4">
+            <span className="text-[color:var(--primary)]">Our </span> Sponsors</h1>
           <p className="text-xl text-[color:var(--nav)]/80 max-w-3xl mx-auto">
             We are grateful to our sponsors who make the 2D MatTechGlobal 2026 Conference possible. Their support
             enables us to bring together the world's leading experts in 2D materials research and applications.

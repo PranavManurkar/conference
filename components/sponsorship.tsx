@@ -80,6 +80,9 @@ export default function Sponsorship() {
     <section id="sponsorship" className="py-20 bg-[color:var(--primary-foreground)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
+           <div className="inline-block mb-4">
+            <div className="h-1 w-12 bg-[var(--primary)] rounded" />
+          </div>
           <h2 className="text-4xl font-bold text-[color:var(--nav)] mb-4">
             <span className="text-[color:var(--primary)]">Sponsorship</span> Opportunities
           </h2>

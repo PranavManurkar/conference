@@ -21,7 +21,8 @@ export default function ConferenceImpact() {
     <section className="py-20 bg-[color:var(--primary-foreground)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-[color:var(--nav)] mb-4">Conference Highlights</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-[color:var(--nav)] mb-4">
+            <span className="text-[color:var(--primary)]"> Conference </span>Highlights</h2>
           <p className="text-lg text-[color:var(--nav)]/80 max-w-2xl mx-auto">
             Experience world-class research and networking in 2D materials science
           </p>

@@ -88,8 +88,10 @@ export default function InvitedSpeakersCarousel() {
   return (
     <div className="w-full bg-[color:var(--primary-foreground)] py-16">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-4xl font-bold text-[color:var(--nav)] mb-12 text-center">Invited Speakers</h2>
-
+        <h2 className="text-4xl font-bold text-[color:var(--nav)] mb-12 text-center">
+          <span className="text-[color:var(--primary)]"> Invited </span>
+          Speakers
+        </h2>
         <div className="flex items-center justify-between gap-4">
           <button
             onClick={handlePrevious}

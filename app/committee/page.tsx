@@ -36,9 +36,15 @@ export default function CommitteePage() {
         </div>
 
         <div className="bg-[color:var(--primary-foreground)] rounded-lg shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-[color:var(--nav)] mb-8">
-            {activeTab === "international" ? "International Advisory Committee" : "Organising Committee"}
-          </h2>
+            <h2 className="text-2xl font-bold text-[color:var(--nav)] mb-8">
+            {activeTab === "international" ? (
+              <>
+              <span className="text-[color:var(--primary)]">International</span> Advisory Committee
+              </>
+            ) : (
+              "Organising Committee"
+            )}
+            </h2>
 
           {activeTab === "international" ? <InternationalAdvisoryCarousel /> : <OrganisingCommitteeCarousel />}
         </div>
