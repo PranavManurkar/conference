@@ -56,22 +56,11 @@ export default function Hero() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Left: Text content */}
           <div className="space-y-6 md:pr-8">
-            <div>
-              <h1 className="text-4xl md:text-6xl font-bold text-[color:var(--primary)] leading-tight">
-                2D MatTechGlobal (2DMTG)
-              </h1>
-              <h2 className="text-xl md:text-2xl font-semibold text-[color:var(--primary)] mt-2">
-                Fundamentals to Applications
-              </h2>
-            </div>
 
-            <div className="inline-flex items-center">
-              <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-slate-900 px-6 py-2 rounded-full font-bold text-base shadow-lg">
-                June 24-26, 2026
-              </div>
-            </div>
+            {/* Conference title, subtitle, and date removed as requested. Adjusted layout below. */}
 
-            <p className="text-lg text-[color:var(--primary)] max-w-xl leading-relaxed">
+
+            <p className="text-xl text-[color:var(--primary)] max-w-xl leading-relaxed">
               Join leading scientists, engineers, and industry experts for an interdisciplinary exploration of 2D materials and their transformative applications across energy, healthcare, electronics, and quantum technologies.
             </p>
 

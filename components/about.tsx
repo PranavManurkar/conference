@@ -34,7 +34,8 @@ export default function About() {
           <div className="md:col-span-3 p-6 order-last md:order-none">
             <div className="mb-4">
               <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
-              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">The Conference</h2>
+              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">The 
+                <span className="text-[color:var(--primary)]"> Conference</span> </h2>
             </div>
 
             <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
@@ -143,7 +144,8 @@ export default function About() {
           <div className="md:col-span-3 p-6 order-last md:order-none">
             <div className="mb-4">
               <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
-              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">Indore City</h2>
+              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">
+                <span className="text-[color:var(--primary)]">Indore </span> City</h2>
             </div>
 
             <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
@@ -192,7 +194,7 @@ export default function About() {
             <div className="mb-4">
               <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
               <h2 className="text-2xl font-semibold text-[color:var(--nav)]">
-                Department of Metallurgical Engineering and Materials Science
+                <span className="text-[color:var(--primary)]">Metallurgical Engineering and Materials Science</span>
               </h2>
             </div>
 

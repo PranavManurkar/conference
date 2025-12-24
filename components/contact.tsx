@@ -3,14 +3,14 @@
 import { Mail, Phone, MapPin } from 'lucide-react'
 
 const ContactCard = ({ icon: Icon, title, details }: { icon: any; title: string; details: string[] }) => (
-  <div className="bg-white rounded-lg shadow-md p-6">
+  <div className="bg-[color:var(--primary-foreground)] rounded-lg shadow-md p-6">
     <div className="flex items-center mb-4">
-      <Icon className="h-6 w-6 text-blue-600 mr-3" />
-      <h3 className="text-xl font-bold text-gray-900">{title}</h3>
+      <Icon className="h-6 w-6 text-[color:var(--primary)] mr-3" />
+      <h3 className="text-xl font-bold text-[color:var(--nav)]">{title}</h3>
     </div>
     <ul className="space-y-2">
       {details.map((detail, idx) => (
-        <p key={idx} className="text-gray-700 text-sm">{detail}</p>
+        <p key={idx} className="text-[color:var(--nav)]/80 text-sm">{detail}</p>
       ))}
     </ul>
   </div>
@@ -18,10 +18,10 @@ const ContactCard = ({ icon: Icon, title, details }: { icon: any; title: string;
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-20 bg-gray-50">
+    <section id="contact" className="py-20 bg-[color:var(--primary-foreground)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">
-          <span className="text-blue-600">Contact</span> Information
+        <h2 className="text-4xl font-bold text-center text-[color:var(--nav)] mb-12">
+          <span className="text-[color:var(--primary)]">Contact</span> Information
         </h2>
 
         <div className="grid md:grid-cols-3 gap-8 mb-12">
@@ -55,13 +55,13 @@ export default function Contact() {
           />
         </div>
 
-        <div className="bg-blue-50 rounded-lg p-8 text-center">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">General Inquiries</h3>
-          <p className="text-gray-700 mb-4">
+        <div className="bg-[color:var(--primary-foreground)] rounded-lg p-8 text-center shadow-md">
+          <h3 className="text-2xl font-bold text-[color:var(--nav)] mb-4">General Inquiries</h3>
+          <p className="text-[color:var(--nav)]/80 mb-4">
             For general questions and registration support, please contact:
           </p>
-          <a href="mailto:arrnd@iiti.ac.in" className="text-blue-600 font-bold text-lg hover:text-blue-700">
-          2dmtg@iiti.ac.in
+          <a href="mailto:arrnd@iiti.ac.in" className="text-[color:var(--primary)] font-bold text-lg hover:underline">
+            2dmtg@iiti.ac.in
           </a>
         </div>
       </div>

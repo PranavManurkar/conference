@@ -12,52 +12,16 @@ interface CommitteeMember {
 export default function InternationalAdvisoryCarousel() {
   const committeeMembers: CommitteeMember[] = [
     {
-      name: "Prof. Kourosh Kalantar-Zadeh",
-      affiliation: "University of Sydney, Australia",
-      initials: "KK",
-      image: "/invited_speaker/zadeh.png",
-    },
-    {
-      name: "Prof. Robert Weatherup",
-      affiliation: "University of Oxford, UK",
-      initials: "RW",
-      image: "/invited_speaker/robert.jpg",
-    },
-    {
-      name: "Prof. T. Venky Venkatesan",
-      affiliation: "University of Oklahoma, USA",
-      initials: "TV",
-      image: "/invited_speaker/venky.png",
-    },
-    {
       name: "Prof. Anirudha V. Sumant",
       affiliation: "Argonne National Laboratory, USA",
       initials: "AS",
       image: "/invited_speaker/sumant.jpg",
     },
     {
-      name: "Prof. Sebastien Royer",
-      affiliation: "Univ. du Littoral Côte d'Opale, France",
-      initials: "SR",
-      image: "/invited_speaker/royer.png",
-    },
-    {
-      name: "Prof. Yogendra Mishra",
-      affiliation: "University of Southern Denmark, Denmark",
-      initials: "YM",
-      image: "/invited_speaker/yog.png",
-    },
-    {
-      name: "Prof. Sanjay Mathur",
-      affiliation: "Director, IIMC, University of Cologne, Germany",
-      initials: "SM",
-      image: "/invited_speaker/mathur.jpg",
-    },
-    {
-      name: "Prof. Jin-Hyeok Kim",
-      affiliation: "Chonnam National University, South Korea",
-      initials: "JK",
-      image: "/invited_speaker/kim.jpg",
+      name: "Prof. Babak Anasori",
+      affiliation: "Purdue University, USA",
+      initials: "BA",
+      image: "/invited_speaker/anasori.jpg",
     },
     {
       name: "Prof. Bharat Jalan",
@@ -66,16 +30,52 @@ export default function InternationalAdvisoryCarousel() {
       image: "/invited_speaker/jalan.jpg",
     },
     {
+      name: "Prof. Jin-Hyeok Kim",
+      affiliation: "Chonnam National University, South Korea",
+      initials: "JK",
+      image: "/invited_speaker/kim.jpg",
+    },
+    {
+      name: "Prof. Kourosh Kalantar-Zadeh",
+      affiliation: "University of Sydney, Australia",
+      initials: "KK",
+      image: "/invited_speaker/zadeh.png",
+    },
+    {
       name: "Prof. Motohiko Ezawa",
       affiliation: "University of Tokyo, Japan",
       initials: "ME",
       image: "/invited_speaker/ezawa.jpg",
     },
     {
-      name: "Prof. Babak Anasori",
-      affiliation: "Purdue University, USA",
-      initials: "BA",
-      image: "/invited_speaker/anasori.jpg",
+      name: "Prof. Robert Weatherup",
+      affiliation: "University of Oxford, UK",
+      initials: "RW",
+      image: "/invited_speaker/robert.jpg",
+    },
+    {
+      name: "Prof. Sanjay Mathur",
+      affiliation: "Director, IIMC, University of Cologne, Germany",
+      initials: "SM",
+      image: "/invited_speaker/mathur.jpg",
+    },
+    {
+      name: "Prof. Sebastien Royer",
+      affiliation: "Univ. du Littoral Côte d'Opale, France",
+      initials: "SR",
+      image: "/invited_speaker/royer.png",
+    },
+    {
+      name: "Prof. T. Venky Venkatesan",
+      affiliation: "University of Oklahoma, USA",
+      initials: "TV",
+      image: "/invited_speaker/venky.png",
+    },
+    {
+      name: "Prof. Yogendra Mishra",
+      affiliation: "University of Southern Denmark, Denmark",
+      initials: "YM",
+      image: "/invited_speaker/yog.png",
     },
     {
       name: "Prof. Yuan-Ron Ma",

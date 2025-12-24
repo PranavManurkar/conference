@@ -32,7 +32,7 @@ export default function ImportantDatesPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[color:var(--nav)]/5">
+    <div className="min-h-screen bg-[color:var(--primary-foreground)]">
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
           <div className="inline-block mb-4">

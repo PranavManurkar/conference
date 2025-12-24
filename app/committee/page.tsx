@@ -8,7 +8,7 @@ export default function CommitteePage() {
   const [activeTab, setActiveTab] = useState("international")
 
   return (
-    <div className="min-h-screen bg-[color:var(--nav)]/5">
+    <div className="min-h-screen bg-[color:var(--primary-foreground)]">
       <div className="max-w-7xl mx-auto px-4 pt-8">
         <h1 className="text-4xl font-bold text-[color:var(--nav)] mb-8">Committee</h1>
 

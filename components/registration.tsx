@@ -49,6 +49,9 @@ export default function Registration() {
   return (
     <section id="registration" className="py-20 bg-[var(--background)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-center mb-4">
+          <div className="h-1 w-12 bg-[var(--primary)] rounded" />
+        </div>
         <h2 className="text-4xl font-bold text-center text-[var(--foreground)] mb-4">
           <span className="text-[var(--primary)]">Registration</span> Fees
         </h2>

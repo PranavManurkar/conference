@@ -103,21 +103,21 @@ export default function Sponsorship() {
           <h3 className="text-2xl font-bold text-[color:var(--nav)] mb-8">Other Sponsorship Options</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
             {otherSponsorship.map((sponsor, idx) => (
-              <Card key={idx} className="border-[color:var(--nav)]/10">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg text-[color:var(--nav)]">{sponsor.title}</CardTitle>
-                  <p className="text-[color:var(--primary)] font-bold mt-2">{sponsor.amount}</p>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-1 text-xs text-[color:var(--nav)]/80">
-                    {sponsor.features.map((feature, fidx) => (
-                      <li key={fidx} className="flex items-start">
-                        <span className="text-[color:var(--primary)] mr-2">•</span>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
+              <Card key={idx} className="border-[color:var(--nav)]/10 flex flex-col h-full">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg text-[color:var(--nav)] min-h-[3rem] flex items-center">{sponsor.title}</CardTitle>
+                <p className="text-[color:var(--primary)] font-bold mt-2">{sponsor.amount}</p>
+              </CardHeader>
+              <CardContent className="flex-1">
+                <ul className="space-y-1 text-xs text-[color:var(--nav)]/80">
+                {sponsor.features.map((feature, fidx) => (
+                  <li key={fidx} className="flex items-start">
+                  <span className="text-[color:var(--primary)] mr-2">•</span>
+                  <span>{feature}</span>
+                  </li>
+                ))}
+                </ul>
+              </CardContent>
               </Card>
             ))}
           </div>

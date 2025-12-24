@@ -32,12 +32,23 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen ">
       <Hero />
       <InvitedSpeakersCarousel />
       <ConferenceImpact />
        <ConferenceAwards />
       <Metrics />
+      {/* Contact Us Call to Action */}
+      <div className="mt-16 flex flex-col items-center justify-center pb-12">
+        <p className="text-lg text-[color:var(--nav)] mb-4 text-center max-w-xl">
+          Have questions or need more information? We're here to help!
+        </p>
+        <a href="/contact" className="inline-block">
+          <button className="px-8 py-3 cursor-pointer bg-[color:var(--primary)] text-[color:var(--primary-foreground)] font-bold rounded-lg shadow-md hover:bg-[color:var(--navhover)] hover:text-white transition-colors duration-200">
+            Contact Us
+          </button>
+        </a>
+      </div>
     </div>
   )
 }

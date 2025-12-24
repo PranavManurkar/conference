@@ -85,7 +85,7 @@ export default function SponsorsPage() {
   ]
 
   return (
-    <main className="min-h-screen bg-[color:var(--nav)]/5 pt-4">
+    <main className="min-h-screen bg-[color:var(--primary-foreground)] pt-4">
       <div className="max-w-7xl mx-auto px-4 py-16">
         {/* Header */}
         <div className="text-center mb-16">
@@ -107,7 +107,14 @@ export default function SponsorsPage() {
                 <tier.icon className="w-8 h-8 text-[color:var(--primary-foreground)]" />
               </div>
               <div>
-                <h2 className="text-3xl font-bold text-[color:var(--nav)]">{tier.name}</h2>
+                <h2 className="text-3xl font-bold text-[color:var(--nav)]">
+                  {(() => {
+                    const [first, ...rest] = tier.name.split(' ');
+                    return <>
+                      <span className="text-[color:var(--primary)]">{first}</span>{rest.length > 0 ? ' ' + rest.join(' ') : ''}
+                    </>;
+                  })()}
+                </h2>
                 <p className="text-[color:var(--primary)] text-sm">{tier.amount}</p>
               </div>
             </div>
@@ -150,7 +157,8 @@ export default function SponsorsPage() {
 
         {/* Additional Sponsorship Options */}
         <section className="mt-16">
-          <h2 className="text-3xl font-bold text-[color:var(--nav)] mb-8">Other Sponsorship Opportunities</h2>
+          <h2 className="text-3xl font-bold text-[color:var(--nav)] mb-8">Other 
+           <span className="text-[color:var(--primary)]"> Sponsorship </span> Opportunities</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[
               { name: "Banquet Sponsorship", amount: "₹350,000" },

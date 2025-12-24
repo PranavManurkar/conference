@@ -128,15 +128,16 @@ export default function Navigation() {
                       </button>
 
                       {/* Desktop dropdown (hover) */}
-                      <div className="absolute left-0 top-full mt-0 hidden group-hover:block bg-[color:var(--navhover)]/95 shadow-lg z-50 min-w-max border-t-2 border-[color:var(--primary)]">
+                      {/* //change */}
+                      <div className="absolute left-0 top-full mt-0 hidden group-hover:block bg-[color:var(--nav)] shadow-lg z-50 min-w-max border-t-2 border-[color:var(--primary)]">
                         {item.children.map((c) => (
                           <Link
                             key={c.label}
                             href={c.href}
                             className={`block px-4 py-3 text-sm font-semibold whitespace-nowrap transition-all duration-300 border-l-4 ${
                               isActive(c.href)
-                                ? "text-white border-l-[color:var(--primary)] bg-[color:var(--nav)]"
-                                : "text-white border-l-transparent hover:text-white hover:border-l-[color:var(--primary)] hover:bg-[color:var(--nav)]"
+                                ? "text-white border-l-[color:var(--primary)] bg-[color:var(--navhover)]"
+                                : "text-white border-l-transparent hover:text-white hover:border-l-[color:var(--primary)] hover:bg-[color:var(--navhover)]"
                             }`}
                           >
                             {c.label}
