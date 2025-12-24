@@ -80,11 +80,11 @@ export default function Navigation() {
             <div className="hidden lg:flex flex-col items-end justify-center space-y-1">
                 <div className="w-28 h-28 relative mb-2 -mr-4">
                 <Image
-                  src="/lolo.png"
+                  src="/mtg2.png"
                   alt="2D MatTechGlobal Logo"
                   width={120}
                   height={120}
-                  className="object-contain -mt-3 "
+                  className="object-contain  "
                 />
                 </div>
               {/* <p className="text-[color:var(--nav)] text-xs -mt-1">June 24-26, 2026</p> */}
