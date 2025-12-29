@@ -54,50 +54,45 @@ export default function Hero() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          {/* Left: Text content */}
-          <div className="space-y-6 md:pr-8">
+          {/* Banner image: appears above text on mobile, right on desktop */}
+          <div className="order-1 md:order-2 flex items-center justify-center mb-6 md:mb-0">
+            <div className="relative w-auto h-auto border border-yellow-400 border-opacity-30 rounded-xl shadow-2xl bg-slate-800">
+              <Image
+                src="/conference.jpeg"
+                alt="Conference banner"
+                width={800}
+                height={550}
+                className="object-contain object-center border-3 border-[color:var(--primary)] rounded-lg shadow-lg"
+                priority
+                sizes="(min-width: 768px) 40vw, 100vw"
+              />
+            </div>
+          </div>
 
-            {/* Conference title, subtitle, and date removed as requested. Adjusted layout below. */}
-
-
+          {/* Text content: below image on mobile, left on desktop */}
+          <div className="order-2 md:order-1 space-y-6 md:pr-8">
             <p className="text-xl text-[color:var(--primary)] max-w-xl leading-relaxed">
               Join leading scientists, engineers, and industry experts for an interdisciplinary exploration of 2D materials and their transformative applications across energy, healthcare, electronics, and quantum technologies.
             </p>
-
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
-              <Link href="/registration">
-                <button className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-slate-900 font-bold text-lg px-6 py-3 rounded-lg shadow-lg transition-all duration-150 hover:shadow-xl">
+              <Link href="/registration" passHref legacyBehavior>
+                <button type="button" className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-slate-900 font-bold text-lg px-6 py-3 rounded-lg shadow-lg transition-all duration-150 hover:shadow-xl">
                   Register Now
                 </button>
               </Link>
-
               <button
+                type="button"
                 onClick={handleDownloadBrochure}
                 className="border-2 border-[color:var(--primary)] text-[color:var(--primary)] hover:bg-[color:var(--primary)] hover:text-white font-bold text-lg px-6 py-3 rounded-lg transition-all duration-150 hover:shadow-lg"
               >
                 Download Brochure
               </button>
             </div>
-
             <p className="text-sm text-[color:var(--primary)] pt-2">
               📍 Indian Institute of Technology Indore | Khandwa Road, Simrol, Indore, India
             </p>
           </div>
 
-          {/* Right: Banner image */}
-          <div className="flex items-center justify-center">
-  <div className="w-full h-64 md:h-96 rounded-xl overflow-hidden shadow-2xl bg-slate-800 border border-yellow-400 border-opacity-30 relative">
-    <Image
-      src="/conference.jpeg"
-      alt="Conference banner"
-      fill
-      className="object-cover object-right transform scale-110"
-      style={{ objectPosition: "10% 50%" }}
-      priority
-      sizes="(min-width: 768px) 40vw, 100vw"
-    />
-  </div>
-</div>
         </div>
       </div>
     </section>
