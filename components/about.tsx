@@ -58,7 +58,7 @@ export default function About() {
 
           <div className="md:col-span-2 relative min-h-[260px] order-first md:order-none">
             <Image
-              src="/images/conference.jpg"
+              src="/conference.jpeg"
               alt="Conference"
               fill
               priority

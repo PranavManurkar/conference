@@ -86,10 +86,18 @@ export default function Hero() {
 
           {/* Right: Banner image */}
           <div className="flex items-center justify-center">
-            <div className="w-full h-64 md:h-96 rounded-xl overflow-hidden shadow-2xl bg-slate-800 flex items-center justify-center border border-yellow-400 border-opacity-30">
-              <Image src="/hero-banner.jpg" alt="Conference banner" width={900} height={600} className="object-cover w-full h-full" />
-            </div>
-          </div>
+  <div className="w-full h-64 md:h-96 rounded-xl overflow-hidden shadow-2xl bg-slate-800 border border-yellow-400 border-opacity-30 relative">
+    <Image
+      src="/conference.jpeg"
+      alt="Conference banner"
+      fill
+      className="object-cover object-right transform scale-110"
+      style={{ objectPosition: "10% 50%" }}
+      priority
+      sizes="(min-width: 768px) 40vw, 100vw"
+    />
+  </div>
+</div>
         </div>
       </div>
     </section>

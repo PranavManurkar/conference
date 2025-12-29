@@ -1254,7 +1254,7 @@ export default function DashboardClient({ user }: { user: User }) {
         <Card className="border-0 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500" />
           <CardHeader className="bg-gradient-to-r from-gray-50 to-blue-50 border-b">
-            <CardTitle className="text-2xl font-bold text-gray-900">Registration Form</CardTitle>
+            <CardTitle className="text-2xl font-bold text-gray-900"><span className="text-[color:var(--primary)]"> Registration Form</span></CardTitle>
             <CardDescription className="text-base mt-2 leading-relaxed">
               {canEdit
                 ? "Fill in your details to complete your registration. Make sure to include your Transaction ID for payment verification."
@@ -1266,7 +1266,7 @@ export default function DashboardClient({ user }: { user: User }) {
               {/* Personal Information Section */}
               <div className="space-y-6">
                 <div className="flex items-center gap-3 pb-3 border-b-2 border-blue-100">
-                  <div className="w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full" />
+                  <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
                   <h3 className="text-xl font-bold text-gray-900">Personal Information</h3>
                 </div>
 
@@ -1367,7 +1367,7 @@ export default function DashboardClient({ user }: { user: User }) {
               {/* Delegate Information Section */}
               <div className="space-y-6">
                 <div className="flex items-center gap-3 pb-3 border-b-2 border-purple-100">
-                  <div className="w-1 h-8 bg-gradient-to-b from-purple-500 to-indigo-500 rounded-full" />
+                  <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
                   <h3 className="text-xl font-bold text-gray-900">Delegate Information</h3>
                 </div>
 
@@ -1548,13 +1548,13 @@ export default function DashboardClient({ user }: { user: User }) {
               {/* Payment Information Section */}
               <div className="space-y-6">
                 <div className="flex items-center gap-3 pb-3 border-b-2 border-indigo-100">
-                  <div className="w-1 h-8 bg-gradient-to-b from-indigo-500 to-blue-500 rounded-full" />
+                  <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
                   <h3 className="text-xl font-bold text-gray-900">Payment Information</h3>
                 </div>
 
                 <div className="bg-gradient-to-br from-gray-50 to-blue-50 p-6 rounded-2xl border-2 border-gray-200 shadow-inner">
                   <p className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <Info className="h-5 w-5 text-blue-600" />
+                    <Info className="h-5 w-5 text-[color:var(--primary)]" />
                     Bank Details for Payment
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -1641,7 +1641,7 @@ export default function DashboardClient({ user }: { user: User }) {
               {canEdit && (
                 <Button
                   type="submit"
-                  className="w-full h-14 text-lg font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-200"
+                  className="w-full h-14 text-lg font-bold bg-[color:var(--primary)] hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-200"
                   disabled={isLoading}
                 >
                   {isLoading ? (
