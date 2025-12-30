@@ -78,21 +78,19 @@ export default function About() {
         >
           <div className="md:col-span-2 relative min-h-[260px] bg-black flex items-center justify-center group cursor-pointer overflow-hidden md:order-none order-first">
             <iframe
-              width="100%"
-              height="100%"
-              src="https://www.youtube.com/embed/jvU_frtZP3Y?si=BTo3fHtROxZoeegC&autoplay=1&mute=1&controls=0"
-              title="IIT Indore Video"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="absolute inset-0"
-            />
-            <a
+    src="https://www.youtube.com/embed/jvU_frtZP3Y?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1&origin=https://tdmtg.iiti.ac.in"
+    title="IIT Indore Video"
+    allow="autoplay; encrypted-media; picture-in-picture"
+    allowFullScreen
+    className="absolute inset-0 w-full h-full"
+  />
+            {/* <a
               href="https://youtu.be/jvU_frtZP3Y?si=BTo3fHtROxZoeegC"
               target="_blank"
               rel="noopener noreferrer"
               className="absolute inset-0 z-10"
               aria-label="Open video on YouTube"
-            />
+            /> */}
             <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-5" />
           </div>
 
