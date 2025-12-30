@@ -19,7 +19,7 @@ SECRET_KEY = 'django-insecure-9%_#-xpb8!w1ss%8#qbw1#d3inq&5wjrfqgj#y*3(1vn34si%y
 DEBUG = True
 
 # Allow localhost and 127.0.0.1 (IPv4)
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ['tdmtg.iiti.ac.in', 'www.tdmtg.iiti.ac.in', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -79,8 +79,12 @@ WSGI_APPLICATION = 'backend_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'tdmtg',       # Verify this name in CloudPanel
+        'USER': 'Pranav',     # Verify this user in CloudPanel
+        'PASSWORD': 'Manurkar@123',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
@@ -149,7 +153,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Custom User Model
 AUTH_USER_MODEL = "core.CustomUser"
 

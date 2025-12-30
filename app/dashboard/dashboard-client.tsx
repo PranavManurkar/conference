@@ -14,7 +14,7 @@
 // import { Badge } from "@/components/ui/badge"
 // import { LogOut, CheckCircle, Clock, XCircle, AlertCircle, PartyPopper, Loader2, Trash2 } from "lucide-react"
 
-// const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "http://localhost:8000"
+// const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "https://tdmtg.iiti.ac.in"
 
 // type Registration = {
 //   id: string
@@ -688,7 +688,7 @@ import { Badge } from "@/components/ui/badge"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { LogOut, CheckCircle, Clock, XCircle, AlertCircle, PartyPopper, Loader2, Trash2, Info } from "lucide-react"
 
-const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "http://localhost:8000"
+const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "https://tdmtg.iiti.ac.in"
 
 type Registration = {
   id: string
