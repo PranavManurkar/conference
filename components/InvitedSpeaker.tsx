@@ -73,7 +73,7 @@ export default function InvitedSpeaker() {
   { name: "Prof. Sumeet Walia", title: "Professor; Director, COMAS", affiliation: "RMIT University, Australia", image: "/invited_speaker/walia2.jpg" },
   { name: "Prof. Tanushree Choudhury", title: "Assistant Research Professor, 2DCC-MIP", affiliation: "Penn State University", image: "/invited_speaker/tanu.png" },
   { name: "Prof. Vilas Pol", title: "Professor", affiliation: "Purdue University, USA", image: "/invited_speaker/pol.jpg" },
-  { name: "Prof. Yuan-Ron Ma", title: "Vice President & Chair Professor", affiliation: "Fo Guang University / NDHU, Taiwan", image: "/invited_speaker/ma2.jpg" },
+  { name: "Prof. Yuan-Ron Ma", title: "Vice President & Chair Professor", affiliation: "Fo Guang University / NDHU, Taiwan", image: "/invited_speaker/ma3.jpg" },
   { name: "Prof. Yogendra Mishra", title: "Professor", affiliation: "University of Southern Denmark, Denmark", image: "/invited_speaker/yog.png" },
 ]
 

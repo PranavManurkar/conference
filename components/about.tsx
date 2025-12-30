@@ -82,6 +82,7 @@ export default function About() {
     title="IIT Indore Video"
     allow="autoplay; encrypted-media; picture-in-picture"
     allowFullScreen
+    referrerPolicy="strict-origin-when-cross-origin"
     className="absolute inset-0 w-full h-full"
   />
             {/* <a

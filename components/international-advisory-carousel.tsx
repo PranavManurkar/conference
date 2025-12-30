@@ -129,7 +129,7 @@ const committeeMembers: CommitteeMember[] = [
     name: "Prof. Yuan-Ron Ma",
     affiliation: "Vice President & Chair Professor, Fo Guang University; NDHU, Taiwan",
     initials: "YM",
-    image: "/invited_speaker/ma2.jpg",
+    image: "/invited_speaker/ma3.jpg",
   },
 ];
 
