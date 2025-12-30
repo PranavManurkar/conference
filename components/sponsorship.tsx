@@ -100,7 +100,8 @@ export default function Sponsorship() {
 
         {/* Other Sponsorship Options */}
         <div className="mt-16">
-          <h3 className="text-2xl font-bold text-[color:var(--nav)] mb-8">Other Sponsorship Options</h3>
+          <h3 className="text-2xl font-bold text-[color:var(--nav)] mb-8">Other
+            <span className='text-[color:var(--primary)]'> Sponsorship</span>  Options</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
             {otherSponsorship.map((sponsor, idx) => (
               <Card key={idx} className="border-[color:var(--nav)]/10 flex flex-col h-full">

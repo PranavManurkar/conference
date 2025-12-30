@@ -14,7 +14,6 @@ export const metadata: Metadata = {
   authors: [{ name: "IIT Indore" }],
   creator: "IIT Indore",
   publisher: "IIT Indore",
-    generator: 'v0.app'
 }
 
 export const viewport = {
@@ -45,6 +44,8 @@ export default function RootLayout({
         <meta property="og:title" content="2D MatTechGlobal 2026 Conference" />
         <meta property="og:description" content="International conference on 2D Materials at IIT Indore" />
         <meta property="og:type" content="website" />
+        {/* Favicon */}
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </head>
       <body className={`font-sans antialiased`}>
         <Navigation />
