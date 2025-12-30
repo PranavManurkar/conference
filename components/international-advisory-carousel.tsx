@@ -15,7 +15,7 @@ const committeeMembers: CommitteeMember[] = [
     name: "Prof. Amlan J. Pal",
     affiliation: "Ex. Director, UGC-DAE-CSR, India; Professor & JC Bose National Fellow, IACS, Kolkata",
     initials: "AP",
-    image: "/invited_speaker/pal.png",
+    image: "/invited_speaker/amlan.png",
   },
   {
     name: "Prof. Anirudha V. Sumant",
