@@ -114,25 +114,6 @@ export default function About() {
     interdisciplinary programs and was the first IIT to launch an MS in Data
     Science and Management in collaboration with IIM Indore.
   </p>
-
-  <p>
-    Recognized as an Institute of National Importance, IIT Indore consistently
-    ranks among India’s leading institutions and has contributed over 7,500
-    international publications and 165+ patents, reflecting its strong research
-    and innovation ecosystem.
-  </p>
-
-  <p>
-    For more information, visit the{" "}
-    <a
-      href="https://iiti.ac.in"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-[color:var(--primary)] underline hover:text-[color:var(--nav)]"
-    >
-      IIT Indore website
-    </a>.
-  </p>
 </div>
 
 
