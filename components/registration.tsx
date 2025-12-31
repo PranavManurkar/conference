@@ -91,67 +91,74 @@ export default function Registration() {
         </Card>
 
         <div className="mt-12 bg-[color:var(--primary)] rounded-lg shadow-lg p-8 text-[var(--primary-foreground)]">
-          <h3 className="text-2xl font-bold mb-6">How to Register</h3>
-          <div className="grid md:grid-cols-4 gap-6">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full bg-[var(--primary-foreground)]/20 flex items-center justify-center mb-4">
-                <CreditCard className="h-6 w-6 text-[var(--primary-foreground)]" />
-              </div>
-              <div className="font-bold text-lg mb-2">Step 1</div>
-              <p className="text-[var(--primary-foreground)]/80 text-sm">
-                Pay the registration fee based on your delegate type and registration period using the bank details
-                above
-              </p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full bg-[var(--primary-foreground)]/20 flex items-center justify-center mb-4">
-                <UserPlus className="h-6 w-6 text-[var(--primary-foreground)]" />
-              </div>
-              <div className="font-bold text-lg mb-2">Step 2</div>
-              <p className="text-[var(--primary-foreground)]/80 text-sm">
-                Create an account or login to your dashboard using the button below
-              </p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full bg-[var(--primary-foreground)]/20 flex items-center justify-center mb-4">
-                <FileText className="h-6 w-6 text-[var(--primary-foreground)]" />
-              </div>
-              <div className="font-bold text-lg mb-2">Step 3</div>
-              <p className="text-[var(--primary-foreground)]/80 text-sm">
-                Fill in your details and enter the Transaction ID for payment verification
-              </p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full bg-[var(--primary-foreground)]/20 flex items-center justify-center mb-4">
-                <CheckCircle className="h-6 w-6 text-[var(--primary-foreground)]" />
-              </div>
-              <div className="font-bold text-lg mb-2">Step 4</div>
-              <p className="text-[var(--primary-foreground)]/80 text-sm">
-                Once your payment is verified and status shows "Accepted", you can attend the conference
-              </p>
-            </div>
-          </div>
+  <h3 className="text-2xl font-bold mb-6">How to Register</h3>
+  <div className="grid md:grid-cols-4 gap-6">
+    
+    {/* STEP 1: Account Creation */}
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 rounded-full bg-[var(--primary-foreground)]/20 flex items-center justify-center mb-4">
+        <UserPlus className="h-6 w-6 text-[var(--primary-foreground)]" />
+      </div>
+      <div className="font-bold text-lg mb-2">Step 1</div>
+      <p className="text-[var(--primary-foreground)]/80 text-sm">
+        Create an account or login to your dashboard to begin the registration process
+      </p>
+    </div>
 
-          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-[var(--primary-foreground)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)]">
-              <Link href="/auth/sign-up">
-                Create Account
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="border-[var(--primary-foreground)] text-[var(--primary-foreground)] hover:text-white hover:bg-[var(--primary-foreground)]"
-            >
-              <Link href="/auth/login">
-                Login to Dashboard
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
+    {/* STEP 2: Fill Details & Calculate */}
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 rounded-full bg-[var(--primary-foreground)]/20 flex items-center justify-center mb-4">
+        <FileText className="h-6 w-6 text-[var(--primary-foreground)]" />
+      </div>
+      <div className="font-bold text-lg mb-2">Step 2</div>
+      <p className="text-[var(--primary-foreground)]/80 text-sm">
+        Fill in your registration details in the dashboard. The system will automatically calculate your fee
+      </p>
+    </div>
+
+    {/* STEP 3: Payment */}
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 rounded-full bg-[var(--primary-foreground)]/20 flex items-center justify-center mb-4">
+        <CreditCard className="h-6 w-6 text-[var(--primary-foreground)]" />
+      </div>
+      <div className="font-bold text-lg mb-2">Step 3</div>
+      <p className="text-[var(--primary-foreground)]/80 text-sm">
+        Pay the amount using the bank details displayed in the dashboard and submit your Transaction ID
+      </p>
+    </div>
+
+    {/* STEP 4: Verification */}
+    <div className="flex flex-col items-center text-center">
+      <div className="w-12 h-12 rounded-full bg-[var(--primary-foreground)]/20 flex items-center justify-center mb-4">
+        <CheckCircle className="h-6 w-6 text-[var(--primary-foreground)]" />
+      </div>
+      <div className="font-bold text-lg mb-2">Step 4</div>
+      <p className="text-[var(--primary-foreground)]/80 text-sm">
+        Once your payment is verified and status shows "Accepted", your registration is complete
+      </p>
+    </div>
+  </div>
+
+  <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+    <Button asChild size="lg" className="bg-[var(--primary-foreground)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)]">
+      <Link href="/auth/sign-up">
+        Create Account
+        <ArrowRight className="ml-2 h-4 w-4" />
+      </Link>
+    </Button>
+    <Button
+      asChild
+      size="lg"
+      variant="outline"
+      className="border-[var(--primary-foreground)] text-[var(--primary-foreground)] hover:text-white hover:bg-[var(--primary-foreground)]"
+    >
+      <Link href="/auth/login">
+        Login to Dashboard
+        <ArrowRight className="ml-2 h-4 w-4" />
+      </Link>
+    </Button>
+  </div>
+</div>
         {/* End of How to Register section */}
       </div>
     </section>
