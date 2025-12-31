@@ -1,0 +1,70 @@
+\documentclass[11pt]{article}
+% Compile with XeLaTeX (Overleaf: set Compiler to XeLaTeX)
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\singlespacing
+\usepackage{xcolor}
+\usepackage{ragged2e}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{enumitem}
+
+% Define colors to match Word red (adjust if needed)
+\definecolor{wordred}{HTML}{B30000} % deep red similar to screenshots
+\definecolor{navy}{HTML}{333333}
+
+% Helper commands for exact sizes
+\newcommand{\TitleFont}{\fontsize{13}{15}\selectfont\bfseries}
+\newcommand{\BodyFont}{\fontsize{11}{13}\selectfont}
+\newcommand{\AffilFont}{\fontsize{11}{13}\selectfont\itshape}
+\newcommand{\SmallBold}{\fontsize{11}{13}\selectfont\bfseries}
+
+\begin{document}
+
+% Centered header block (title, authors, affiliations)
+\begin{center}
+{\TitleFont Abstract Format\par}
+\vspace{8pt}
+
+{\TitleFont Please Provide A Concise Title of Your Presentation (Times New Roman, font size 13)\par}
+\vspace{10pt}
+
+{\BodyFont Author A1, Author B1, Author C2,*\ldots, Author N1. (Times New Roman, font size 11)\par}
+\vspace{6pt}
+
+{\AffilFont \textcolor{wordred}{Affiliation:1Department, Organisation, Address, (Italic, Times New Roman, font size 11)}\par}
+{\AffilFont \textcolor{wordred}{2Department, Organisation, Address}\par}
+\vspace{6pt}
+
+{\BodyFont *Corresponding Author E-mail: (Times New Roman, font size 11, preferred one)\par}
+\end{center}
+
+\vspace{8pt}
+
+{\BodyFont
+You are invited to submit your abstract (Times New Roman, font size 11, line spacing 1, maximum 300 words) via the online portal by March 25, 2026. The abstract should be in English and within a one-page limit. The format and style should be as described in this template. References should be identified in the text in brackets and listed at the end of the paper (11 points). Authors will be notified of abstract acceptance by April 25, 2026. Each paper accepted for presentation will be included in the proceedings after the confirmation of registration by June 05, 2026. Abstracts accepted for the conference will be further invited to submit as a full manuscript to the SCI journals for peer review. 
+\par}
+
+\vspace{8pt}
+
+{\SmallBold \textcolor{wordred}{Keywords:} \BodyFont Keyword 1; Keyword 2; Keyword 3; Keyword 4; Keyword 5; (Maximum 5).\par}
+
+\vspace{10pt}
+
+{\SmallBold \textcolor{wordred}{References (Maximum 3)}\par}
+
+\vspace{6pt}
+
+{\BodyFont A. B. Cdef, A. B. Cedf, and A. B. Cedf, Journal name, Volume, (Year), Page-page/Article Number. \par}
+
+\vspace{4pt}
+
+{\BodyFont A. B. Cdef, A. B. Cedf, and A. B. Cedf, Journal name, Volume, (Year), Page-page/Article Number. \par}
+
+\vspace{4pt}
+
+{\BodyFont A. B. Cdef, A. B. Cedf, and A. B. Cedf, Journal name, Volume, (Year), Page-page/Article Number. \par}
+
+\end{document}

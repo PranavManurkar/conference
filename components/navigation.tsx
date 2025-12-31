@@ -68,9 +68,9 @@ export default function Navigation() {
                   भारतीय प्रौद्योगिकी संस्थान
                 </h2>
                 <p className="text-[color:var(--nav)] font-semibold text-xs">
-                  Indian Institute of Technology
+                  Indian Institute of Technology, Indore
                 </p>
-                <p className="text-[color:var(--nav)] font-semibold text-xs">Indore</p>
+                {/* <p className="text-[color:var(--nav)] font-semibold text-xs">Indore</p> */}
               </div>
             </Link>
 

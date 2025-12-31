@@ -151,65 +151,6 @@ export default function About() {
             <div className="mb-4">
               <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
               <h2 className="text-2xl font-semibold text-[color:var(--nav)]">
-                <span className="text-[color:var(--primary)]">Indore </span> City</h2>
-            </div>
-
-            <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
-  <p>
-    Indore, the largest city and commercial capital of Madhya Pradesh, is located
-    in the Malwa region and was established in the 16th century as a major trading
-    hub along the Kanh and Saraswati rivers.
-  </p>
-
-  <p>
-    The city is renowned for its rich heritage, vibrant culture, and cleanliness,
-    with popular attractions such as Rajwada, Lal Bagh Palace, Kanch Mandir, and
-    the Annapurna and Ganpati temples.
-  </p>
-
-  <p>
-    Indore also serves as a gateway to prominent nearby destinations, including
-    the Jyotirlingas at Ujjain and Omkareshwar, as well as Mandu, Maheshwar, and
-    scenic spots like Patalpani and Choral Dam. December offers pleasant weather
-    with mild winters, suitable for visitors.
-  </p>
-</div>
-
-          </div>
-
-          <div className="md:col-span-2 relative min-h-[260px] order-first md:order-none">
-            <Image
-              src="/indore.jpg"
-              alt="Indore City"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 40vw"
-            />
-          </div>
-        </motion.div>
-
-        {/* SECTION 4 — Image top (mobile only), Image left, Text right (desktop) */}
-        <motion.div
-          className="bg-[color:var(--primary-foreground)] rounded-lg shadow flex flex-col md:grid md:grid-cols-5 overflow-hidden"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeUp}
-        >
-          <div className="md:col-span-2 relative min-h-[260px] md:order-none order-first">
-            <Image
-              src="/convocation.jpg"
-              alt="MEMS IIT Indore"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 40vw"
-            />
-          </div>
-
-          <div className="md:col-span-3 p-6 md:order-none order-last">
-            <div className="mb-4">
-              <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
-              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">
                 <span className="text-[color:var(--primary)]">Metallurgical Engineering and Materials Science</span>
               </h2>
             </div>
@@ -248,6 +189,81 @@ export default function About() {
     </a>.
   </p>
 </div>
+
+          </div>
+
+          <div className="md:col-span-2 relative min-h-[260px] order-first md:order-none">
+            <Image
+              src="/convocation.jpg"
+              alt="MEMS IIT Indore"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 40vw"
+            />
+          </div>
+        </motion.div>
+
+        {/* SECTION 4 — Image top (mobile only), Image left, Text right (desktop) */}
+        <motion.div
+          className="bg-[color:var(--primary-foreground)] rounded-lg shadow flex flex-col md:grid md:grid-cols-5 overflow-hidden"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+        >
+          <div className="md:col-span-2 relative min-h-[260px] md:order-none order-first">
+            <Image
+              src="/indore.jpg"
+              alt="Indore City"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 40vw"
+            />
+          </div>
+
+          <div className="md:col-span-3 p-6 md:order-none order-last">
+            <div className="mb-4">
+              <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
+              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">
+                <span className="text-[color:var(--primary)]">Indore </span> City</h2>
+            </div>
+
+           <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
+  <p>
+    Indore, the largest city and commercial capital of Madhya Pradesh, is located
+    in the Malwa region and was established in the 16th century as a major trading
+    hub along the Kanh and Saraswati rivers.
+  </p>
+
+  <p>
+    The city is renowned for its rich heritage, vibrant culture, and cleanliness,
+    with popular attractions such as Rajwada, Lal Bagh Palace, Kanch Mandir, and
+    the Annapurna and Ganpati temples.
+  </p>
+
+  <p>
+    Indore also serves as a gateway to prominent nearby destinations, including
+    the Jyotirlingas at Ujjain and Omkareshwar, as well as Mandu, Maheshwar, and
+    scenic spots like Patalpani and Choral Dam. June-July offers pleasant weather marking onset of monsoon with greenery all around, suitable for visitors.
+  </p>
+
+  <p>
+    Located around 55 km from Indore, the Mahakaleshwar Jyotirlinga in Ujjain is
+    one of the twelve sacred Jyotirlingas of Lord Shiva and is revered for its
+    unique south-facing (Dakshinamukhi) lingam. The temple is especially known
+    for the early-morning Bhasma Aarti and holds immense spiritual significance.
+    More details are available on the official website:&nbsp;
+    <a
+      href="https://shrimahakaleshwar.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="underline underline-offset-2 text-[color:var(--primary)] hover:text-[color:var(--nav)]"
+    >
+      shrimahakaleshwar.com
+    </a>
+  </p>
+</div>
+
 
           </div>
         </motion.div>
