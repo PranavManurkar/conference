@@ -58,7 +58,7 @@ export default function Hero() {
           <div className="order-1 md:order-2 flex items-center justify-center mb-6 md:mb-0">
             <div className="relative w-auto h-auto border border-yellow-400 border-opacity-30 rounded-xl shadow-2xl bg-slate-800">
               <Image
-                src="/conference.jpeg"
+                src="/poster1.png"
                 alt="Conference banner"
                 width={800}
                 height={550}

@@ -77,13 +77,12 @@ export default function Navigation() {
             <div className="flex-1"></div>
 
             {/* Right: 2D MatTechGlobal Branding */}
-            <div className="hidden lg:flex flex-col items-end justify-center space-y-1">
-                <div className="w-28 h-28 relative mb-2 -mr-4">
+            <div className="hidden lg:flex items-center h-full">
+              <div className="relative w-24 h-23">
                 <Image
-                  src="/mtg2.png"
+                  src="/logo1.png"
                   alt="2D MatTechGlobal Logo"
-                  width={120}
-                  height={120}
+                  fill
                   className="object-contain  "
                 />
                 </div>
