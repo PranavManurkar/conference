@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+	<circle cx="50" cy="50" r="48" fill="#f5f6fa" stroke="#888" stroke-width="4"/>
+	<circle cx="50" cy="50" r="38" fill="#2d3e6b" stroke="#f9c846" stroke-width="2"/>
+	<!-- India shape simplified as a blue blob for favicon scale -->
+	<ellipse cx="60" cy="55" rx="10" ry="7" fill="#1e90ff"/>
+	<!-- Hex mesh (simplified for favicon) -->
+	<g stroke="#f9c846" stroke-width="1">
+		<polygon points="50,12 62,18 62,32 50,38 38,32 38,18" fill="none"/>
+		<polygon points="50,38 62,32 74,38 74,52 62,58 50,52 38,58 26,52 26,38 38,32" fill="none"/>
+		<polygon points="50,52 62,58 62,72 50,78 38,72 38,58" fill="none"/>
+	</g>
+	<!-- 2DMTG text -->
+	<text x="50" y="92" font-size="18" font-family="Arial, Helvetica, sans-serif" text-anchor="middle" font-weight="bold">
+		<tspan fill="#ff8000">2D</tspan><tspan fill="#a259c4">MTG</tspan>
+	</text>
+</svg>

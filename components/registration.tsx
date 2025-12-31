@@ -90,56 +90,7 @@ export default function Registration() {
           </CardContent>
         </Card>
 
-        <div className="mt-12 bg-[var(--card)] rounded-lg shadow-md p-8">
-          <h3 className="text-2xl font-bold text-[var(--foreground)] mb-6">Payment Information</h3>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h4 className="font-bold text-[var(--foreground)] mb-4">Bank Details</h4>
-              <ul className="space-y-3 text-[var(--muted-foreground)]">
-                <li>
-                  <span className="font-semibold">Bank:</span> Canara Bank
-                </li>
-                <li>
-                  <span className="font-semibold">Branch:</span> Simrol IIT Branch
-                </li>
-                <li>
-                  <span className="font-semibold">Account Number:</span> 1476101027440
-                </li>
-                <li>
-                  <span className="font-semibold">IFSC Code:</span> CNRB0006223
-                </li>
-                <li>
-                  <span className="font-semibold">MICR Code:</span> 452015003
-                </li>
-                <li>
-                  <span className="font-semibold">Account Holder:</span> Indian Institute of Technology Indore
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold text-[var(--foreground)] mb-4">Account Information</h4>
-              <ul className="space-y-3 text-[var(--muted-foreground)]">
-                <li>
-                  <span className="font-semibold">GST No:</span> 23AAAAI7115H122
-                </li>
-                <li>
-                  <span className="font-semibold">PAN:</span> AAAAI7115H
-                </li>
-                <li>
-                  <span className="font-semibold">TAN:</span> BPLI01163B
-                </li>
-                <li>
-                  <span className="font-semibold">SWIFT Code:</span> CNRBINBBMSG
-                </li>
-                <li>
-                  <span className="font-semibold">Contact:</span> arrnd@iiti.ac.in
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-12 bg-[var(--lightpurple)] rounded-lg shadow-lg p-8 text-[var(--primary-foreground)]">
+        <div className="mt-12 bg-[color:var(--primary)] rounded-lg shadow-lg p-8 text-[var(--primary-foreground)]">
           <h3 className="text-2xl font-bold mb-6">How to Register</h3>
           <div className="grid md:grid-cols-4 gap-6">
             <div className="flex flex-col items-center text-center">

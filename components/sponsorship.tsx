@@ -100,7 +100,8 @@ export default function Sponsorship() {
 
         {/* Other Sponsorship Options */}
         <div className="mt-16">
-          <h3 className="text-2xl font-bold text-[color:var(--nav)] mb-8">Other Sponsorship Options</h3>
+          <h3 className="text-2xl font-bold text-[color:var(--nav)] mb-8">Other
+            <span className='text-[color:var(--primary)]'> Sponsorship</span>  Options</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
             {otherSponsorship.map((sponsor, idx) => (
               <Card key={idx} className="border-[color:var(--nav)]/10 flex flex-col h-full">
@@ -120,6 +121,74 @@ export default function Sponsorship() {
               </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* PAYMENT SECTION UPDATED */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+        <div className="bg-[var(--card)] rounded-lg shadow-md p-8 border border-[color:var(--nav)]/10 max-w-5xl mx-auto">
+          <h2 className="text-2xl font-bold text-[color:var(--primary)] mb-6 border-b border-[color:var(--nav)]/10 pb-4">
+            Payment Information
+          </h2>
+          
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start justify-between">
+            
+            {/* Column 1: Bank Details */}
+            <div className="flex-1">
+              <h3 className="font-bold text-[color:var(--primary)] mb-3 text-lg">Bank Details</h3>
+              <ul className="space-y-3 text-[var(--muted-foreground)] text-sm md:text-base">
+                <li><span className="font-semibold text-[color:var(--nav)]">Bank:</span> Canara Bank</li>
+                <li><span className="font-semibold text-[color:var(--nav)]">Branch:</span> Simrol IIT Branch</li>
+                <li><span className="font-semibold text-[color:var(--nav)]">Account Number:</span> 1476101027440</li>
+                <li><span className="font-semibold text-[color:var(--nav)]">IFSC Code:</span> CNRB0006223</li>
+                <li><span className="font-semibold text-[color:var(--nav)]">MICR Code:</span> 452015003</li>
+                {/* ADDED whitespace-nowrap HERE */}
+                <li className="whitespace-nowrap">
+                    <span className="font-semibold text-[color:var(--nav)]">Account Holder:</span> Indian Institute of Technology Indore
+                </li>
+                <li className="flex items-center gap-2 pt-2">
+                  <span className="font-semibold text-[color:var(--nav)]">Payu link:</span>
+                  <a 
+                    href="https://payu.in/web/EB3AF4CBC22FB4C90B5ABC9A52E5CAC3" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="px-4 py-1.5 bg-[color:var(--primary)] text-white text-sm font-medium rounded hover:opacity-90 transition-opacity"
+                  >
+                    Pay Now
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 2: Account Information */}
+            <div className="flex-1">
+              <h3 className="font-bold text-[color:var(--primary)] mb-3 text-lg">
+                Account Information
+              </h3>
+              <ul className="space-y-3 text-[var(--muted-foreground)] text-sm md:text-base">
+                <li><span className="font-semibold text-[color:var(--nav)]">GST No:</span> 23AAAAI7115H122</li>
+                <li><span className="font-semibold text-[color:var(--nav)]">PAN:</span> AAAAI7115H</li>
+                <li><span className="font-semibold text-[color:var(--nav)]">TAN:</span> BPLI01163B</li>
+                <li><span className="font-semibold text-[color:var(--nav)]">SWIFT Code:</span> CNRBINBBMSG</li>
+                <li><span className="font-semibold text-[color:var(--nav)]">Contact:</span> arrnd@iiti.ac.in</li>
+              </ul>
+            </div>
+
+            {/* Column 3: QR Code */}
+            <div className="flex-none flex flex-col items-center justify-center md:items-start lg:items-center">
+              <h4 className="font-bold text-[color:var(--primary)] mb-4">
+                Scan to Pay
+              </h4>
+              <div className="bg-white p-2 rounded-lg border border-[var(--border)] shadow-sm">
+                <img 
+                    src="payuqr.png" 
+                    alt="Payment QR Code" 
+                    className="w-40 h-40 object-contain" 
+                />
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

@@ -14,7 +14,7 @@
 // import { Badge } from "@/components/ui/badge"
 // import { LogOut, CheckCircle, Clock, XCircle, AlertCircle, PartyPopper, Loader2, Trash2 } from "lucide-react"
 
-// const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "http://localhost:8000"
+// const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "https://tdmtg.iiti.ac.in"
 
 // type Registration = {
 //   id: string
@@ -686,9 +686,9 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { LogOut, CheckCircle, Clock, XCircle, AlertCircle, PartyPopper, Loader2, Trash2, Info } from "lucide-react"
+import { LogOut, CheckCircle, Clock, XCircle, AlertCircle, PartyPopper, Loader2, Trash2, Info ,ExternalLink} from "lucide-react"
 
-const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "http://localhost:8000"
+const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "https://tdmtg.iiti.ac.in"
 
 type Registration = {
   id: string
@@ -1547,38 +1547,79 @@ export default function DashboardClient({ user }: { user: User }) {
 
               {/* Payment Information Section */}
               <div className="space-y-6">
+                {/* Header Section */}
                 <div className="flex items-center gap-3 pb-3 border-b-2 border-indigo-100">
                   <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
                   <h3 className="text-xl font-bold text-gray-900">Payment Information</h3>
                 </div>
 
-                <div className="bg-gradient-to-br from-gray-50 to-blue-50 p-6 rounded-2xl border-2 border-gray-200 shadow-inner">
-                  <p className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <Info className="h-5 w-5 text-[color:var(--primary)]" />
-                    Bank Details for Payment
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div className="bg-white p-4 rounded-xl shadow-sm">
-                      <p className="font-semibold text-gray-700 mb-1">Account Name</p>
-                      <p className="text-gray-900">Indian Institute of Technology Indore</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm">
-                      <p className="font-semibold text-gray-700 mb-1">Account Number</p>
-                      <p className="text-gray-900 font-mono">1476101027440</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm">
-                      <p className="font-semibold text-gray-700 mb-1">IFSC Code</p>
-                      <p className="text-gray-900 font-mono">CNRB0006223</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm">
-                      <p className="font-semibold text-gray-700 mb-1">Bank Name</p>
-                      <p className="text-gray-900">Canara Bank, Simrol IIT Branch</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm md:col-span-2">
-                      <p className="font-semibold text-gray-700 mb-1">SWIFT Code (International)</p>
-                      <p className="text-gray-900 font-mono">CNRBINBBMSG</p>
+                <div className="flex flex-col lg:flex-row gap-6">
+
+                  {/* LEFT COLUMN: Bank Details Grid */}
+                  <div className="flex-1 bg-gradient-to-br from-gray-50 to-blue-50 p-6 rounded-2xl border-2 border-gray-200 shadow-inner">
+                    <p className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                      <Info className="h-5 w-5 text-[color:var(--primary)]" />
+                      Bank Details for Payment
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+
+                      {/* Row 1: Account Name & Account Number */}
+                      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                        <p className="font-semibold text-gray-700 mb-1">Account Name</p>
+                        <p className="text-gray-900 font-medium">Indian Institute of Technology Indore</p>
+                      </div>
+                      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                        <p className="font-semibold text-gray-700 mb-1">Account Number</p>
+                        <p className="text-gray-900 font-mono tracking-wide">1476101027440</p>
+                      </div>
+
+                      {/* Row 2: IFSC & Bank Name */}
+                      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                        <p className="font-semibold text-gray-700 mb-1">IFSC Code</p>
+                        <p className="text-gray-900 font-mono tracking-wide">CNRB0006223</p>
+                      </div>
+                      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                        <p className="font-semibold text-gray-700 mb-1">Bank Name</p>
+                        <p className="text-gray-900">Canara Bank, Simrol IIT Branch</p>
+                      </div>
+
+                      {/* Row 3: SWIFT & PayU Button */}
+                      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                        <p className="font-semibold text-gray-700 mb-1">SWIFT Code (International)</p>
+                        <p className="text-gray-900 font-mono tracking-wide">CNRBINBBMSG</p>
+                      </div>
+
+                      <a
+                        href="https://payu.in/web/EB3AF4CBC22FB4C90B5ABC9A52E5CAC3"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-[color:var(--primary)] hover:bg-blue-700 text-white p-4 rounded-xl shadow-sm transition-all flex flex-col justify-center items-center text-center group cursor-pointer"
+                      >
+                        <span className="font-bold flex items-center gap-2 text-base">
+                          Pay Now
+                          <ExternalLink className="w-4 h-4 opacity-80 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                        <span className="text-xs opacity-90 mt-0.5">via PayU Gateway</span>
+                      </a>
+
                     </div>
                   </div>
+
+                  {/* RIGHT COLUMN: QR Code Card */}
+                  <div className="lg:w-80 bg-white p-6 rounded-2xl border-2 border-gray-200 shadow-sm flex flex-col items-center justify-center text-center">
+                    <div className="mb-4">
+                      <h4 className="text-lg font-bold text-[color:var(--primary)]">Scan to Pay</h4>
+                    </div>
+                    <div className="bg-white p-2 rounded-xl border-2 border-dashed border-gray-200">
+                      <img
+                        src="payuqr.png"
+                        alt="Payment QR Code"
+                        className="w-48 h-48 object-contain"
+                      />
+                    </div>
+                  </div>
+
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-2">

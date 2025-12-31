@@ -30,6 +30,16 @@ type Attraction = {
 export default function KeyAttraction() {
   const attractions: Attraction[] = [
     {
+      id: "Mahakaleshwar Jyotirlinga",
+      title: "Mahakaleshwar Jyotirlinga",
+      description:
+        "Located around 55 km from Indore, the Mahakaleshwar Jyotirlinga in Ujjain is one of the twelve sacred Jyotirlingas of Lord Shiva and is revered for its unique south-facing (Dakshinamukhi) lingam. The temple is especially known for the early-morning Bhasma Aarti and holds immense spiritual significance.",
+      icon: <Star className="h-6 w-6" />,
+      accent: "bg-blue-50",
+      image: "/mj2.jpg",
+      googleMapsLink: "https://www.madhya-pradesh-tourism.com/destination/Rajwada-Palace-60",
+    },
+    {
       id: "rajwada",
       title: "Rajwada Palace",
       description:

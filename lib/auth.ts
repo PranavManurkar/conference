@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode"
 
-const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "http://localhost:8000"
+const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "https://tdmtg.iiti.ac.in"
 
 export type User = {
   id: string

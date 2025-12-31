@@ -38,9 +38,8 @@ export default function Contact() {
             icon={Phone}
             title="Phone"
             details={[
-              'Mr. Rupesh S Devan: +91-1234567890',
-              'Dr. Ravindra Jangir: +91-1234567890',
-              'Dr. Ram J. Choudhary: +91-1234567890',
+              '+91-731-6603244',
+              '+91-731-6605126',
             ]}
           />
           <ContactCard
