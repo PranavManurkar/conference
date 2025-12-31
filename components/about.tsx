@@ -114,6 +114,25 @@ export default function About() {
     interdisciplinary programs and was the first IIT to launch an MS in Data
     Science and Management in collaboration with IIM Indore.
   </p>
+
+  <p>
+    Recognized as an Institute of National Importance, IIT Indore consistently
+    ranks among India’s leading institutions and has contributed over 7,500
+    international publications and 165+ patents, reflecting its strong research
+    and innovation ecosystem.
+  </p>
+
+  <p>
+    For more information, visit the{" "}
+    <a
+      href="https://iiti.ac.in"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-[color:var(--primary)] underline hover:text-[color:var(--nav)]"
+    >
+      IIT Indore website
+    </a>.
+  </p>
 </div>
 
 
@@ -226,22 +245,6 @@ export default function About() {
     Indore also serves as a gateway to prominent nearby destinations, including
     the Jyotirlingas at Ujjain and Omkareshwar, as well as Mandu, Maheshwar, and
     scenic spots like Patalpani and Choral Dam. June-July offers pleasant weather marking onset of monsoon with greenery all around, suitable for visitors.
-  </p>
-
-  <p>
-    Located around 55 km from Indore, the Mahakaleshwar Jyotirlinga in Ujjain is
-    one of the twelve sacred Jyotirlingas of Lord Shiva and is revered for its
-    unique south-facing (Dakshinamukhi) lingam. The temple is especially known
-    for the early-morning Bhasma Aarti and holds immense spiritual significance.
-    More details are available on the official website:&nbsp;
-    <a
-      href="https://shrimahakaleshwar.com"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="underline underline-offset-2 text-[color:var(--primary)] hover:text-[color:var(--nav)]"
-    >
-      shrimahakaleshwar.com
-    </a>
   </p>
 </div>
 
