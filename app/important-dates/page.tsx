@@ -5,18 +5,18 @@ import { Calendar, CheckCircle2 } from "lucide-react"
 export default function ImportantDatesPage() {
   const dates = [
     {
-      date: "March 25, 2026",
+      date: "April 30, 2026",
       title: "Abstract Submission Deadline",
       description: "Submit your research abstracts (200-250 words) through the online portal",
     },
     {
-      date: "April 25, 2026",
+      date: "May 15, 2026",
       title: "Abstract Acceptance Notification",
       description: "Decisions on submitted abstracts will be communicated to authors",
     },
     {
-      date: "May 5, 2026",
-      title: "Early Bird Registration Opens",
+      date: "May 25, 2026",
+      title: "Early Bird Registration Deadline",
       description: "Register early and avail discounted registration fees",
     },
     {

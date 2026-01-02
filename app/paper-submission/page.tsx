@@ -37,10 +37,10 @@ export default function PaperSubmission() {
             <div className="bg-[var(--muted)] border-l-4 border-[var(--primary)] rounded-lg p-4">
               <h3 className="font-bold text-[var(--nav)] mb-2">Important Dates</h3>
               <p className="text-sm text-[var(--primary)] mb-1">
-                <strong>Submission:</strong> March 25, 2026
+                <strong>Submission:</strong> April 30, 2026
               </p>
               <p className="text-sm text-[var(--primary)]">
-                <strong>Notification:</strong> April 25, 2026
+                <strong>Notification:</strong> May 15, 2026
               </p>
             </div>
           </div>
@@ -49,17 +49,18 @@ export default function PaperSubmission() {
           <div className="md:col-span-2 bg-[var(--card)] rounded-lg shadow-lg p-8">
             <h2 className="text-2xl font-bold text-[var(--foreground)] mb-6">Submit Your Abstract</h2>
             <p className="text-[var(--muted-foreground)] mb-6">
-              Submit your abstract through our Microsoft CMT portal. Click the button below to proceed with your
-              submission.
+              Submit your abstract through our Microsoft CMT portal.
             </p>
-            <a
-              href="https://cmt3.research.microsoft.com/2dmattechglobal2026"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--nav)] text-[var(--primary-foreground)] font-semibold py-3 px-8 rounded-lg transition-colors"
-            >
-              Submit Abstract on CMT
-            </a>
+            <div className="inline-flex items-center gap-2 bg-[var(--muted)] text-[var(--muted-foreground)] font-semibold py-3 px-8 rounded-lg cursor-not-allowed">
+              CMT submission link will be coming shortly
+            </div>
+
+            {/* Acknowledgment */}
+            <div className="mt-6 bg-[var(--muted)] rounded-lg p-4">
+              <p className="text-xs text-[var(--muted-foreground)]">
+                <strong>ACKNOWLEDGMENT:</strong> The Microsoft CMT service was used for managing the peer-reviewing process for this conference. This service was provided for free by Microsoft and they bore all expenses, including costs for Azure cloud services as well as for software development and support.
+              </p>
+            </div>
 
             <div className="mt-6">
               <p className="text-[var(--muted-foreground)] mb-3 text-sm">Download Templates:</p>

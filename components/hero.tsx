@@ -9,20 +9,7 @@ export default function Hero() {
   const pathname = usePathname()
   const handleDownloadBrochure = () => {
     const link = document.createElement("a")
-
-    // Option 1: Use your local PDF in the public folder
-    // Add your brochure PDF to: /public/brochure.pdf
-    // Then use: link.href = "/brochure.pdf"
-
-    // Option 2: Use an environment variable for production
-    // Create .env.local with: NEXT_PUBLIC_BROCHURE_URL=your-url
-    // Then use: link.href = process.env.NEXT_PUBLIC_BROCHURE_URL || "/brochure.pdf"
-
-    // Option 3: Current setup (blob URL from v0)
-    // Replace this URL with your own PDF URL
-    link.href =
-      "https://blobs.vusercontent.net/blob/Brochure%20for%202DMatTech%20-%202025-11-09-6IHhq5WV3Q4GkPNSWHBvPGb3qrlCUJ.pdf"
-
+    link.href = "/Brochure for 2DMatTech - Revised 2025-01-02.pdf"
     link.download = "Brochure-2DMatTech-2025.pdf"
     document.body.appendChild(link)
     link.click()

@@ -48,7 +48,7 @@ export default function InvitedSpeaker() {
   { name: "Dr. K. Pillai Vijayamohanan", title: "Professor", affiliation: "Professor, IISER Tirupati Honorary Fellow Electrochemical Society of India.", image: "/invited_speaker/pillai.png" },
   { name: "Prof. S. B. Ogale", title: "Director, RISE; Emeritus Professor", affiliation: "Director, RISE, TCG-CREST, Kolkata, India. Emeritus Professor, IISER Pune, India.", image: "/invited_speaker/ogale.jpg" },
   { name: "Prof. Sanjay Mathur", title: "Director, IIMC", affiliation: "Director, IIMC, Univ. of Cologne, Germany", image: "/invited_speaker/mathur.jpg" },
-  { name: "Prof. Sebastien Royer", title: "Professor", affiliation: "Distinguished Professor of Chemistry, Université du Littoral Côte d'Opale (ULCO) in France", image: "/invited_speaker/royer.png" },
+  { name: "Prof. Sebastien Royer", title: "Professor", affiliation: "Distinguished Professor of Chemistry, Université du Littoral Côte d'Opale (ULCO) in France", image: "/invited_speaker/royer2.jpg" },
   { name: "Prof. Anirudha V. Sumant", title: "Group Leader / Scientist", affiliation: "Group Leader Nanofabrication and Devices, Argonne National Lab., USA", image: "/invited_speaker/sumant.png" },
   { name: "Prof. Yuan-Ron Ma", title: "Vice President & Chair Professor", affiliation: "Vice President & Chair Professor, Fo Guang University, Yilan, Taiwan. Distinguished Professor, National Dong Hwa University, Hualien, Taiwan.", image: "/invited_speaker/ma3.jpg" },
   { name: "Prof. Jin-Hyeok Kim", title: "Professor", affiliation: "Professor, Chonnam National University, South Korea.", image: "/invited_speaker/kim.jpg" },

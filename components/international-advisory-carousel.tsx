@@ -45,7 +45,7 @@ const committeeMembers: CommitteeMember[] = [
     name: "Prof. Sebastien Royer",
     affiliation: "Université du Littoral Côte d'Opale, France",
     initials: "SR",
-    image: "/invited_speaker/royer.png",
+    image: "/invited_speaker/royer2.jpg",
   },
   {
     name: "Prof. Kaustubh R. S. Priolkar",

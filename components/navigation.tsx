@@ -80,7 +80,7 @@ export default function Navigation() {
             <div className="hidden lg:flex items-center h-full">
               <div className="relative w-24 h-23">
                 <Image
-                  src="/logo1.png"
+                  src="/2DMTG.png"
                   alt="2D MatTechGlobal Logo"
                   fill
                   className="object-contain  "

@@ -55,7 +55,7 @@ export default function Registration() {
         <h2 className="text-4xl font-bold text-center text-[var(--foreground)] mb-4">
           <span className="text-[var(--primary)]">Registration</span> Fees
         </h2>
-        <p className="text-center text-[var(--muted-foreground)] mb-12 text-lg">Early Bird rates available until May 5, 2026</p>
+        <p className="text-center text-[var(--muted-foreground)] mb-12 text-lg">Early Bird rates available until May 25, 2026</p>
 
         <Card className="border-0 shadow-lg bg-[var(--card)]">
           <CardContent className="p-0">
