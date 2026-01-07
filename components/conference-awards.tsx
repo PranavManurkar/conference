@@ -14,26 +14,31 @@ const AwardCard = ({
   icon: Icon,
   title,
   description,
-  note,
+  awardCount,
+  prize,
+  criteria,
 }: {
   icon: any;
   title: string;
   description: string;
-  note?: string;
+  awardCount: string;
+  prize: string;
+  criteria: string;
 }) => {
   return (
-    <div className="bg-[color:var(--primary-foreground)] rounded-xl shadow-md p-6 border border-[color:var(--nav)]/10 hover:shadow-lg transition-shadow duration-300">
-      <div className="flex items-start gap-4 mb-3">
-        <div className="w-12 h-12 bg-[color:var(--primary)]/10 rounded-lg flex items-center justify-center shrink-0">
-          <Icon size={24} className="text-[color:var(--primary)]" />
-        </div>
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-[color:var(--nav)]">{title}</h3>
-          <p className="text-[color:var(--nav)]/80 text-sm leading-relaxed mt-1">{description}</p>
-        </div>
+    <div className="bg-[color:var(--primary-foreground)] rounded-xl shadow-md p-6 border border-[color:var(--nav)]/10 hover:shadow-lg transition-shadow duration-300 flex flex-col gap-4">
+      <div className="flex items-start gap-3">
+      <div className="w-10 h-10 bg-[color:var(--primary)]/10 rounded-lg flex items-center justify-center shrink-0">
+        <Icon size={20} className="text-[color:var(--primary)]" />
       </div>
-
-      {note && <div className="mt-4 text-xs text-[color:var(--nav)]/60">{note}</div>}
+      <h3 className="text-base font-semibold text-[color:var(--nav)] line-clamp-2">{title}</h3>
+      </div>
+      <p className="text-[color:var(--nav)]/80 text-xs leading-relaxed min-h-[3rem]">{description}</p>
+      <div className="space-y-2 text-sm text-[color:var(--nav)]/70 pt-2 border-t border-[color:var(--nav)]/10 ">
+      <div><strong>Total Awards:</strong> {awardCount}</div>
+      <div><strong>Prize:</strong> {prize}</div>
+      <div><strong>Criteria:</strong> {criteria}</div>
+      </div>
     </div>
   );
 };
@@ -55,26 +60,41 @@ export default function ConferenceAwards() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <AwardCard
+            icon={Award}
+            title="Best Thesis Award"
+            description="Thesis awarded or submitted between 1 May 2024 – 30th April 2026 will be eligible. Selected by technical program committee."
+            awardCount="3"
+            prize="Certificate + Rs 25,000 (or Equivalent)"
+            criteria="Novelty, significance, outcome"
+          />
+
           <AwardCard
             icon={Award}
             title="Oral Presentation Award"
-            description="Awarded to the top oral presenter for clarity, scientific merit, and impact. Selected by the technical program committee."
-            note="Prize: Certificate + ₹10,000 (or equivalent) • Criteria: novelty, clarity, significance"
+            description="Awarded to the top oral presenter for clarity, scientific merit, and impact. Selected by technical program committee."
+            awardCount="3"
+            prize="Certificate + ₹10,000 (or equivalent)"
+            criteria="Novelty, clarity, significance"
           />
 
           <AwardCard
             icon={Award}
-            title="Poster / Presentation Award"
-            description="Recognizes exceptional poster presentations with clear visuals, strong results, and engaging communication."
-            note="Prize: Certificate + ₹7,500 (or equivalent) • Criteria: visualization, discussion, relevance"
+            title="Poster Presentation Award"
+            description="Exceptional poster presentations with clear visuals, strong results, and engaging communication. Selected by technical program committee."
+            awardCount="3 in each theme, 12 Total"
+            prize="Certificate + ₹5000 (or equivalent)"
+            criteria="Visualisation, discussion, relevance"
           />
 
           <AwardCard
             icon={Award}
-            title="Special Mention (Placeholder)"
-            description="This slot is reserved for additional awards (student category, industry collaboration, or community choice). Details to be announced."
-            note="Placeholder — finalize award category & prize before printing materials."
+            title="Special Mention"
+            description="Reserved for additional awards (student category, industry collaboration, or community choice). Details to be announced."
+            awardCount="To be announced"
+            prize="To be announced"
+            criteria="To be finalized"
           />
         </div>
       </div>
