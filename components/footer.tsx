@@ -5,7 +5,8 @@ import Link from "next/link"
 export default function Footer() {
   return (
     <footer className="bg-[color:var(--nav)] text-gray-400 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full mx-0 px-0">
+      <div className=" sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 mb-6">
           {/* Left half: Navigation columns */}
           <div className="flex flex-col sm:flex-row sm:justify-between gap-8 lg:w-1/2">
@@ -96,6 +97,7 @@ export default function Footer() {
         <div className="border-t border-gray-500 pt-6">
           <p className="text-sm text-center">© 2025-2026 2D MatTechGlobal Conference. All rights reserved.</p>
         </div>
+      </div>
       </div>
     </footer>
   )
