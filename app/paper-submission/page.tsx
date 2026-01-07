@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button"
 export default function PaperSubmission() {
   return (
     <main className="min-h-screen bg-[var(--background)]">
@@ -51,9 +52,15 @@ export default function PaperSubmission() {
             <p className="text-[var(--muted-foreground)] mb-6">
               Submit your abstract through our Microsoft CMT portal.
             </p>
-            <div className="inline-flex items-center gap-2 bg-[var(--muted)] text-[var(--muted-foreground)] font-semibold py-3 px-8 rounded-lg cursor-not-allowed">
-              CMT submission link will be coming shortly
-            </div>
+            <a
+              href="https://cmt3.research.microsoft.com/2DMTG2026"            // ← put your CMT URL here
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[var(--primary)] text-white font-semibold py-3 px-8 rounded-lg cursor-pointer"
+              aria-label="CMT submission (opens in a new tab)"
+            >
+              Paper Submission on Microsoft CMT 
+            </a>
 
             {/* Acknowledgment */}
             <div className="mt-6 bg-[var(--muted)] rounded-lg p-4">
