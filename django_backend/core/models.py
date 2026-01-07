@@ -38,6 +38,7 @@ class Registration(models.Model):
     transaction_id = models.CharField(max_length=255, null=True, blank=True)
     payment_date = models.DateField(null=True, blank=True)
     abstract_title = models.CharField(max_length=500, null=True, blank=True)
+    accompanying_persons = models.IntegerField(default=0)
     presentation_preference = models.CharField(max_length=100, null=True, blank=True)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default=STATUS_UNDER)
     admin_notes = models.TextField(null=True, blank=True)

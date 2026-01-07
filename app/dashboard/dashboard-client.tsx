@@ -756,6 +756,7 @@ export default function DashboardClient({ user }: { user: User }) {
     payment_date: "",
     presenting_paper: "",
     abstract_id: "",
+    accompanying_persons: 0,
   })
 
   useEffect(() => {
@@ -796,6 +797,7 @@ export default function DashboardClient({ user }: { user: User }) {
               payment_date: reg.payment_date || "",
               presenting_paper: reg.presenting_paper ? "yes" : "no",
               abstract_id: reg.abstract_id || "",
+              accompanying_persons: reg. accompanying_persons || 0,
             })
             setIsFetchingStatus(false)
             return
@@ -825,6 +827,7 @@ export default function DashboardClient({ user }: { user: User }) {
               payment_date: data.payment_date || "",
               presenting_paper: data.presenting_paper ? "yes" : "no",
               abstract_id: data.abstract_id || "",
+              accompanying_persons: data. accompanying_persons || 0,
             })
           } else if (response.status === 404) {
             console.log("DEBUG: No registration found (404)")
@@ -845,7 +848,10 @@ export default function DashboardClient({ user }: { user: User }) {
   }, [user, userEmail])
 
   const calculatePaymentAmount = () => {
-    const fees: Record<string, Record<string, Record<string, number>>> = {
+    type Region = "Indian" | "SAARC" | "Non-SAARC";
+    type Period = "Early Bird" | "Final";
+    type Delegate = "UG/PG Student" | "Research Scholar" | "Faculty" | "Industry";
+    const fees: Record<Delegate, Record<Period, Record<Region, number>>> = {
       "UG/PG Student": {
         "Early Bird": { Indian: 4000, SAARC: 75, "Non-SAARC": 125 },
         Final: { Indian: 4500, SAARC: 100, "Non-SAARC": 150 },
@@ -854,20 +860,41 @@ export default function DashboardClient({ user }: { user: User }) {
         "Early Bird": { Indian: 6000, SAARC: 200, "Non-SAARC": 250 },
         Final: { Indian: 7000, SAARC: 250, "Non-SAARC": 300 },
       },
-      Faculty: {
+      "Faculty": {
         "Early Bird": { Indian: 10000, SAARC: 300, "Non-SAARC": 400 },
         Final: { Indian: 12000, SAARC: 400, "Non-SAARC": 500 },
       },
-      Industry: {
+      "Industry": {
         "Early Bird": { Indian: 15000, SAARC: 500, "Non-SAARC": 700 },
         Final: { Indian: 17000, SAARC: 650, "Non-SAARC": 850 },
       },
     }
+    const accompany : Record<Delegate, Record<Period, Record<Region, number>>> = {
+      "UG/PG Student": {
+        "Early Bird": { Indian: 0, SAARC: 0, "Non-SAARC": 0 },
+        Final: { Indian: 0, SAARC: 0, "Non-SAARC": 0 },
+      },
+      "Research Scholar": {
+        "Early Bird": { Indian: 5000, SAARC: 170, "Non-SAARC": 210 },
+        Final: { Indian: 6000, SAARC: 210, "Non-SAARC": 250 },
+      },
+      "Faculty": {
+        "Early Bird": { Indian: 7500, SAARC: 225, "Non-SAARC": 300 },
+        Final: { Indian: 9000, SAARC: 300, "Non-SAARC": 375 },
+      },
+      "Industry": {
+        "Early Bird": { Indian: 11500, SAARC: 375, "Non-SAARC": 525 },
+        Final: { Indian: 13000, SAARC: 500, "Non-SAARC": 640 },
+      },
+    }
+    const { delegate_type, registration_period, participant_region, accompanying_persons } = formData
 
-    const { delegate_type, registration_period, participant_region } = formData
+    type delegate_type = Delegate;
+    type registration_period = Period;
+    type participant_region = Region;
 
     if (delegate_type && registration_period && participant_region) {
-      return fees[delegate_type]?.[registration_period]?.[participant_region] || 0
+      return (fees[delegate_type as Delegate][registration_period as Period][participant_region as Region] + (accompany[delegate_type as Delegate][registration_period as Period][participant_region as Region])*accompanying_persons) || 0
     }
     return 0
   }
@@ -1470,6 +1497,38 @@ export default function DashboardClient({ user }: { user: User }) {
                       </SelectContent>
                     </Select>
                   </div>
+                  {formData.delegate_type && formData.delegate_type !== "UG/PG Student" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="accompanying_persons" className="text-sm font-semibold text-gray-700">
+                      Accompanying persons <span className="text-red-500">*</span>
+                    </Label>
+                    <Select
+                      value={formData.accompanying_persons != null ? String(formData.accompanying_persons) : "Select number of accompanying people"}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, accompanying_persons: Number.parseInt(value, 10) || 0 })
+                      }
+                      disabled={!canEdit}
+                      required
+                    >
+                      <SelectTrigger id="accompanying_persons" className="h-12 border-2 focus:border-purple-500">
+                        <SelectValue placeholder="Select number of accompanying people" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white">
+                        <SelectItem value= "0"
+                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                        >0</SelectItem>
+                        <SelectItem value= "1"
+                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                        >1</SelectItem>
+                        <SelectItem value= "2"
+                         className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                        >2</SelectItem>
+                        <SelectItem value= "3"
+                         className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                        >3</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>)}
                 </div>
 
                 {/* Presenting Paper Section */}

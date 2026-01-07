@@ -11,6 +11,6 @@ class CustomUserAdmin(UserAdmin):
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):
     list_display = ("full_name", "email", "status", "created_at")
-    list_filter = ("status", "participant_region", "delegate_type")
+    list_filter = ("status", "participant_region", "delegate_type",'accompanying_persons')
     search_fields = ("full_name", "email", "transaction_id")
     readonly_fields = ("created_at",)
