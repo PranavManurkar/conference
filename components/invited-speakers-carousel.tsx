@@ -46,6 +46,7 @@ const speakers: Speaker[] = [
   { name: "Prof. Murli Devraj", title: "Associate Professor", affiliation: "Associate Professor, IIITDM, Kurnool", image: "/invited_speaker/dev.png" },
   { name: "Dr. Dhiraj Bhatia", title: "Assistant Professor", affiliation: "Associate Professor in Biological Engineering, IIT Gandhinagar", image: "/invited_speaker/bhatia2.png" },
   { name: "Prof. Tanushree Choudhury", title: "Assistant Professor", affiliation: "Assistant Professor, IIT Bombay", image: "/invited_speaker/tanu.png" },
+  { name: "Dr. Ashutosh Singh", title: "Material Scientist", affiliation: "CeNS, Bangalore", image: "/invited_speaker/scientist.jpeg" },
 ];
 
 
