@@ -153,8 +153,14 @@ from django.core.cache import cache
 
 @api_view(['GET'])
 def visit_counter(request):
-    # 'incr' is atomic; it handles concurrent visitors safely
-    # If key doesn't exist, it creates it starting at 0, then adds 1
-    total_visits = cache.incr('site_visits', delta=1)
+    try:
+        # Try to increment the counter by 1
+        total_visits = cache.incr('site_visits', delta=1)
+    except ValueError:
+        # If "site_visits" doesn't exist yet, it raises a ValueError.
+        # We catch it and initialize the counter.
+        # You wanted to start at 700, so we set it to 701 (700 + this visit)
+        cache.set('site_visits', 701, timeout=None) # timeout=None means it never expires
+        total_visits = 701
     
     return Response({'visits': total_visits})
