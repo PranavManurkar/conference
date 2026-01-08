@@ -1,25 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react' // 1. Import useRef
+import { useState, useEffect, useRef } from 'react'
 import { Users, Globe, TrendingUp, FileText } from 'lucide-react'
 
+// Updated Component: No animation state, renders 'value' directly
 const MetricsCard = ({ icon: Icon, label, value }: { icon: any; label: string; value: number }) => {
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCount(prev => {
-        if (prev < value) {
-            return prev + 1 
-        } else {
-            return value
-        }
-      })
-    }, 10)
-
-    return () => clearInterval(interval)
-  }, [value])
-
   return (
     <div className="bg-[color:var(--primary-foreground)] rounded-2xl shadow-lg p-8 text-center border border-[color:var(--nav)]/10 hover:shadow-xl transition-shadow duration-300">
       <div className="flex justify-center mb-4">
@@ -28,7 +13,8 @@ const MetricsCard = ({ icon: Icon, label, value }: { icon: any; label: string; v
         </div>
       </div>
       <div className="text-4xl font-bold bg-gradient-to-r from-[color:var(--primary)] to-[color:var(--nav)] bg-clip-text text-transparent mb-2">
-        {count.toLocaleString()}+
+        {/* Directly display the value with commas */}
+        {value.toLocaleString()}+
       </div>
       <p className="text-[color:var(--nav)]/80 font-semibold text-lg">{label}</p>
     </div>
@@ -37,12 +23,9 @@ const MetricsCard = ({ icon: Icon, label, value }: { icon: any; label: string; v
 
 export default function Metrics() {
   const [visitorCount, setVisitorCount] = useState(700)
-  
-  // 2. Create a ref to track if we have already fetched
   const hasFetched = useRef(false)
 
   useEffect(() => {
-    // 3. Stop if we have already fetched data
     if (hasFetched.current) return
     hasFetched.current = true
 
