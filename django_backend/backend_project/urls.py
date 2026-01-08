@@ -25,5 +25,6 @@ urlpatterns = [
     path("api/auth/token/", EmailTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/", include("core.urls")),
+    path('api/visit-counter/', visit_counter, name='visit-counter'),
 ]
 
