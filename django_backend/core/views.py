@@ -146,3 +146,15 @@ class LogoutView(APIView):
         except Exception:
             # token could already be blacklisted/invalid — still clear client tokens
             return Response({"detail": "Invalid token or already logged out"}, status=status.HTTP_400_BAD_REQUEST)
+        
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.core.cache import cache
+
+@api_view(['GET'])
+def visit_counter(request):
+    # 'incr' is atomic; it handles concurrent visitors safely
+    # If key doesn't exist, it creates it starting at 0, then adds 1
+    total_visits = cache.incr('site_visits', delta=1)
+    
+    return Response({'visits': total_visits})

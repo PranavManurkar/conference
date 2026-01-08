@@ -17,7 +17,7 @@ Including another URLconf
 # backend_project/urls.py
 from django.contrib import admin
 from django.urls import path, include
-from core.views import EmailTokenObtainPairView
+from core.views import EmailTokenObtainPairView,visit_counter
 from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
