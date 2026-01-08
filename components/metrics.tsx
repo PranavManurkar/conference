@@ -1,25 +1,21 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react' // 1. Import useRef
 import { Users, Globe, TrendingUp, FileText } from 'lucide-react'
 
 const MetricsCard = ({ icon: Icon, label, value }: { icon: any; label: string; value: number }) => {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    // Logic: Simple linear addition, no division
-    // This creates a smooth "ticker" effect by adding +1 rapidly
     const interval = setInterval(() => {
       setCount(prev => {
         if (prev < value) {
-            // Speed control: Add 1 per tick for a smooth count up
-            // You can change '1' to '5' or '10' if you want it faster without division logic
             return prev + 1 
         } else {
             return value
         }
       })
-    }, 10) // Faster interval (10ms) for smoother 1-by-1 counting
+    }, 10)
 
     return () => clearInterval(interval)
   }, [value])
@@ -40,23 +36,27 @@ const MetricsCard = ({ icon: Icon, label, value }: { icon: any; label: string; v
 }
 
 export default function Metrics() {
-  // 1. Set Initial Value to 700
   const [visitorCount, setVisitorCount] = useState(700)
+  
+  // 2. Create a ref to track if we have already fetched
+  const hasFetched = useRef(false)
 
   useEffect(() => {
+    // 3. Stop if we have already fetched data
+    if (hasFetched.current) return
+    hasFetched.current = true
+
     const API_URL = 'https://tdmtg.iiti.ac.in/api/visit-counter/' 
 
     fetch(API_URL)
       .then((res) => res.json())
       .then((data) => {
         if (data?.visits) {
-          // 2. Real-time Addition: Add API visits to base 700
           setVisitorCount(700 + data.visits)
         }
       })
       .catch((err) => {
         console.error('Failed to fetch visitor count:', err)
-        // Fallback: If API fails, just show the base 700
         setVisitorCount(700) 
       })
   }, [])
@@ -75,10 +75,7 @@ export default function Metrics() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <MetricsCard icon={Users} label="Expected Participants" value={500} />
           <MetricsCard icon={Globe} label="Countries Represented" value={35} />
-          
-          {/* Visitor Count Card */}
           <MetricsCard icon={TrendingUp} label="Website Visitors" value={visitorCount} />
-          
           <MetricsCard icon={FileText} label="Paper Submissions" value={280} />
         </div>
       </div>
