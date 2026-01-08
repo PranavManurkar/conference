@@ -3,20 +3,24 @@
 import { useState, useEffect } from 'react'
 import { Users, Globe, TrendingUp, FileText } from 'lucide-react'
 
-// MetricsCard remains mostly the same, handling the animation logic
 const MetricsCard = ({ icon: Icon, label, value }: { icon: any; label: string; value: number }) => {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    // Reset count if value changes significantly or on initial load
-    // This ensures the animation plays when the API data arrives
+    // Logic: Simple linear addition, no division
+    // This creates a smooth "ticker" effect by adding +1 rapidly
     const interval = setInterval(() => {
       setCount(prev => {
-        // Calculate step size dynamically so animation duration is consistent
-        const step = Math.ceil(value / 50)
-        return prev < value ? prev + (step > 0 ? step : 1) : value
+        if (prev < value) {
+            // Speed control: Add 1 per tick for a smooth count up
+            // You can change '1' to '5' or '10' if you want it faster without division logic
+            return prev + 1 
+        } else {
+            return value
+        }
       })
-    }, 20)
+    }, 10) // Faster interval (10ms) for smoother 1-by-1 counting
+
     return () => clearInterval(interval)
   }, [value])
 
@@ -36,25 +40,24 @@ const MetricsCard = ({ icon: Icon, label, value }: { icon: any; label: string; v
 }
 
 export default function Metrics() {
-  // Initialize with 0 or a static fallback
-  const [visitorCount, setVisitorCount] = useState(0)
+  // 1. Set Initial Value to 700
+  const [visitorCount, setVisitorCount] = useState(700)
 
   useEffect(() => {
-    // Replace this URL with your actual Django API endpoint
     const API_URL = 'https://tdmtg.iiti.ac.in/api/visit-counter/' 
 
     fetch(API_URL)
       .then((res) => res.json())
       .then((data) => {
-        // Assuming your API returns { "visits": 1234 }
         if (data?.visits) {
-          setVisitorCount(data.visits)
+          // 2. Real-time Addition: Add API visits to base 700
+          setVisitorCount(700 + data.visits)
         }
       })
       .catch((err) => {
         console.error('Failed to fetch visitor count:', err)
-        // Optional: Fallback to a static number if API fails
-        setVisitorCount(12450) 
+        // Fallback: If API fails, just show the base 700
+        setVisitorCount(700) 
       })
   }, [])
 
@@ -73,7 +76,7 @@ export default function Metrics() {
           <MetricsCard icon={Users} label="Expected Participants" value={500} />
           <MetricsCard icon={Globe} label="Countries Represented" value={35} />
           
-          {/* Use the dynamic visitorCount state here */}
+          {/* Visitor Count Card */}
           <MetricsCard icon={TrendingUp} label="Website Visitors" value={visitorCount} />
           
           <MetricsCard icon={FileText} label="Paper Submissions" value={280} />
