@@ -151,16 +151,36 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.core.cache import cache
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
 @api_view(['GET'])
 def visit_counter(request):
+    ip = get_client_ip(request)
+    # Create a unique key for this specific user
+    user_key = f"seen_{ip}"
+
+    # 1. Check if we just counted this user recently (last 2 seconds)
+    if cache.get(user_key):
+        # If yes, just return the current count WITHOUT incrementing
+        total_visits = cache.get('site_visits') or 700
+        return Response({'visits': total_visits})
+
+    # 2. If not, increment the counter safely
     try:
-        # Try to increment the counter by 1
         total_visits = cache.incr('site_visits', delta=1)
     except ValueError:
-        # If "site_visits" doesn't exist yet, it raises a ValueError.
-        # We catch it and initialize the counter.
-        # You wanted to start at 700, so we set it to 701 (700 + this visit)
-        cache.set('site_visits', 701, timeout=None) # timeout=None means it never expires
+        # Initialize if it doesn't exist
+        cache.set('site_visits', 701, timeout=None)
         total_visits = 701
-    
+
+    # 3. Mark this user as "counted" for 5 seconds
+    # This blocks the "double fetch" from React Strict Mode
+    cache.set(user_key, 'true', timeout=5)
+
     return Response({'visits': total_visits})
