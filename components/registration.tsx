@@ -147,11 +147,7 @@ export default function Registration() {
       </Link>
     </Button>
     <Button
-      asChild
-      size="lg"
-      variant="outline"
-      className="border-[var(--primary-foreground)] text-[var(--primary-foreground)] hover:text-white hover:bg-[var(--primary-foreground)]"
-    >
+asChild size="lg" className="bg-[var(--primary-foreground)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)]">
       <Link href="/auth/login">
         Login to Dashboard
         <ArrowRight className="ml-2 h-4 w-4" />
