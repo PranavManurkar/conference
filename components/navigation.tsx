@@ -24,12 +24,12 @@ export default function Navigation() {
         
       ],
     },
+    { label: "Abstract Submission", href: "/paper-submission" },
     {
       label: "Registration/Accommodation",
       href: "/",
       children: [
         { label: "Registration", href: "/registration" },
-        { label: "Paper Submission", href: "/paper-submission" },
         { label: "Accommodation", href: "/accommodation" },
       ],
     },
