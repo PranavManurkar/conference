@@ -686,7 +686,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { LogOut, CheckCircle, Clock, XCircle, AlertCircle, PartyPopper, Loader2, Trash2, Info ,ExternalLink} from "lucide-react"
+import { LogOut, CheckCircle, Clock, XCircle, AlertCircle, PartyPopper, Loader2, Trash2, Info, ExternalLink } from "lucide-react"
 
 const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "https://tdmtg.iiti.ac.in"
 
@@ -709,6 +709,8 @@ type Registration = {
   created_at: string
   presenting_paper: boolean
   abstract_id: string | null
+  oral_presentation: boolean
+  poster_presentation: boolean
 }
 
 async function authFetch(input: RequestInfo, init?: RequestInit) {
@@ -757,6 +759,8 @@ export default function DashboardClient({ user }: { user: User }) {
     presenting_paper: "",
     abstract_id: "",
     accompanying_persons: 0,
+    oral_presentation: false,
+    poster_presentation: false,
   })
 
   useEffect(() => {
@@ -797,7 +801,9 @@ export default function DashboardClient({ user }: { user: User }) {
               payment_date: reg.payment_date || "",
               presenting_paper: reg.presenting_paper ? "yes" : "no",
               abstract_id: reg.abstract_id || "",
-              accompanying_persons: reg. accompanying_persons || 0,
+              accompanying_persons: reg.accompanying_persons || 0,
+              oral_presentation: !!reg.oral_presentation,
+              poster_presentation: !!reg.poster_presentation,
             })
             setIsFetchingStatus(false)
             return
@@ -827,7 +833,9 @@ export default function DashboardClient({ user }: { user: User }) {
               payment_date: data.payment_date || "",
               presenting_paper: data.presenting_paper ? "yes" : "no",
               abstract_id: data.abstract_id || "",
-              accompanying_persons: data. accompanying_persons || 0,
+              accompanying_persons: data.accompanying_persons || 0,
+              oral_presentation: !!data.oral_presentation,
+              poster_presentation: !!data.poster_presentation,
             })
           } else if (response.status === 404) {
             console.log("DEBUG: No registration found (404)")
@@ -869,7 +877,7 @@ export default function DashboardClient({ user }: { user: User }) {
         Final: { Indian: 17000, SAARC: 650, "Non-SAARC": 850 },
       },
     }
-    const accompany : Record<Delegate, Record<Period, Record<Region, number>>> = {
+    const accompany: Record<Delegate, Record<Period, Record<Region, number>>> = {
       "UG/PG Student": {
         "Early Bird": { Indian: 0, SAARC: 0, "Non-SAARC": 0 },
         Final: { Indian: 0, SAARC: 0, "Non-SAARC": 0 },
@@ -894,7 +902,7 @@ export default function DashboardClient({ user }: { user: User }) {
     type participant_region = Region;
 
     if (delegate_type && registration_period && participant_region) {
-      return (fees[delegate_type as Delegate][registration_period as Period][participant_region as Region] + (accompany[delegate_type as Delegate][registration_period as Period][participant_region as Region])*accompanying_persons) || 0
+      return (fees[delegate_type as Delegate][registration_period as Period][participant_region as Region] + (accompany[delegate_type as Delegate][registration_period as Period][participant_region as Region]) * accompanying_persons) || 0
     }
     return 0
   }
@@ -1009,6 +1017,8 @@ export default function DashboardClient({ user }: { user: User }) {
           payment_date: "",
           presenting_paper: "",
           abstract_id: "",
+          poster_presentation: false,
+          oral_presentation: false,
         }))
         setSuccess("Registration deleted. You can now refill and resubmit.")
       } else {
@@ -1461,11 +1471,11 @@ export default function DashboardClient({ user }: { user: User }) {
                       </SelectTrigger>
                       <SelectContent className="bg-white">
                         <SelectItem value="Early Bird"
-                           className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
                         >Early Bird (until May 5, 2026)</SelectItem>
 
                         <SelectItem value="Final"
-                         className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
                         >Final (after May 5, 2026)</SelectItem>
                       </SelectContent>
                     </Select>
@@ -1492,43 +1502,43 @@ export default function DashboardClient({ user }: { user: User }) {
                           className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
                         >SAARC</SelectItem>
                         <SelectItem value="Non-SAARC"
-                         className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
                         >Non-SAARC</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   {formData.delegate_type && formData.delegate_type !== "UG/PG Student" && (
-                  <div className="space-y-2">
-                    <Label htmlFor="accompanying_persons" className="text-sm font-semibold text-gray-700">
-                      Accompanying persons <span className="text-red-500">*</span>
-                    </Label>
-                    <Select
-                      value={formData.accompanying_persons != null ? String(formData.accompanying_persons) : "Select number of accompanying people"}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, accompanying_persons: Number.parseInt(value, 10) || 0 })
-                      }
-                      disabled={!canEdit}
-                      required
-                    >
-                      <SelectTrigger id="accompanying_persons" className="h-12 border-2 focus:border-purple-500">
-                        <SelectValue placeholder="Select number of accompanying people" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white">
-                        <SelectItem value= "0"
-                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                        >0</SelectItem>
-                        <SelectItem value= "1"
-                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                        >1</SelectItem>
-                        <SelectItem value= "2"
-                         className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                        >2</SelectItem>
-                        <SelectItem value= "3"
-                         className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                        >3</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>)}
+                    <div className="space-y-2">
+                      <Label htmlFor="accompanying_persons" className="text-sm font-semibold text-gray-700">
+                        Accompanying persons <span className="text-red-500">*</span>
+                      </Label>
+                      <Select
+                        value={formData.accompanying_persons != null ? String(formData.accompanying_persons) : "Select number of accompanying people"}
+                        onValueChange={(value) =>
+                          setFormData({ ...formData, accompanying_persons: Number.parseInt(value, 10) || 0 })
+                        }
+                        disabled={!canEdit}
+                        required
+                      >
+                        <SelectTrigger id="accompanying_persons" className="h-12 border-2 focus:border-purple-500">
+                          <SelectValue placeholder="Select number of accompanying people" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white">
+                          <SelectItem value="0"
+                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          >0</SelectItem>
+                          <SelectItem value="1"
+                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          >1</SelectItem>
+                          <SelectItem value="2"
+                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          >2</SelectItem>
+                          <SelectItem value="3"
+                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          >3</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>)}
                 </div>
 
                 {/* Presenting Paper Section */}
@@ -1582,8 +1592,49 @@ export default function DashboardClient({ user }: { user: User }) {
                         <Info className="h-3 w-3" />
                         Enter the Abstract ID assigned to your submitted paper
                       </p>
+
+                      {/* Single-select (radio) that directly sets the two booleans */}
+                      <fieldset className="mt-3">
+                        <legend className="text-sm font-semibold text-gray-700">Presentation type <span className="text-red-500">*</span></legend>
+                        <div className="flex gap-6 mt-2">
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="presentation_type"
+                              value="oral"
+                              checked={!!formData.oral_presentation}
+                              disabled={!canEdit}
+                              onChange={() => setFormData({
+                                ...formData,
+                                oral_presentation: true,
+                                poster_presentation: false
+                              })}
+                            />
+                            <span className="ml-1 text-sm">Oral presentation</span>
+                          </label>
+
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="presentation_type"
+                              value="poster"
+                              checked={!!formData.poster_presentation}
+                              disabled={!canEdit}
+                              onChange={() => setFormData({
+                                ...formData,
+                                oral_presentation: false,
+                                poster_presentation: true
+                              })}
+                            />
+                            <span className="ml-1 text-sm">Poster presentation</span>
+                          </label>
+                        </div>
+                      </fieldset>
                     </div>
                   )}
+
+
+
                 </div>
 
                 {formData.delegate_type && formData.registration_period && formData.participant_region && (

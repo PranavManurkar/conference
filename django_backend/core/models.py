@@ -28,6 +28,8 @@ class Registration(models.Model):
     phone = models.CharField(max_length=50, blank=True)
     is_presenter = models.BooleanField(default=False)
     abstract_id = models.CharField(max_length=255, null=True, blank=True)
+    poster_presentation = models.BooleanField(default=False)
+    oral_presentation = models.BooleanField(default=False)
     institution_organization = models.CharField(max_length=255, blank=True)
     designation = models.CharField(max_length=255, blank=True)
     country = models.CharField(max_length=100, blank=True)
