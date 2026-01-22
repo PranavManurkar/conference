@@ -924,7 +924,8 @@ export default function DashboardClient({ user }: { user: User }) {
     setIsLoading(true)
     setError(null)
     setSuccess(null)
-
+  
+    // required fields check
     if (
       !formData.full_name ||
       !formData.email ||
@@ -932,41 +933,86 @@ export default function DashboardClient({ user }: { user: User }) {
       !formData.payment_date ||
       !formData.presenting_paper
     ) {
-      setError("Please fill in required fields: Full name, Email, Transaction ID, Payment Date, and Presenting Paper.")
+      setError(
+        "Please fill in required fields: Full name, Email, Transaction ID, Payment Date, and Presenting Paper."
+      )
       setIsLoading(false)
       return
     }
-
-    if (formData.presenting_paper === "yes" && !formData.abstract_id) {
-      setError("Please provide the Abstract ID since you are presenting a paper.")
-      setIsLoading(false)
-      return
-    }
-
-    const paymentAmount = calculatePaymentAmount()
-
-    try {
-      const registrationData = {
-        ...formData,
-        payment_amount: paymentAmount,
-        presenting_paper: formData.presenting_paper === "yes",
-        abstract_id: formData.presenting_paper === "yes" ? formData.abstract_id : null,
+  
+    const isPresenter = formData.presenting_paper === "yes"
+  
+    // presenter-specific validation
+    if (isPresenter) {
+      if (!formData.abstract_id || !formData.abstract_id.trim()) {
+        setError("Please provide the Abstract ID since you are presenting a paper.")
+        setIsLoading(false)
+        return
       }
-
+  
+      // exactly-one validation (xor)
+      const oral = !!formData.oral_presentation
+      const poster = !!formData.poster_presentation
+      if (!oral && !poster) {
+        setError("Please select either Oral or Poster presentation.")
+        setIsLoading(false)
+        return
+      }
+      if (oral && poster) {
+        setError("Please select only one presentation type (either Oral OR Poster).")
+        setIsLoading(false)
+        return
+      }
+    }
+  
+    const paymentAmount = calculatePaymentAmount()
+  
+    try {
+      // build payload explicitly so we don't accidentally send the string 'presenting_paper'
+      const registrationData = {
+        full_name: formData.full_name,
+        email: formData.email,
+        phone: formData.phone,
+        institution_organization: formData.institution_organization,
+        designation: formData.designation,
+        country: formData.country,
+        delegate_type: formData.delegate_type,
+        registration_period: formData.registration_period,
+        participant_region: formData.participant_region,
+        transaction_id: formData.transaction_id,
+        payment_date: formData.payment_date,
+        payment_amount: paymentAmount,
+        // IMPORTANT: send the boolean field the backend expects
+        is_presenter: isPresenter,
+        // abstract_id only when presenting; null otherwise to let backend clear it
+        abstract_id: isPresenter ? formData.abstract_id : null,
+        // always include both booleans
+        oral_presentation: !!formData.oral_presentation,
+        poster_presentation: !!formData.poster_presentation,
+        accompanying_persons: Number(formData.accompanying_persons || 0),
+        // add any other explicit fields you want to send...
+      }
+  
+      // DEBUG: inspect payload in console / network
+      console.debug("DEBUG: registration payload", registrationData)
+  
       const isUpdate = !!existingRegistration
       const url = isUpdate
         ? `${DJANGO_API_URL}/api/registrations/${existingRegistration!.id}/`
         : `${DJANGO_API_URL}/api/registrations/`
       const method = isUpdate ? "PATCH" : "POST"
-
+  
       const response = await authFetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(registrationData),
       })
-
+  
       const data = await response.json().catch(() => null)
-
+  
+      // DEBUG: server response
+      console.debug("DEBUG: server response", response.status, data)
+  
       if (!response.ok) {
         if (data) {
           const fieldError =
@@ -980,19 +1026,32 @@ export default function DashboardClient({ user }: { user: User }) {
           throw new Error("Failed to submit registration")
         }
       }
-
+  
+      // success: update local state using server's canonical object
       setExistingRegistration(data)
       setSuccess(
         isUpdate
           ? "Registration updated successfully!"
-          : "Registration submitted successfully! Your application is now under review.",
+          : "Registration submitted successfully! Your application is now under review."
       )
+  
+      // sync local formData to returned server values (ensures booleans and presenting_paper stay consistent)
+      if (data) {
+        setFormData((prev) => ({
+          ...prev,
+          presenting_paper: data.is_presenter ? "yes" : "no",
+          abstract_id: data.abstract_id || "",
+          oral_presentation: !!data.oral_presentation,
+          poster_presentation: !!data.poster_presentation,
+        }))
+      }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "An error occurred")
     } finally {
       setIsLoading(false)
     }
   }
+  
 
   const deleteRegistration = async (id: string) => {
     if (!confirm("Are you sure you want to delete your registration? You can resubmit after deletion.")) return
