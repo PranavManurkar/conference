@@ -1117,7 +1117,7 @@ export default function DashboardClient({ user }: { user: User }) {
     }
   }
 
-  const canEdit = !existingRegistration || existingRegistration.status === "Rejected"
+  const canEdit = !existingRegistration
 
   const renderStatusCard = () => {
     if (!existingRegistration) return null
