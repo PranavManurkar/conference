@@ -4,7 +4,7 @@ export default function PaperSubmission() {
     <main className="min-h-screen bg-[var(--background)]">
       <div className="max-w-7xl mx-auto px-4 py-16">
         <h1 className="text-4xl font-bold text-[var(--foreground)] mb-8">
-          <span className="text-[var(--primary)]">Paper </span>Submission</h1>
+          <span className="text-[var(--primary)]">Abstract </span>Submission</h1>
 
         <div className="grid md:grid-cols-3 gap-8">
           {/* Guidelines Section */}
@@ -85,7 +85,7 @@ export default function PaperSubmission() {
               className="inline-flex items-center gap-2 bg-[var(--primary)] text-white font-semibold py-3 px-8 rounded-lg cursor-pointer"
               aria-label="CMT submission (opens in a new tab)"
             >
-              Paper Submission on Microsoft CMT 
+              Abstract Submission on Microsoft CMT 
             </a>
 
             {/* <div className="mt-6">
