@@ -707,7 +707,7 @@ type Registration = {
   status: string
   admin_notes: string | null
   created_at: string
-  presenting_paper: boolean
+  is_presenter: boolean
   abstract_id: string | null
   oral_presentation: boolean
   poster_presentation: boolean
@@ -756,11 +756,11 @@ export default function DashboardClient({ user }: { user: User }) {
     participant_region: "",
     transaction_id: "",
     payment_date: "",
-    presenting_paper: "",
     abstract_id: "",
     accompanying_persons: 0,
     oral_presentation: false,
     poster_presentation: false,
+    is_presenter: false,
   })
 
   useEffect(() => {
@@ -799,7 +799,7 @@ export default function DashboardClient({ user }: { user: User }) {
               participant_region: reg.participant_region || "",
               transaction_id: reg.transaction_id || "",
               payment_date: reg.payment_date || "",
-              presenting_paper: reg.presenting_paper ? "yes" : "no",
+              is_presenter: !!reg.is_presenter,
               abstract_id: reg.abstract_id || "",
               accompanying_persons: reg.accompanying_persons || 0,
               oral_presentation: !!reg.oral_presentation,
@@ -831,7 +831,7 @@ export default function DashboardClient({ user }: { user: User }) {
               participant_region: data.participant_region || "",
               transaction_id: data.transaction_id || "",
               payment_date: data.payment_date || "",
-              presenting_paper: data.presenting_paper ? "yes" : "no",
+              is_presenter: !!data.is_presenter,
               abstract_id: data.abstract_id || "",
               accompanying_persons: data.accompanying_persons || 0,
               oral_presentation: !!data.oral_presentation,
@@ -924,14 +924,14 @@ export default function DashboardClient({ user }: { user: User }) {
     setIsLoading(true)
     setError(null)
     setSuccess(null)
-  
+
     // required fields check
     if (
       !formData.full_name ||
       !formData.email ||
       !formData.transaction_id ||
       !formData.payment_date ||
-      !formData.presenting_paper
+      !formData.is_presenter
     ) {
       setError(
         "Please fill in required fields: Full name, Email, Transaction ID, Payment Date, and Presenting Paper."
@@ -939,9 +939,9 @@ export default function DashboardClient({ user }: { user: User }) {
       setIsLoading(false)
       return
     }
-  
-    const isPresenter = formData.presenting_paper === "yes"
-  
+
+    const isPresenter = formData.is_presenter === true
+
     // presenter-specific validation
     if (isPresenter) {
       if (!formData.abstract_id || !formData.abstract_id.trim()) {
@@ -949,7 +949,7 @@ export default function DashboardClient({ user }: { user: User }) {
         setIsLoading(false)
         return
       }
-  
+
       // exactly-one validation (xor)
       const oral = !!formData.oral_presentation
       const poster = !!formData.poster_presentation
@@ -964,9 +964,9 @@ export default function DashboardClient({ user }: { user: User }) {
         return
       }
     }
-  
+
     const paymentAmount = calculatePaymentAmount()
-  
+
     try {
       // build payload explicitly so we don't accidentally send the string 'presenting_paper'
       const registrationData = {
@@ -992,27 +992,27 @@ export default function DashboardClient({ user }: { user: User }) {
         accompanying_persons: Number(formData.accompanying_persons || 0),
         // add any other explicit fields you want to send...
       }
-  
+
       // DEBUG: inspect payload in console / network
       console.debug("DEBUG: registration payload", registrationData)
-  
+
       const isUpdate = !!existingRegistration
       const url = isUpdate
         ? `${DJANGO_API_URL}/api/registrations/${existingRegistration!.id}/`
         : `${DJANGO_API_URL}/api/registrations/`
       const method = isUpdate ? "PATCH" : "POST"
-  
+
       const response = await authFetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(registrationData),
       })
-  
+
       const data = await response.json().catch(() => null)
-  
+
       // DEBUG: server response
       console.debug("DEBUG: server response", response.status, data)
-  
+
       if (!response.ok) {
         if (data) {
           const fieldError =
@@ -1026,7 +1026,7 @@ export default function DashboardClient({ user }: { user: User }) {
           throw new Error("Failed to submit registration")
         }
       }
-  
+
       // success: update local state using server's canonical object
       setExistingRegistration(data)
       setSuccess(
@@ -1034,12 +1034,12 @@ export default function DashboardClient({ user }: { user: User }) {
           ? "Registration updated successfully!"
           : "Registration submitted successfully! Your application is now under review."
       )
-  
+
       // sync local formData to returned server values (ensures booleans and presenting_paper stay consistent)
       if (data) {
         setFormData((prev) => ({
           ...prev,
-          presenting_paper: data.is_presenter ? "yes" : "no",
+          is_presenter: !!data.is_presenter,
           abstract_id: data.abstract_id || "",
           oral_presentation: !!data.oral_presentation,
           poster_presentation: !!data.poster_presentation,
@@ -1051,7 +1051,7 @@ export default function DashboardClient({ user }: { user: User }) {
       setIsLoading(false)
     }
   }
-  
+
 
   const deleteRegistration = async (id: string) => {
     if (!confirm("Are you sure you want to delete your registration? You can resubmit after deletion.")) return
@@ -1074,7 +1074,7 @@ export default function DashboardClient({ user }: { user: User }) {
           participant_region: "",
           transaction_id: "",
           payment_date: "",
-          presenting_paper: "",
+          is_presenter: false,
           abstract_id: "",
           poster_presentation: false,
           oral_presentation: false,
@@ -1118,7 +1118,7 @@ export default function DashboardClient({ user }: { user: User }) {
   }
 
   const canEdit = !existingRegistration
-
+  console.log("existingRegistration:", existingRegistration)
   const renderStatusCard = () => {
     if (!existingRegistration) return null
 
@@ -1201,6 +1201,24 @@ export default function DashboardClient({ user }: { user: User }) {
                       </p>
                       <p className="font-mono font-semibold text-gray-900">{existingRegistration.transaction_id}</p>
                     </div>
+                    {existingRegistration.is_presenter && (
+                      <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+                        <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Abstract ID:</p>
+                        <p className="font-semibold text-gray-900">{existingRegistration.abstract_id}</p>
+                      </div>
+                    )}
+                    {existingRegistration.is_presenter && existingRegistration.oral_presentation && (
+                      <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+                        <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Presentation mode:</p>
+                        <p className="font-semibold text-gray-900"> Oral Presentation</p>
+                      </div>
+                    )}
+                    {existingRegistration.is_presenter && existingRegistration.poster_presentation && (
+                      <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+                        <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Presentation mode:</p>
+                        <p className="font-semibold text-gray-900"> Poster Presentation</p>
+                      </div>
+                    )}
                   </div>
 
                   {existingRegistration.admin_notes && (
@@ -1231,28 +1249,67 @@ export default function DashboardClient({ user }: { user: User }) {
                     Our team is verifying your payment details. This usually takes 2-3 business days. You'll receive an
                     email once the verification is complete.
                   </p>
-                  <div className="bg-white p-5 rounded-xl shadow-sm border border-amber-100">
-                    <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-3">
-                      Submitted Details
-                    </p>
-                    <div className="space-y-2">
-                      <p className="text-sm">
-                        <span className="font-semibold text-gray-700">Name:</span>{" "}
-                        <span className="text-gray-900">{existingRegistration.full_name}</span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Full Name</p>
+                      <p className="font-semibold text-gray-900">{existingRegistration.full_name}</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Email</p>
+                      <p className="font-semibold text-gray-900 break-all">{existingRegistration.email}</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Phone</p>
+                      <p className="font-semibold text-gray-900">{existingRegistration.phone}</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Institution</p>
+                      <p className="font-semibold text-gray-900">{existingRegistration.institution_organization}</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Delegate Type</p>
+                      <p className="font-semibold text-gray-900">{existingRegistration.delegate_type}</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">
+                        Registration Period
                       </p>
-                      <p className="text-sm">
-                        <span className="font-semibold text-gray-700">Email:</span>{" "}
-                        <span className="text-gray-900">{existingRegistration.email}</span>
+                      <p className="font-semibold text-gray-900">{existingRegistration.registration_period}</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">
+                        Payment Amount
                       </p>
-                      <p className="text-sm">
-                        <span className="font-semibold text-gray-700">Transaction ID:</span>{" "}
-                        <span className="text-gray-900 font-mono">{existingRegistration.transaction_id}</span>
-                      </p>
-                      <p className="text-sm">
-                        <span className="font-semibold text-gray-700">Payment Date:</span>{" "}
-                        <span className="text-gray-900">{existingRegistration.payment_date}</span>
+                      <p className="font-bold text-lg text-green-700">
+                        {existingRegistration.participant_region === "Indian"
+                          ? `₹${existingRegistration.payment_amount}`
+                          : `$${existingRegistration.payment_amount}`}
                       </p>
                     </div>
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow md:col-span-2">
+                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">
+                        Transaction ID
+                      </p>
+                      <p className="font-mono font-semibold text-gray-900">{existingRegistration.transaction_id}</p>
+                    </div>
+                    {existingRegistration.is_presenter && (
+                      <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+                        <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Abstract ID:</p>
+                        <p className="font-semibold text-gray-900">{existingRegistration.abstract_id}</p>
+                      </div>
+                    )}
+                    {existingRegistration.is_presenter && existingRegistration.oral_presentation && (
+                      <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+                        <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Presentation mode:</p>
+                        <p className="font-semibold text-gray-900"> Oral Presentation</p>
+                      </div>
+                    )}
+                    {existingRegistration.is_presenter && existingRegistration.poster_presentation && (
+                      <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
+                        <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Presentation mode:</p>
+                        <p className="font-semibold text-gray-900"> Poster Presentation</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -1321,7 +1378,6 @@ export default function DashboardClient({ user }: { user: User }) {
       </div>
     )
   }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
@@ -1345,531 +1401,535 @@ export default function DashboardClient({ user }: { user: User }) {
       </div>
 
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-        {renderStatusCard()}
-
-        <Card className="border-0 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500" />
-          <CardHeader className="bg-gradient-to-r from-gray-50 to-blue-50 border-b">
-            <CardTitle className="text-2xl font-bold text-gray-900"><span className="text-[color:var(--primary)]"> Registration Form</span></CardTitle>
-            <CardDescription className="text-base mt-2 leading-relaxed">
-              {canEdit
-                ? "Fill in your details to complete your registration. Make sure to include your Transaction ID for payment verification."
-                : "Your registration has been submitted and cannot be edited while it is under review or after acceptance."}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-8">
-            <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Personal Information Section */}
-              <div className="space-y-6">
-                <div className="flex items-center gap-3 pb-3 border-b-2 border-blue-100">
-                  <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
-                  <h3 className="text-xl font-bold text-gray-900">Personal Information</h3>
-                </div>
-
-                <div className="grid gap-6 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="full_name" className="text-sm font-semibold text-gray-700">
-                      Full Name <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="full_name"
-                      required
-                      disabled={!canEdit}
-                      value={formData.full_name}
-                      onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                      className="h-12 border-2 focus:border-blue-500 transition-colors"
-                      placeholder="Enter your full name"
-                    />
+        {existingRegistration && renderStatusCard()}
+        {!existingRegistration && (
+          <Card className="border-0 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500" />
+            <CardHeader className="bg-gradient-to-r from-gray-50 to-blue-50 border-b">
+              <CardTitle className="text-2xl font-bold text-gray-900"><span className="text-[color:var(--primary)]"> Registration Form</span></CardTitle>
+              <CardDescription className="text-base mt-2 leading-relaxed">
+                {canEdit
+                  ? "Fill in your details to complete your registration. Make sure to include your Transaction ID for payment verification."
+                  : "Your registration has been submitted and cannot be edited while it is under review or after acceptance."}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-8">
+              <form onSubmit={handleSubmit} className="space-y-8">
+                {/* Personal Information Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3 pb-3 border-b-2 border-blue-100">
+                    <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
+                    <h3 className="text-xl font-bold text-gray-900">Personal Information</h3>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
-                      Email Address <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      required
-                      disabled={!canEdit}
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="h-12 border-2 focus:border-blue-500 transition-colors"
-                      placeholder="your.email@example.com"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="phone" className="text-sm font-semibold text-gray-700">
-                      Phone Number <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      required
-                      disabled={!canEdit}
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="h-12 border-2 focus:border-blue-500 transition-colors"
-                      placeholder="+1 234 567 8900"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="country" className="text-sm font-semibold text-gray-700">
-                      Country <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="country"
-                      required
-                      disabled={!canEdit}
-                      value={formData.country}
-                      onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                      className="h-12 border-2 focus:border-blue-500 transition-colors"
-                      placeholder="Enter your country"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="institution_organization" className="text-sm font-semibold text-gray-700">
-                      Institution/Organization <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="institution_organization"
-                      required
-                      disabled={!canEdit}
-                      value={formData.institution_organization}
-                      onChange={(e) => setFormData({ ...formData, institution_organization: e.target.value })}
-                      className="h-12 border-2 focus:border-blue-500 transition-colors"
-                      placeholder="Your institution name"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="designation" className="text-sm font-semibold text-gray-700">
-                      Designation
-                    </Label>
-                    <Input
-                      id="designation"
-                      disabled={!canEdit}
-                      value={formData.designation}
-                      onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                      className="h-12 border-2 focus:border-blue-500 transition-colors"
-                      placeholder="Your job title or position"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Delegate Information Section */}
-              <div className="space-y-6">
-                <div className="flex items-center gap-3 pb-3 border-b-2 border-purple-100">
-                  <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
-                  <h3 className="text-xl font-bold text-gray-900">Delegate Information</h3>
-                </div>
-
-                <div className="grid gap-6 md:grid-cols-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="delegate_type" className="text-sm font-semibold text-gray-700">
-                      Delegate Type <span className="text-red-500">*</span>
-                    </Label>
-                    <Select
-                      value={formData.delegate_type}
-                      onValueChange={(value) => setFormData({ ...formData, delegate_type: value })}
-                      disabled={!canEdit}
-                      required
-                    >
-                      <SelectTrigger id="delegate_type" className="h-12 border-2 focus:border-purple-500">
-                        <SelectValue placeholder="Select delegate type" />
-                      </SelectTrigger>
-
-                      <SelectContent className="bg-white rounded-lg shadow-lg border border-gray-200 p-1">
-                        <SelectItem
-                          value="UG/PG Student"
-                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                        >
-                          UG/PG Student
-                        </SelectItem>
-
-                        <SelectItem
-                          value="Research Scholar"
-                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                        >
-                          Research Scholar
-                        </SelectItem>
-
-                        <SelectItem
-                          value="Faculty"
-                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                        >
-                          Faculty
-                        </SelectItem>
-
-                        <SelectItem
-                          value="Industry"
-                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                        >
-                          Industry
-                        </SelectItem>
-                      </SelectContent>
-
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="registration_period" className="text-sm font-semibold text-gray-700">
-                      Registration Period <span className="text-red-500">*</span>
-                    </Label>
-                    <Select
-                      value={formData.registration_period}
-                      onValueChange={(value) => setFormData({ ...formData, registration_period: value })}
-                      disabled={!canEdit}
-                      required
-                    >
-                      <SelectTrigger id="registration_period" className="h-12 border-2 focus:border-purple-500">
-                        <SelectValue placeholder="Select period" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white">
-                        <SelectItem value="Early Bird"
-                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                        >Early Bird (until May 5, 2026)</SelectItem>
-
-                        <SelectItem value="Final"
-                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                        >Final (after May 5, 2026)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="participant_region" className="text-sm font-semibold text-gray-700">
-                      Participant Region <span className="text-red-500">*</span>
-                    </Label>
-                    <Select
-                      value={formData.participant_region}
-                      onValueChange={(value) => setFormData({ ...formData, participant_region: value })}
-                      disabled={!canEdit}
-                      required
-                    >
-                      <SelectTrigger id="participant_region" className="h-12 border-2 focus:border-purple-500">
-                        <SelectValue placeholder="Select region" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white">
-                        <SelectItem value="Indian"
-                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                        >Indian</SelectItem>
-                        <SelectItem value="SAARC"
-                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                        >SAARC</SelectItem>
-                        <SelectItem value="Non-SAARC"
-                          className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                        >Non-SAARC</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  {formData.delegate_type && formData.delegate_type !== "UG/PG Student" && (
+                  <div className="grid gap-6 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="accompanying_persons" className="text-sm font-semibold text-gray-700">
-                        Accompanying persons <span className="text-red-500">*</span>
+                      <Label htmlFor="full_name" className="text-sm font-semibold text-gray-700">
+                        Full Name <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="full_name"
+                        required
+                        disabled={!canEdit}
+                        value={formData.full_name}
+                        onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                        className="h-12 border-2 focus:border-blue-500 transition-colors"
+                        placeholder="Enter your full name"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
+                        Email Address <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        required
+                        disabled={!canEdit}
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="h-12 border-2 focus:border-blue-500 transition-colors"
+                        placeholder="your.email@example.com"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="text-sm font-semibold text-gray-700">
+                        Phone Number <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        required
+                        disabled={!canEdit}
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="h-12 border-2 focus:border-blue-500 transition-colors"
+                        placeholder="+1 234 567 8900"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="country" className="text-sm font-semibold text-gray-700">
+                        Country <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="country"
+                        required
+                        disabled={!canEdit}
+                        value={formData.country}
+                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                        className="h-12 border-2 focus:border-blue-500 transition-colors"
+                        placeholder="Enter your country"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="institution_organization" className="text-sm font-semibold text-gray-700">
+                        Institution/Organization <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="institution_organization"
+                        required
+                        disabled={!canEdit}
+                        value={formData.institution_organization}
+                        onChange={(e) => setFormData({ ...formData, institution_organization: e.target.value })}
+                        className="h-12 border-2 focus:border-blue-500 transition-colors"
+                        placeholder="Your institution name"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="designation" className="text-sm font-semibold text-gray-700">
+                        Designation
+                      </Label>
+                      <Input
+                        id="designation"
+                        disabled={!canEdit}
+                        value={formData.designation}
+                        onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
+                        className="h-12 border-2 focus:border-blue-500 transition-colors"
+                        placeholder="Your job title or position"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Delegate Information Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3 pb-3 border-b-2 border-purple-100">
+                    <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
+                    <h3 className="text-xl font-bold text-gray-900">Delegate Information</h3>
+                  </div>
+
+                  <div className="grid gap-6 md:grid-cols-3">
+                    <div className="space-y-2">
+                      <Label htmlFor="delegate_type" className="text-sm font-semibold text-gray-700">
+                        Delegate Type <span className="text-red-500">*</span>
                       </Label>
                       <Select
-                        value={formData.accompanying_persons != null ? String(formData.accompanying_persons) : "Select number of accompanying people"}
-                        onValueChange={(value) =>
-                          setFormData({ ...formData, accompanying_persons: Number.parseInt(value, 10) || 0 })
-                        }
+                        value={formData.delegate_type}
+                        onValueChange={(value) => setFormData({ ...formData, delegate_type: value })}
                         disabled={!canEdit}
                         required
                       >
-                        <SelectTrigger id="accompanying_persons" className="h-12 border-2 focus:border-purple-500">
-                          <SelectValue placeholder="Select number of accompanying people" />
+                        <SelectTrigger id="delegate_type" className="h-12 border-2 focus:border-purple-500">
+                          <SelectValue placeholder="Select delegate type" />
+                        </SelectTrigger>
+
+                        <SelectContent className="bg-white rounded-lg shadow-lg border border-gray-200 p-1">
+                          <SelectItem
+                            value="UG/PG Student"
+                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          >
+                            UG/PG Student
+                          </SelectItem>
+
+                          <SelectItem
+                            value="Research Scholar"
+                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          >
+                            Research Scholar
+                          </SelectItem>
+
+                          <SelectItem
+                            value="Faculty"
+                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          >
+                            Faculty
+                          </SelectItem>
+
+                          <SelectItem
+                            value="Industry"
+                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          >
+                            Industry
+                          </SelectItem>
+                        </SelectContent>
+
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="registration_period" className="text-sm font-semibold text-gray-700">
+                        Registration Period <span className="text-red-500">*</span>
+                      </Label>
+                      <Select
+                        value={formData.registration_period}
+                        onValueChange={(value) => setFormData({ ...formData, registration_period: value })}
+                        disabled={!canEdit}
+                        required
+                      >
+                        <SelectTrigger id="registration_period" className="h-12 border-2 focus:border-purple-500">
+                          <SelectValue placeholder="Select period" />
                         </SelectTrigger>
                         <SelectContent className="bg-white">
-                          <SelectItem value="0"
+                          <SelectItem value="Early Bird"
                             className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                          >0</SelectItem>
-                          <SelectItem value="1"
+                          >Early Bird (until May 5, 2026)</SelectItem>
+
+                          <SelectItem value="Final"
                             className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                          >1</SelectItem>
-                          <SelectItem value="2"
-                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                          >2</SelectItem>
-                          <SelectItem value="3"
-                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                          >3</SelectItem>
+                          >Final (after May 5, 2026)</SelectItem>
                         </SelectContent>
                       </Select>
-                    </div>)}
-                </div>
+                    </div>
 
-                {/* Presenting Paper Section */}
-                <div className="space-y-4 mt-6">
-                  <div className="space-y-3">
-                    <Label className="text-sm font-semibold text-gray-700">
-                      Are you presenting a paper? <span className="text-red-500">*</span>
-                    </Label>
-                    <RadioGroup
-                      value={formData.presenting_paper}
-                      onValueChange={(value) =>
-                        setFormData({
-                          ...formData,
-                          presenting_paper: value,
-                          abstract_id: value === "no" ? "" : formData.abstract_id,
-                        })
-                      }
-                      disabled={!canEdit}
-                      className="flex gap-6"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="yes" id="presenting_yes" />
-                        <Label htmlFor="presenting_yes" className="font-normal cursor-pointer">
-                          Yes
+                    <div className="space-y-2">
+                      <Label htmlFor="participant_region" className="text-sm font-semibold text-gray-700">
+                        Participant Region <span className="text-red-500">*</span>
+                      </Label>
+                      <Select
+                        value={formData.participant_region}
+                        onValueChange={(value) => setFormData({ ...formData, participant_region: value })}
+                        disabled={!canEdit}
+                        required
+                      >
+                        <SelectTrigger id="participant_region" className="h-12 border-2 focus:border-purple-500">
+                          <SelectValue placeholder="Select region" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white">
+                          <SelectItem value="Indian"
+                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          >Indian</SelectItem>
+                          <SelectItem value="SAARC"
+                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          >SAARC</SelectItem>
+                          <SelectItem value="Non-SAARC"
+                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                          >Non-SAARC</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    {formData.delegate_type && formData.delegate_type !== "UG/PG Student" && (
+                      <div className="space-y-2">
+                        <Label htmlFor="accompanying_persons" className="text-sm font-semibold text-gray-700">
+                          Accompanying persons <span className="text-red-500">*</span>
                         </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="no" id="presenting_no" />
-                        <Label htmlFor="presenting_no" className="font-normal cursor-pointer">
-                          No
-                        </Label>
-                      </div>
-                    </RadioGroup>
+                        <Select
+                          value={formData.accompanying_persons != null ? String(formData.accompanying_persons) : "Select number of accompanying people"}
+                          onValueChange={(value) =>
+                            setFormData({ ...formData, accompanying_persons: Number.parseInt(value, 10) || 0 })
+                          }
+                          disabled={!canEdit}
+                          required
+                        >
+                          <SelectTrigger id="accompanying_persons" className="h-12 border-2 focus:border-purple-500">
+                            <SelectValue placeholder="Select number of accompanying people" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white">
+                            <SelectItem value="0"
+                              className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                            >0</SelectItem>
+                            <SelectItem value="1"
+                              className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                            >1</SelectItem>
+                            <SelectItem value="2"
+                              className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                            >2</SelectItem>
+                            <SelectItem value="3"
+                              className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
+                            >3</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>)}
                   </div>
 
-                  {formData.presenting_paper === "yes" && (
-                    <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-                      <Label htmlFor="abstract_id" className="text-sm font-semibold text-gray-700">
-                        Abstract ID <span className="text-red-500">*</span>
+                  {/* Presenting Paper Section */}
+                  <div className="space-y-4 mt-6">
+                    <div className="space-y-3">
+                      <Label className="text-sm font-semibold text-gray-700">
+                        Are you presenting a paper? <span className="text-red-500">*</span>
+                      </Label>
+                      <RadioGroup
+                        value={formData.is_presenter ? "yes" : "no"}           // render from boolean
+                        onValueChange={(value) =>
+                          setFormData({
+                            ...formData,
+                            is_presenter: value === "yes",                     // store boolean
+                            // clear abstract when switching to no
+                            abstract_id: value === "no" ? "" : formData.abstract_id,
+                            // if switching to no, also clear presentation type booleans
+                            ...(value === "no" ? { oral_presentation: false, poster_presentation: false } : {}),
+                          })
+                        }
+                        disabled={!canEdit}
+                        className="flex gap-6"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="yes" id="presenting_yes" />
+                          <Label htmlFor="presenting_yes" className="font-normal cursor-pointer">
+                            Yes
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="no" id="presenting_no" />
+                          <Label htmlFor="presenting_no" className="font-normal cursor-pointer">
+                            No
+                          </Label>
+                        </div>
+                      </RadioGroup>
+
+                    </div>
+
+                    {formData.is_presenter === true && (
+                      <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <Label htmlFor="abstract_id" className="text-sm font-semibold text-gray-700">
+                          Abstract ID <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="abstract_id"
+                          required
+                          disabled={!canEdit}
+                          value={formData.abstract_id}
+                          onChange={(e) => setFormData({ ...formData, abstract_id: e.target.value })}
+                          className="h-12 border-2 focus:border-purple-500 transition-colors"
+                          placeholder="Enter your abstract ID"
+                        />
+                        <p className="text-xs text-gray-500 flex items-center gap-1">
+                          <Info className="h-3 w-3" />
+                          Enter the Abstract ID assigned to your submitted paper
+                        </p>
+
+                        {/* Single-select (radio) that directly sets the two booleans */}
+                        <fieldset className="mt-3">
+                          <legend className="text-sm font-semibold text-gray-700">Presentation type <span className="text-red-500">*</span></legend>
+                          <div className="flex gap-6 mt-2">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="presentation_type"
+                                value="oral"
+                                checked={!!formData.oral_presentation}
+                                disabled={!canEdit}
+                                onChange={() => setFormData({
+                                  ...formData,
+                                  oral_presentation: true,
+                                  poster_presentation: false
+                                })}
+                              />
+                              <span className="ml-1 text-sm">Oral presentation</span>
+                            </label>
+
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="presentation_type"
+                                value="poster"
+                                checked={!!formData.poster_presentation}
+                                disabled={!canEdit}
+                                onChange={() => setFormData({
+                                  ...formData,
+                                  oral_presentation: false,
+                                  poster_presentation: true
+                                })}
+                              />
+                              <span className="ml-1 text-sm">Poster presentation</span>
+                            </label>
+                          </div>
+                        </fieldset>
+                      </div>
+                    )}
+
+
+
+                  </div>
+
+                  {formData.delegate_type && formData.registration_period && formData.participant_region && (
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border-2 border-blue-200 shadow-lg animate-in fade-in zoom-in duration-300">
+                      <div className="flex items-center justify-between flex-wrap gap-4">
+                        <div>
+                          <p className="text-sm font-bold text-blue-900 uppercase tracking-wide mb-1">Registration Fee</p>
+                          <p className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                            {formData.participant_region === "Indian" ? "₹" : "$"}
+                            {calculatePaymentAmount()}
+                          </p>
+                        </div>
+                        <div className="bg-white/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-blue-200">
+                          <p className="text-xs text-blue-700 font-medium">💡 Please pay this amount before submitting</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Payment Information Section */}
+                <div className="space-y-6">
+                  {/* Header Section */}
+                  <div className="flex items-center gap-3 pb-3 border-b-2 border-indigo-100">
+                    <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
+                    <h3 className="text-xl font-bold text-gray-900">Payment Information</h3>
+                  </div>
+
+                  <div className="flex flex-col lg:flex-row gap-6">
+
+                    {/* LEFT COLUMN: Bank Details Grid */}
+                    <div className="flex-1 bg-gradient-to-br from-gray-50 to-blue-50 p-6 rounded-2xl border-2 border-gray-200 shadow-inner">
+                      <p className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <Info className="h-5 w-5 text-[color:var(--primary)]" />
+                        Bank Details for Payment
+                      </p>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+
+                        {/* Row 1: Account Name & Account Number */}
+                        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                          <p className="font-semibold text-gray-700 mb-1">Account Name</p>
+                          <p className="text-gray-900 font-medium">Indian Institute of Technology Indore</p>
+                        </div>
+                        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                          <p className="font-semibold text-gray-700 mb-1">Account Number</p>
+                          <p className="text-gray-900 font-mono tracking-wide">1476101027440</p>
+                        </div>
+
+                        {/* Row 2: IFSC & Bank Name */}
+                        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                          <p className="font-semibold text-gray-700 mb-1">IFSC Code</p>
+                          <p className="text-gray-900 font-mono tracking-wide">CNRB0006223</p>
+                        </div>
+                        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                          <p className="font-semibold text-gray-700 mb-1">Bank Name</p>
+                          <p className="text-gray-900">Canara Bank, Simrol IIT Branch</p>
+                        </div>
+
+                        {/* Row 3: SWIFT & PayU Button */}
+                        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                          <p className="font-semibold text-gray-700 mb-1">SWIFT Code (International)</p>
+                          <p className="text-gray-900 font-mono tracking-wide">CNRBINBBMSG</p>
+                        </div>
+
+                        <a
+                          href="https://payu.in/web/EB3AF4CBC22FB4C90B5ABC9A52E5CAC3"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-[color:var(--primary)] hover:bg-blue-700 text-white p-4 rounded-xl shadow-sm transition-all flex flex-col justify-center items-center text-center group cursor-pointer"
+                        >
+                          <span className="font-bold flex items-center gap-2 text-base">
+                            Pay Now
+                            <ExternalLink className="w-4 h-4 opacity-80 group-hover:translate-x-1 transition-transform" />
+                          </span>
+                          <span className="text-xs opacity-90 mt-0.5">via PayU Gateway</span>
+                        </a>
+
+                      </div>
+                    </div>
+
+                    {/* RIGHT COLUMN: QR Code Card */}
+                    <div className="lg:w-80 bg-white p-6 rounded-2xl border-2 border-gray-200 shadow-sm flex flex-col items-center justify-center text-center">
+                      <div className="mb-4">
+                        <h4 className="text-lg font-bold text-[color:var(--primary)]">Scan to Pay</h4>
+                      </div>
+                      <div className="bg-white p-2 rounded-xl border-2 border-dashed border-gray-200">
+                        <img
+                          src="payuqr.png"
+                          alt="Payment QR Code"
+                          className="w-48 h-48 object-contain"
+                        />
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="transaction_id" className="text-sm font-semibold text-gray-700">
+                        Transaction ID <span className="text-red-500">*</span>
                       </Label>
                       <Input
-                        id="abstract_id"
+                        id="transaction_id"
                         required
                         disabled={!canEdit}
-                        value={formData.abstract_id}
-                        onChange={(e) => setFormData({ ...formData, abstract_id: e.target.value })}
-                        className="h-12 border-2 focus:border-purple-500 transition-colors"
-                        placeholder="Enter your abstract ID"
+                        value={formData.transaction_id || ""}
+                        onChange={(e) => setFormData({ ...formData, transaction_id: e.target.value })}
+                        placeholder="Enter payment transaction ID"
+                        className="h-12 border-2 focus:border-indigo-500 transition-colors font-mono"
                       />
                       <p className="text-xs text-gray-500 flex items-center gap-1">
                         <Info className="h-3 w-3" />
-                        Enter the Abstract ID assigned to your submitted paper
+                        Enter the transaction/reference ID from your bank
                       </p>
-
-                      {/* Single-select (radio) that directly sets the two booleans */}
-                      <fieldset className="mt-3">
-                        <legend className="text-sm font-semibold text-gray-700">Presentation type <span className="text-red-500">*</span></legend>
-                        <div className="flex gap-6 mt-2">
-                          <label className="flex items-center gap-2 cursor-pointer">
-                            <input
-                              type="radio"
-                              name="presentation_type"
-                              value="oral"
-                              checked={!!formData.oral_presentation}
-                              disabled={!canEdit}
-                              onChange={() => setFormData({
-                                ...formData,
-                                oral_presentation: true,
-                                poster_presentation: false
-                              })}
-                            />
-                            <span className="ml-1 text-sm">Oral presentation</span>
-                          </label>
-
-                          <label className="flex items-center gap-2 cursor-pointer">
-                            <input
-                              type="radio"
-                              name="presentation_type"
-                              value="poster"
-                              checked={!!formData.poster_presentation}
-                              disabled={!canEdit}
-                              onChange={() => setFormData({
-                                ...formData,
-                                oral_presentation: false,
-                                poster_presentation: true
-                              })}
-                            />
-                            <span className="ml-1 text-sm">Poster presentation</span>
-                          </label>
-                        </div>
-                      </fieldset>
                     </div>
-                  )}
 
-
-
-                </div>
-
-                {formData.delegate_type && formData.registration_period && formData.participant_region && (
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border-2 border-blue-200 shadow-lg animate-in fade-in zoom-in duration-300">
-                    <div className="flex items-center justify-between flex-wrap gap-4">
-                      <div>
-                        <p className="text-sm font-bold text-blue-900 uppercase tracking-wide mb-1">Registration Fee</p>
-                        <p className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                          {formData.participant_region === "Indian" ? "₹" : "$"}
-                          {calculatePaymentAmount()}
-                        </p>
-                      </div>
-                      <div className="bg-white/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-blue-200">
-                        <p className="text-xs text-blue-700 font-medium">💡 Please pay this amount before submitting</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Payment Information Section */}
-              <div className="space-y-6">
-                {/* Header Section */}
-                <div className="flex items-center gap-3 pb-3 border-b-2 border-indigo-100">
-                  <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
-                  <h3 className="text-xl font-bold text-gray-900">Payment Information</h3>
-                </div>
-
-                <div className="flex flex-col lg:flex-row gap-6">
-
-                  {/* LEFT COLUMN: Bank Details Grid */}
-                  <div className="flex-1 bg-gradient-to-br from-gray-50 to-blue-50 p-6 rounded-2xl border-2 border-gray-200 shadow-inner">
-                    <p className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <Info className="h-5 w-5 text-[color:var(--primary)]" />
-                      Bank Details for Payment
-                    </p>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-
-                      {/* Row 1: Account Name & Account Number */}
-                      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                        <p className="font-semibold text-gray-700 mb-1">Account Name</p>
-                        <p className="text-gray-900 font-medium">Indian Institute of Technology Indore</p>
-                      </div>
-                      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                        <p className="font-semibold text-gray-700 mb-1">Account Number</p>
-                        <p className="text-gray-900 font-mono tracking-wide">1476101027440</p>
-                      </div>
-
-                      {/* Row 2: IFSC & Bank Name */}
-                      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                        <p className="font-semibold text-gray-700 mb-1">IFSC Code</p>
-                        <p className="text-gray-900 font-mono tracking-wide">CNRB0006223</p>
-                      </div>
-                      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                        <p className="font-semibold text-gray-700 mb-1">Bank Name</p>
-                        <p className="text-gray-900">Canara Bank, Simrol IIT Branch</p>
-                      </div>
-
-                      {/* Row 3: SWIFT & PayU Button */}
-                      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                        <p className="font-semibold text-gray-700 mb-1">SWIFT Code (International)</p>
-                        <p className="text-gray-900 font-mono tracking-wide">CNRBINBBMSG</p>
-                      </div>
-
-                      <a
-                        href="https://payu.in/web/EB3AF4CBC22FB4C90B5ABC9A52E5CAC3"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-[color:var(--primary)] hover:bg-blue-700 text-white p-4 rounded-xl shadow-sm transition-all flex flex-col justify-center items-center text-center group cursor-pointer"
-                      >
-                        <span className="font-bold flex items-center gap-2 text-base">
-                          Pay Now
-                          <ExternalLink className="w-4 h-4 opacity-80 group-hover:translate-x-1 transition-transform" />
-                        </span>
-                        <span className="text-xs opacity-90 mt-0.5">via PayU Gateway</span>
-                      </a>
-
-                    </div>
-                  </div>
-
-                  {/* RIGHT COLUMN: QR Code Card */}
-                  <div className="lg:w-80 bg-white p-6 rounded-2xl border-2 border-gray-200 shadow-sm flex flex-col items-center justify-center text-center">
-                    <div className="mb-4">
-                      <h4 className="text-lg font-bold text-[color:var(--primary)]">Scan to Pay</h4>
-                    </div>
-                    <div className="bg-white p-2 rounded-xl border-2 border-dashed border-gray-200">
-                      <img
-                        src="payuqr.png"
-                        alt="Payment QR Code"
-                        className="w-48 h-48 object-contain"
+                    <div className="space-y-2">
+                      <Label htmlFor="payment_date" className="text-sm font-semibold text-gray-700">
+                        Payment Date <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="payment_date"
+                        type="date"
+                        required
+                        disabled={!canEdit}
+                        value={formData.payment_date || ""}
+                        onChange={(e) => setFormData({ ...formData, payment_date: e.target.value })}
+                        className="h-12 border-2 focus:border-indigo-500 transition-colors"
                       />
                     </div>
                   </div>
-
                 </div>
 
-                <div className="grid gap-6 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="transaction_id" className="text-sm font-semibold text-gray-700">
-                      Transaction ID <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="transaction_id"
-                      required
-                      disabled={!canEdit}
-                      value={formData.transaction_id || ""}
-                      onChange={(e) => setFormData({ ...formData, transaction_id: e.target.value })}
-                      placeholder="Enter payment transaction ID"
-                      className="h-12 border-2 focus:border-indigo-500 transition-colors font-mono"
-                    />
-                    <p className="text-xs text-gray-500 flex items-center gap-1">
-                      <Info className="h-3 w-3" />
-                      Enter the transaction/reference ID from your bank
-                    </p>
+                {/* Alert Messages */}
+                {error && (
+                  <div className="bg-gradient-to-r from-red-50 to-rose-50 border-l-4 border-red-500 p-5 rounded-xl shadow-md animate-in slide-in-from-top-2 duration-300">
+                    <div className="flex items-start gap-3">
+                      <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm text-red-800 font-medium leading-relaxed">{error}</p>
+                    </div>
                   </div>
+                )}
 
-                  <div className="space-y-2">
-                    <Label htmlFor="payment_date" className="text-sm font-semibold text-gray-700">
-                      Payment Date <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="payment_date"
-                      type="date"
-                      required
-                      disabled={!canEdit}
-                      value={formData.payment_date || ""}
-                      onChange={(e) => setFormData({ ...formData, payment_date: e.target.value })}
-                      className="h-12 border-2 focus:border-indigo-500 transition-colors"
-                    />
+                {success && (
+                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 p-5 rounded-xl shadow-md animate-in slide-in-from-top-2 duration-300">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm text-green-800 font-medium leading-relaxed">{success}</p>
+                    </div>
                   </div>
-                </div>
-              </div>
+                )}
 
-              {/* Alert Messages */}
-              {error && (
-                <div className="bg-gradient-to-r from-red-50 to-rose-50 border-l-4 border-red-500 p-5 rounded-xl shadow-md animate-in slide-in-from-top-2 duration-300">
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
-                    <p className="text-sm text-red-800 font-medium leading-relaxed">{error}</p>
-                  </div>
-                </div>
-              )}
-
-              {success && (
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 p-5 rounded-xl shadow-md animate-in slide-in-from-top-2 duration-300">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <p className="text-sm text-green-800 font-medium leading-relaxed">{success}</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Submit Button */}
-              {canEdit && (
-                <Button
-                  type="submit"
-                  className="w-full h-14 text-lg font-bold bg-[color:var(--primary)] hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-200"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Submitting Your Registration...
-                    </>
-                  ) : existingRegistration ? (
-                    "Update Registration"
-                  ) : (
-                    "Submit Registration"
-                  )}
-                </Button>
-              )}
-            </form>
-          </CardContent>
-        </Card>
-
+                {/* Submit Button */}
+                {canEdit && (
+                  <Button
+                    type="submit"
+                    className="w-full h-14 text-lg font-bold bg-[color:var(--primary)] hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-200"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Submitting Your Registration...
+                      </>
+                    ) : existingRegistration ? (
+                      "Update Registration"
+                    ) : (
+                      "Submit Registration"
+                    )}
+                  </Button>
+                )}
+              </form>
+            </CardContent>
+          </Card>
+        )}
         {/* Footer note */}
         <p className="text-center text-sm text-gray-500 mt-8">Need help? Contact us at support@2dmattech.org</p>
       </div>
