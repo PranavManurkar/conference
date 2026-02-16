@@ -46,7 +46,7 @@ export default function Contact() {
             icon={MapPin}
             title="Address"
             details={[
-              'Department of Metallurgical Engineering',
+              'Department of Metallurgical Engineering And Materials Science',
               'Indian Institute of Technology Indore',
               'Khandwa Road, Simrol',
               'Indore 453552, India',
