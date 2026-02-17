@@ -48,7 +48,7 @@ const speakers: Speaker[] = [
   { name: "Prof. Tanushree Choudhury", title: "Assistant Professor", affiliation: "Assistant Professor, IIT Bombay", image: "/invited_speaker/tanu.png" },
   { name: "Dr. Ashutosh Singh", title: "Material Scientist", affiliation: "CeNS, Bangalore", image: "/invited_speaker/scientist.jpeg" },
   { name: "Prof. Pankaj Koinkar", title: "Professor", affiliation: "Institute of Post-LED Photonics, Tokushima University, Japan", image: "/invited_speaker/Professor.png" },
-  { name: "Dr. Vikas Thakare", title: " Scientist G & Associate Director", affiliation: "SoG & Associate Director, DRDE DRDO, Gwalior.", image: "/invited_speaker/thakare.jpg" },
+  { name: "Dr. Vikas Thakare", title: " Scientist G & Associate Director", affiliation: "DRDE, Gwalior.", image: "/invited_speaker/thakare.jpg" },
 ];
 
 
