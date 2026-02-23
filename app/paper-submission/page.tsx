@@ -28,10 +28,10 @@ export default function PaperSubmission() {
                   <span className="text-[var(--primary)] font-bold mr-2">•</span>
                   <span>High-quality papers invited for SCI journals</span>
                 </li>
-                <li className="flex items-start">
+                {/* <li className="flex items-start">
                   <span className="text-[var(--primary)] font-bold mr-2">•</span>
                   <span>Selected: full paper (6-8 pages)</span>
-                </li>
+                </li> */}
               </ul>
             </div>
 
@@ -73,6 +73,35 @@ export default function PaperSubmission() {
                   </svg>
                   LaTeX Template (.tex)
                 </a>
+              </div>
+            </div>
+
+            {/* poster submission  */}
+            <div className="mt-6 mb-4">
+              <p className="text-[var(--muted-foreground)] mb-3 text-sm">Poster Submission Template:</p>
+              <div className="flex gap-4">
+                <a
+                  href="/Poster Templat1.pptx"
+                  download
+                  className="inline-flex items-center gap-2 text-[var(--primary)] hover:text-[var(--nav)] font-medium text-sm transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13 7H7v6h6V7z" />
+                    <path fillRule="evenodd" d="M3 3a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V3zm2 0v14h10V3H5z" clipRule="evenodd" />
+                  </svg>
+                  Poster Template (.pptx)
+                </a>
+                {/* <a
+                  href="/Abstract_Template.tex"
+                  download
+                  className="inline-flex items-center gap-2 text-[var(--primary)] hover:text-[var(--nav)] font-medium text-sm transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13 7H7v6h6V7z" />
+                    <path fillRule="evenodd" d="M3 3a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V3zm2 0v14h10V3H5z" clipRule="evenodd" />
+                  </svg>
+                  LaTeX Template (.tex)
+                </a> */}
               </div>
             </div>
             <p className="text-[var(--muted-foreground)] mb-6">
