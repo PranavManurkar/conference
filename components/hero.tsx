@@ -9,7 +9,7 @@ export default function Hero() {
   const pathname = usePathname()
   const handleDownloadBrochure = () => {
     const link = document.createElement("a")
-    link.href = "/Brochure for 2DMatTech - Revised 2025-01-02.pdf"
+    link.href = "/Brochure for 2DMatTech - 2025-02-20.pdf"
     link.download = "Brochure-2DMatTech-2025.pdf"
     document.body.appendChild(link)
     link.click()

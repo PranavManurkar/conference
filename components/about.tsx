@@ -34,24 +34,24 @@ export default function About() {
           <div className="md:col-span-2 p-6 order-last md:order-none">
             <div className="mb-4">
               <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
-              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">The 
-          <span className="text-[color:var(--primary)]"> Conference</span> </h2>
+              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">The
+                <span className="text-[color:var(--primary)]"> Conference</span> </h2>
             </div>
 
             <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
               <p>
-          2D materials are far more than a scientific curiosity; they represent a
-          transformative frontier in materials science, poised to redefine
-          performance boundaries across diverse technological domains.
+                2D materials are far more than a scientific curiosity; they represent a
+                transformative frontier in materials science, poised to redefine
+                performance boundaries across diverse technological domains.
               </p>
               <p>
-          From graphene to transition metal dichalcogenides, phosphorene, and
-          MXenes, the 2D materials ecosystem is reshaping energy, electronics,
-          photonics, healthcare, aerospace, and quantum technologies.
+                From graphene to transition metal dichalcogenides, phosphorene, and
+                MXenes, the 2D materials ecosystem is reshaping energy, electronics,
+                photonics, healthcare, aerospace, and quantum technologies.
               </p>
               <p>
-          This conference serves as an interdisciplinary platform connecting
-          academia, industry, and policy makers worldwide.
+                This conference serves as an interdisciplinary platform connecting
+                academia, industry, and policy makers worldwide.
               </p>
             </div>
           </div>
@@ -78,13 +78,13 @@ export default function About() {
         >
           <div className="md:col-span-2 relative min-h-[260px] bg-black flex items-center justify-center group cursor-pointer overflow-hidden md:order-none order-first">
             <iframe
-    src="https://www.youtube.com/embed/jvU_frtZP3Y?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1&origin=https://tdmtg.iiti.ac.in"
-    title="IIT Indore Video"
-    allow="autoplay; encrypted-media; picture-in-picture"
-    allowFullScreen
-    referrerPolicy="strict-origin-when-cross-origin"
-    className="absolute inset-0 w-full h-full"
-  />
+              src="https://www.youtube.com/embed/jvU_frtZP3Y?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1&origin=https://tdmtg.iiti.ac.in"
+              title="IIT Indore Video"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
+              className="absolute inset-0 w-full h-full"
+            />
             {/* <a
               href="https://youtu.be/jvU_frtZP3Y?si=BTo3fHtROxZoeegC"
               target="_blank"
@@ -98,42 +98,42 @@ export default function About() {
           <div className="md:col-span-3 p-6 md:order-none order-last">
             <div className="mb-4">
               <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
-              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">About 
+              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">
                 <span className="text-[color:var(--primary)]"> IIT Indore</span></h2>
             </div>
 
-           <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
-  <p>
-    The Indian Institute of Technology Indore (IITI), established in 2009 as a
-    second-generation IIT, is located at Simrol on a 501-acre permanent campus
-    that became fully operational in 2015.
-  </p>
+            <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
+              <p>
+                The Indian Institute of Technology Indore (IITI), established in 2009 as a
+                second-generation IIT, is located at Simrol on a 501-acre permanent campus
+                that became fully operational in 2015.
+              </p>
 
-  <p>
-    IITI offers a broad spectrum of undergraduate, postgraduate, doctoral, and
-    interdisciplinary programs and was the first IIT to launch an MS in Data
-    Science and Management in collaboration with IIM Indore.
-  </p>
+              <p>
+                IITI offers a broad spectrum of undergraduate, postgraduate, doctoral, and
+                interdisciplinary programs and was the first IIT to launch an MS in Data
+                Science and Management in collaboration with IIM Indore.
+              </p>
 
-  <p>
-    Recognized as an Institute of National Importance, IIT Indore consistently
-    ranks among India’s leading institutions and has contributed over 7,500
-    international publications and 165+ patents, reflecting its strong research
-    and innovation ecosystem.
-  </p>
+              <p>
+                Recognized as an Institute of National Importance, IIT Indore consistently
+                ranks among India’s leading institutions and has contributed over 7,500
+                international publications and 165+ patents, reflecting its strong research
+                and innovation ecosystem.
+              </p>
 
-  <p>
-    For more information, visit the{" "}
-    <a
-      href="https://iiti.ac.in"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-[color:var(--primary)] underline hover:text-[color:var(--nav)]"
-    >
-      IIT Indore website
-    </a>.
-  </p>
-</div>
+              <p>
+                For more information, visit the{" "}
+                <a
+                  href="https://iiti.ac.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[color:var(--primary)] underline hover:text-[color:var(--nav)]"
+                >
+                  IIT Indore website
+                </a>.
+              </p>
+            </div>
 
 
           </div>
@@ -156,39 +156,26 @@ export default function About() {
             </div>
 
             <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
-  <p>
-    The Department of Metallurgical Engineering and Materials Science (MEMS) at
-    IIT Indore originated as the Center for Materials Science Engineering and
-    evolved into a full-fledged department in 2016, bringing together expertise
-    from the schools of Basic Sciences and Engineering.
-  </p>
+              <p>
+                Department of Metallurgical Engineering and Materials Science (MEMS) at IIT Indore, established as a full-fledged department in 2016 from the Center for Materials Science Engineering, stands as a vibrant hub of innovation at the interface of science and engineering. Bringing together expertise from Basic Sciences and Engineering disciplines, MEMS drives cutting-edge, multidisciplinary research focused on understanding and engineering the process-structure-property relationship across metals, ceramics, polymers, composites, and functional materials.
+              </p>
 
-  <p>
-    The department is dedicated to multidisciplinary research in materials
-    science, addressing real-world challenges through studies on material
-    processing, structure, and property relationships across diverse material
-    systems.
-  </p>
+              <p>
+                With a strong foundation in both fundamental science and applied research, MEMS actively addresses contemporary challenges in energy, sustainability, advanced manufacturing, and next-generation materials technology. MEMS offers undergraduate, postgraduate, and doctoral programs, supported by state-of-the-art laboratories in physical metallurgy, 2D materials, nanomaterials, functional and electronic materials, biomaterials, and computational materials science, creating a dynamic ecosystem for research excellence and technological impact
+              </p>
 
-  <p>
-    With strong emphasis on both fundamental and applied research, MEMS offers
-    undergraduate, postgraduate, and doctoral programs and is supported by
-    state-of-the-art laboratories in physical metallurgy, nanomaterials,
-    functional materials, biomaterials, and computational materials science.
-  </p>
-
-  <p>
-    For more information, visit the{" "}
-    <a
-      href="https://mems.iiti.ac.in/"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-[color:var(--primary)] underline hover:text-[color:var(--nav)]"
-    >
-      MEMS IIT Indore website
-    </a>.
-  </p>
-</div>
+              <p>
+                For more information, visit the{" "}
+                <a
+                  href="https://mems.iiti.ac.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[color:var(--primary)] underline hover:text-[color:var(--nav)]"
+                >
+                  MEMS IIT Indore website
+                </a>.
+              </p>
+            </div>
 
           </div>
 
@@ -203,6 +190,77 @@ export default function About() {
           </div>
         </motion.div>
 
+        <motion.div
+          className="bg-[color:var(--primary-foreground)] rounded-lg shadow flex flex-col overflow-hidden"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+        >
+          <div className="p-6">
+            <div className="mb-4">
+              <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
+              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">
+                <span className="text-[color:var(--primary)]">UGC-DAE CSR Indore</span>
+              </h2>
+            </div>
+
+            <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed text-left">
+              <p>
+                UGC-DAE CSR, Indore is an Inter-University Research Centre of the University Grants Commission (UGC), New Delhi. The broad objective of the Consortium is developing competence and promoting research in front line areas of science and technology in Indian Universities and colleges by providing institutional framework for optimum utilization of major research facilities established by the Department of Atomic Energy as well as in-house facilities. Through active collaborations with universities and national laboratories, UGC-DAE CSR Indore plays a vital role in strengthening university-based research, promoting high-quality publications, training young researchers, and fostering interdisciplinary scientific advancement across India.
+              </p>
+
+              <p>
+                For more information, visit the{" "}
+                <a
+                  href="https://www.csr.res.in/Indore_Centre"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[color:var(--primary)] underline hover:text-[color:var(--nav)]"
+                >
+                  UGC-DAE CSR website
+                </a>.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+
+
+        <motion.div
+          className="bg-[color:var(--primary-foreground)] rounded-lg shadow flex flex-col overflow-hidden"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+        >
+          <div className="p-6">
+            <div className="mb-4">
+              <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
+              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">
+                <span className="text-[color:var(--primary)]">RRCAT Indore</span>
+              </h2>
+            </div>
+
+            <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed text-left">
+              <p>
+              Raja Ramanna Centre for Advanced Technology (RRCAT), a premier unit of the Department of Atomic Energy, Govt. of India, is engaged in advanced non-nuclear R&D in lasers, particle accelerators, and related frontier technologies. Centre houses two national synchrotron radiation facilities:  Indus-1 and Indus-2. Indus-1 is a 450 MeV, 100 mA electron storage ring that delivers radiation from mid-infrared to soft X-ray region, with a critical wavelength of ~61 Å. Indus-2 is a 2.5 GeV 3rd generation synchrotron radiation source, indigenously designed and developed at RRCAT, producing high-brilliance photon beams from infrared to hard X-rays. With low-emittance operation, state-of-the-art accelerator systems, precision beam diagnostics, ultra-high vacuum infrastructure, and sophisticated beamline instrumentation, Indus-2 enables high-resolution structural, spectroscopic, and imaging studies across materials science, condensed matter physics, chemistry, biology, nanoscience, environmental science, and industrial R&D, serving as a key national platform for multidisciplinary research and strategic technological advancement.
+              </p>
+
+              <p>
+                For more information, visit the{" "}
+                <a
+                  href="https://www.rrcat.gov.in/index_eng.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[color:var(--primary)] underline hover:text-[color:var(--nav)]"
+                >
+                  RRCAT Indore website
+                </a>.
+              </p>
+            </div>
+          </div>
+        </motion.div>
         {/* SECTION 4 — Image top (mobile only), Image left, Text right (desktop) */}
         <motion.div
           className="bg-[color:var(--primary-foreground)] rounded-lg shadow flex flex-col md:grid md:grid-cols-5 overflow-hidden"
@@ -228,25 +286,25 @@ export default function About() {
                 <span className="text-[color:var(--primary)]">Indore </span> City</h2>
             </div>
 
-           <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
-  <p>
-    Indore, the largest city and commercial capital of Madhya Pradesh, is located
-    in the Malwa region and was established in the 16th century as a major trading
-    hub along the Kanh and Saraswati rivers.
-  </p>
+            <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
+              <p>
+                Indore, the largest city and commercial capital of Madhya Pradesh, is located
+                in the Malwa region and was established in the 16th century as a major trading
+                hub along the Kanh and Saraswati rivers.
+              </p>
 
-  <p>
-    The city is renowned for its rich heritage, vibrant culture, and cleanliness,
-    with popular attractions such as Rajwada, Lal Bagh Palace, Kanch Mandir, and
-    the Annapurna and Ganpati temples.
-  </p>
+              <p>
+                The city is renowned for its rich heritage, vibrant culture, and cleanliness,
+                with popular attractions such as Rajwada, Lal Bagh Palace, Kanch Mandir, and
+                the Annapurna and Ganpati temples.
+              </p>
 
-  <p>
-    Indore also serves as a gateway to prominent nearby destinations, including
-    the Jyotirlingas at Ujjain and Omkareshwar, as well as Mandu, Maheshwar, and
-    scenic spots like Patalpani and Choral Dam. June-July offers pleasant weather marking onset of monsoon with greenery all around, suitable for visitors.
-  </p>
-</div>
+              <p>
+                Indore also serves as a gateway to prominent nearby destinations, including
+                the Jyotirlingas at Ujjain and Omkareshwar, as well as Mandu, Maheshwar, and
+                scenic spots like Patalpani and Choral Dam. June-July offers pleasant weather marking onset of monsoon with greenery all around, suitable for visitors.
+              </p>
+            </div>
 
 
           </div>
