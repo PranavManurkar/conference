@@ -1,9 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -19,6 +28,8 @@ const fadeUp: Variants = {
 
 
 export default function About() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <section id="about" className="py-20 bg-[color:var(--nav)]/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
@@ -40,9 +51,10 @@ export default function About() {
 
             <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
               <p>
-                2D materials are far more than a scientific curiosity; they represent a
-                transformative frontier in materials science, poised to redefine
-                performance boundaries across diverse technological domains.
+                2D materials are far more than a scientific curiosity; they
+                represent a transformative frontier in materials science, poised to
+                redefine performance boundaries across diverse technological
+                domains.
               </p>
               <p>
                 From graphene to transition metal dichalcogenides, phosphorene, and
@@ -53,6 +65,68 @@ export default function About() {
                 This conference serves as an interdisciplinary platform connecting
                 academia, industry, and policy makers worldwide.
               </p>
+              
+              <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    className="mt-4 bg-[color:var(--primary)] border-[color:var(--primary)] text-[color:var(--primary-foreground)] hover:bg-[color:var(--primary)] hover:text-white transition-all"
+                  >
+                    Read More
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl max-h-[85vh] overflow-hidden bg-[color:var(--primary-foreground)] border-[color:var(--primary)]/20">
+                  <DialogHeader className="border-b border-[color:var(--primary)]/10 pb-4">
+                    <DialogTitle className="text-3xl font-bold text-[color:var(--nav)]">
+                      About the <span className="text-[color:var(--primary)]">Conference</span>
+                    </DialogTitle>
+                  </DialogHeader>
+                  <DialogDescription asChild>
+                    <div className="overflow-y-auto pr-4 space-y-4 text-base text-[color:var(--nav)] leading-relaxed max-h-[calc(85vh-120px)]">
+                      <p className="text-justify">
+                        2D materials are far more than a scientific curiosity; they
+                        represent a transformative frontier in materials science, poised to
+                        redefine performance boundaries across diverse technological
+                        domains. With their atomically thin, layered structures, these
+                        materials exhibit unprecedented quantum, optical, and
+                        electrochemical behaviors that are unattainable in bulk or other
+                        morphological forms.
+                      </p>
+                      <p className="text-justify">
+                        From the groundbreaking discovery of graphene to the emergence of
+                        advanced materials such as transition metal dichalcogenides,
+                        phosphorene, and MXenes, the 2D materials landscape is reshaping the
+                        future of energy, healthcare, defense, electronics, photonics,
+                        flexible devices, aerospace, and quantum technologies.
+                      </p>
+                      <p className="text-justify">
+                        To capture the recent advancements in the field and dwell upon
+                        its future prospects, we are pleased to inform you that an
+                        International Conference on <span className="font-semibold text-[color:var(--primary)]">"2D MatTech Global: Fundamentals
+                        to Applications"</span> is being organized by <span className="font-semibold">Indian Institute of
+                        Technology Indore (IIT Indore)</span> in association with <span className="font-semibold">UGC-DAE
+                        Consortium for Scientific Research (UGC-DAE CSR), Indore</span> and <span className="font-semibold">Raja Ramanna Centre for Advanced Technology (RRCAT), Indore</span>.
+                      </p>
+                      <p className="text-justify bg-[color:var(--primary)]/5 p-4 rounded-lg border-l-4 border-[color:var(--primary)]">
+                        <span className="font-semibold text-[color:var(--primary)]">Important:</span> Selected high-quality submissions will be invited for 
+                        publication in SCI journals or conference proceedings.
+                      </p>
+                      <p className="text-justify">
+                        This conference aims to serve as a dynamic, interdisciplinary
+                        platform uniting scientists, engineers, industry leaders, and
+                        policymakers around the world. It offers a vital space for sharing
+                        pioneering research, fostering interdisciplinary collaboration, and
+                        catalyzing the next wave of innovation.
+                      </p>
+                      <p className="text-justify">
+                        By bringing together prominent figures and emerging experts in the
+                        field, the event seeks to accelerate the real-world integration of 2D
+                        materials and unlock their vast potential for global impact.
+                      </p>
+                    </div>
+                  </DialogDescription>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
 

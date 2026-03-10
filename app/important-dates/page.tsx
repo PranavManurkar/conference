@@ -15,7 +15,7 @@ export default function ImportantDatesPage() {
       description: "Decisions on submitted abstracts will be communicated to authors",
     },
     {
-      date: "May 25, 2026",
+      date: "May 20, 2026",
       title: "Early Bird Registration Deadline",
       description: "Register early and avail discounted registration fees",
     },

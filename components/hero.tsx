@@ -13,6 +13,7 @@ export default function Hero() {
     { src: "/poster1.png", alt: "Conference banner 1" },
     { src: "/Poster presentation.png", alt: "Conference banner 2" },
     { src: "/ORAL presentation.png", alt: "Conference banner 3" },
+    { src: "/thesis.jpeg", alt: "Conference banner 4" },
   ]
 
   // Auto-rotate carousel with 5 second delay
