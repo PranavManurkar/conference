@@ -56,7 +56,7 @@ export default function Hero() {
     return pathname === href
   }
   return (
-    <section id="home" className="relative overflow-hidden py-16 md:py-24 bg-[color:var(--primary-foreground)] shadow-lg">
+    <section id="home" className="relative overflow-hidden py-16 md:py-24 pb-8 md:pb-8 bg-[color:var(--primary-foreground)] shadow-lg">
       {/* Decorative background elements */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         {/* <div className="absolute top-0 right-0 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl" />
@@ -155,7 +155,7 @@ export default function Hero() {
 
         </div>
       </div>
-      <div className="mt-15 flex items-center justify-center">
+      <div className="mt-15 mb- 3flex items-center justify-center">
           <h2 className="text-4xl font-bold text-[color:var(--nav)] text-center">
             "Join the conference and publish with{" "}
             <Link href="/paper_publish" className="text-[color:var(--primary)] hover:underline underline-offset-4">
