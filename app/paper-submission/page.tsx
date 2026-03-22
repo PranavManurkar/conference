@@ -6,19 +6,19 @@ export default function PaperSubmission() {
         <h1 className="text-4xl font-bold text-[var(--foreground)] mb-8">
           <span className="text-[var(--primary)]">Abstract </span>Submission</h1>
 
-        <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 items-start">
           {/* Guidelines Section */}
           <div className="md:col-span-1 space-y-6">
             <div className="bg-[var(--card)] rounded-lg shadow-lg p-6">
-              <h2 className="text-xl font-bold text-[var(--foreground)] mb-4">Submission Requirements</h2>
+              <h2 className="text-xl font-bold text-[var(--foreground)] mb-4">Submission Requirements for abstract</h2>
               <ul className="space-y-3 text-[var(--muted-foreground)] text-sm">
                 <li className="flex items-start">
                   <span className="text-[var(--primary)] font-bold mr-2">•</span>
-                  <span>Only unpublished work</span>
+                  <span>Unpublished work preferred</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-[var(--primary)] font-bold mr-2">•</span>
-                  <span>100-250 words abstract</span>
+                  <span>Follow the template for other details</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-[var(--primary)] font-bold mr-2">•</span>
@@ -26,7 +26,7 @@ export default function PaperSubmission() {
                 </li>
                 <li className="flex items-start">
                   <span className="text-[var(--primary)] font-bold mr-2">•</span>
-                  <span>High-quality papers invited for SCI journals</span>
+                  <span>High-quality papers invited for WILEY journals</span>
                 </li>
                 {/* <li className="flex items-start">
                   <span className="text-[var(--primary)] font-bold mr-2">•</span>
@@ -34,7 +34,6 @@ export default function PaperSubmission() {
                 </li> */}
               </ul>
             </div>
-
             <div className="bg-[var(--muted)] border-l-4 border-[var(--primary)] rounded-lg p-4">
               <h3 className="font-bold text-[var(--nav)] mb-2">Important Dates</h3>
               <p className="text-sm text-[var(--primary)] mb-1">
@@ -43,6 +42,31 @@ export default function PaperSubmission() {
               <p className="text-sm text-[var(--primary)]">
                 <strong>Notification:</strong> May 15, 2026
               </p>
+            </div>
+            <div className="bg-[var(--card)] rounded-lg shadow-lg p-6">
+              <h2 className="text-xl font-bold text-[var(--foreground)] mb-4">Best thesis award submission</h2>
+              <ul className="space-y-3 text-[var(--muted-foreground)] text-sm">
+                <li className="flex items-start">
+                  <span className="text-[var(--primary)] font-bold mr-2">•</span>
+                  <span>Title of abstract should be same as thesis</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[var(--primary)] font-bold mr-2">•</span>
+                  <span>Template should be same as the abstract</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[var(--primary)] font-bold mr-2">•</span>
+                  <span>Abstract should be submitted to Microsoft CMT</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[var(--primary)] font-bold mr-2">•</span>
+                  <span>Submit best thesis entry to 2dmtg@iiti.ac.in with subject as "Submission for best thesis award"</span>
+                </li>
+                {/* <li className="flex items-start">
+                  <span className="text-[var(--primary)] font-bold mr-2">•</span>
+                  <span>Selected: full paper (6-8 pages)</span>
+                </li> */}
+              </ul>
             </div>
           </div>
           {/* Submission Section */}
@@ -91,6 +115,7 @@ export default function PaperSubmission() {
                   </svg>
                   Poster Template (.pptx)
                 </a>
+                
                 {/* <a
                   href="/Abstract_Template.tex"
                   download
@@ -104,8 +129,34 @@ export default function PaperSubmission() {
                 </a> */}
               </div>
             </div>
+            {/* <div className="mt-6 mb-4">
+              <p className="text-[var(--muted-foreground)] mb-3 text-sm">Oral Presentation Submission Template:</p>
+              <div className="flex gap-4">
+                <a
+                  href="/Poster Templat1.pptx"
+                  download
+                  className="inline-flex items-center gap-2 text-[var(--primary)] hover:text-[var(--nav)] font-medium text-sm transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13 7H7v6h6V7z" />
+                    <path fillRule="evenodd" d="M3 3a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V3zm2 0v14h10V3H5z" clipRule="evenodd" />
+                  </svg>
+                  Oral Template (.pptx)
+                </a>
+                
+                {/* <a
+                  href="/Abstract_Template.tex"
+                  download
+                  className="inline-flex items-center gap-2 text-[var(--primary)] hover:text-[var(--nav)] font-medium text-sm transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13 7H7v6h6V7z" />
+                    <path fillRule="evenodd" d="M3 3a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V3zm2 0v14h10V3H5z" clipRule="evenodd" />
+                  </svg>
+                  LaTeX Template (.tex)
+                </a> */}
             <p className="text-[var(--muted-foreground)] mb-6">
-              Submit your abstract through our Microsoft CMT portal.
+              Submit your abstract through our Microsoft CMT portal:
             </p>
             <a
               href="https://cmt3.research.microsoft.com/2DMTG2026"            // ← put your CMT URL here
@@ -114,7 +165,7 @@ export default function PaperSubmission() {
               className="inline-flex items-center gap-2 bg-[var(--primary)] text-white font-semibold py-3 px-8 rounded-lg cursor-pointer"
               aria-label="CMT submission (opens in a new tab)"
             >
-              Abstract Submission on Microsoft CMT 
+              Abstract Submission on Microsoft CMT
             </a>
 
             {/* <div className="mt-6">

@@ -20,11 +20,17 @@ export default function Navigation() {
       href: "/",
       children: [
         { label: "Sponsorship Opportunities", href: "/sponsorship" },
-        { label: "Our Sponsors", href: "/sponsors" },
+        // { label: "Our Sponsors", href: "/sponsors" },
         
       ],
     },
-    { label: "Abstract Submission", href: "/paper-submission" },
+    { label: "Abstract-Paper-Awards Submission", href: "/",
+      children:[
+        {label: "Abstract Submission", href: "/paper-submission"},
+        {label: "Paper Submission", href: "/paper_publish"},
+        {label: "Awards", href: "/awards"},
+      ],
+     },
     {
       label: "Registration/Accommodation",
       href: "/",
