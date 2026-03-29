@@ -14,18 +14,7 @@ export default function Awards() {
           </svg>
         ),
         details: [
-          { label: "Guidlines", value: "", 
-            sub:[
-              "Title of abstract should be same as thesis",
-              "Template should be same as the abstract",
-              "Abstract should be submitted to Microsoft CMT",
-              "The thesis submission for the award of a Ph.D. degree must be endorsed by the Head of the Institution/Department.",
-              "The Ph.D. degree certificate must be provided if the degree has been awarded.",
-              "Submit best thesis entry to 2dmtg@iiti.ac.in with subject as (Submission for best thesis award)",
-            ],
-          },
           { label: "Number of Awards", value: "3 awards" },
-          { label: "Prize", value: "Certificate + ₹ 25,000 (or equivalent)" },
           {
             label: "Eligibility",
             value: "Degree awarded within the last 3 years:",
@@ -34,6 +23,22 @@ export default function Awards() {
               "Thesis submitted before 30 April 2026",
             ],
           },
+          { label: "Guidlines", value: "", 
+            sub:[
+              "Abstract should be submitted to Microsoft CMT",
+              "Template should be same as the abstract",
+              "Title of abstract should be same as thesis",
+              "Thesis submission for the award of a Ph.D. degree must be endorsed by the Head of Institution/Department.",
+              "Ph.D. degree certificate must be provided if the degree has been awarded.",
+              "Submit the thesis copy in PDF format",
+              <>
+              Submit best thesis entry along with above documents to{" "}
+              <span style={{ color: "var(--primary)" }}>2dmtg@iiti.ac.in</span>{" "}
+              with subject line <span>"Submission for best thesis award"</span>
+            </>,
+            ],
+          },
+          { label: "Prize", value: "Certificate + ₹ 25,000 (or equivalent)" },
         ],
         tagline: "Share your scientific journey with pride and shine on a global research platform.",
       },
