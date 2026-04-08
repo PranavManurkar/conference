@@ -40,6 +40,26 @@ export default function KeyAttraction() {
       googleMapsLink: "https://www.madhya-pradesh-tourism.com/destination/Rajwada-Palace-60",
     },
     {
+      id: "omkareshwar",
+      title: "Omkareshwar",
+      description:
+        "One of the 12 Jyotirlinga shrines on an island in the Narmada river — a major pilgrimage town with temples and ghats.",
+      icon: <Globe className="h-6 w-6" />,
+      accent: "bg-green-50",
+      image: "/omkareshwar.jpg",
+      googleMapsLink: "https://www.mptourism.com/destination-omkareshwar.php",
+    },
+    {
+      id: "maheshwar",
+      title: "Maheshwar (Ahilya Fort)",
+      description:
+        "Riverside town on the Narmada known for the Ahilya Fort, ghats, handloom weaving and Holkar-era heritage.",
+      icon: <Star className="h-6 w-6" />,
+      accent: "bg-green-50",
+      image: "/maheshwar.jpg",
+      googleMapsLink: "https://www.mptourism.com/destination-maheshwar.php",
+    },
+    {
       id: "rajwada",
       title: "Rajwada Palace",
       description:
@@ -72,16 +92,6 @@ export default function KeyAttraction() {
       googleMapsLink: "https://ramadaencoreindore.com/ralamandal-wildlife-sanctuary-a-nature-lovers-haven-in-indore/",
     },
     {
-      id: "omkareshwar",
-      title: "Omkareshwar",
-      description:
-        "One of the 12 Jyotirlinga shrines on an island in the Narmada river — a major pilgrimage town with temples and ghats.",
-      icon: <Globe className="h-6 w-6" />,
-      accent: "bg-green-50",
-      image: "/omkareshwar.jpg",
-      googleMapsLink: "https://www.mptourism.com/destination-omkareshwar.php",
-    },
-    {
       id: "mandu",
       title: "Mandu (Jahaz Mahal & Forts)",
       description:
@@ -90,16 +100,6 @@ export default function KeyAttraction() {
       accent: "bg-blue-50",
       image: "/mandu.jpg",
       googleMapsLink: "https://www.mptourism.com/destination-mandu.php",
-    },
-    {
-      id: "maheshwar",
-      title: "Maheshwar (Ahilya Fort)",
-      description:
-        "Riverside town on the Narmada known for the Ahilya Fort, ghats, handloom weaving and Holkar-era heritage.",
-      icon: <Star className="h-6 w-6" />,
-      accent: "bg-green-50",
-      image: "/maheshwar.jpg",
-      googleMapsLink: "https://www.mptourism.com/destination-maheshwar.php",
     },
     {
       id: "patalpani",
