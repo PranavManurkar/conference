@@ -65,11 +65,11 @@ export default function About() {
                 This conference serves as an interdisciplinary platform connecting
                 academia, industry, and policy makers worldwide.
               </p>
-              
+
               <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogTrigger asChild>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="mt-4 bg-[color:var(--primary)] border-[color:var(--primary)] text-[color:var(--primary-foreground)] hover:bg-[color:var(--primary)] hover:text-white transition-all"
                   >
                     Read More
@@ -103,12 +103,12 @@ export default function About() {
                         To capture the recent advancements in the field and dwell upon
                         its future prospects, we are pleased to inform you that an
                         International Conference on <span className="font-semibold text-[color:var(--primary)]">"2D MatTech Global: Fundamentals
-                        to Applications"</span> is being organized by <span className="font-semibold">Indian Institute of
-                        Technology Indore (IIT Indore)</span> in association with <span className="font-semibold">UGC-DAE
-                        Consortium for Scientific Research (UGC-DAE CSR), Indore</span> and <span className="font-semibold">Raja Ramanna Centre for Advanced Technology (RRCAT), Indore</span>.
+                          to Applications"</span> is being organized by <span className="font-semibold">Indian Institute of
+                            Technology Indore (IIT Indore)</span> in association with <span className="font-semibold">UGC-DAE
+                              Consortium for Scientific Research (UGC-DAE CSR), Indore</span> and <span className="font-semibold">Raja Ramanna Centre for Advanced Technology (RRCAT), Indore</span>.
                       </p>
                       <p className="text-justify bg-[color:var(--primary)]/5 p-4 rounded-lg border-l-4 border-[color:var(--primary)]">
-                        <span className="font-semibold text-[color:var(--primary)]">Important:</span> Selected high-quality submissions will be invited for 
+                        <span className="font-semibold text-[color:var(--primary)]">Important:</span> Selected high-quality submissions will be invited for
                         publication in SCI journals or conference proceedings.
                       </p>
                       <p className="text-justify">
@@ -214,18 +214,21 @@ export default function About() {
         </motion.div>
 
         {/* SECTION 3 — Image top (mobile only), Text left, Image right (desktop) */}
+        {/* SECTION 3 — MEMS text only */}
         <motion.div
-          className="bg-[color:var(--primary-foreground)] rounded-lg shadow flex flex-col md:grid md:grid-cols-5 overflow-hidden"
+          className="bg-[color:var(--primary-foreground)] rounded-lg shadow flex flex-col overflow-hidden"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeUp}
         >
-          <div className="md:col-span-3 p-6 order-last md:order-none">
+          <div className="p-6">
             <div className="mb-4">
               <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
               <h2 className="text-2xl font-semibold text-[color:var(--nav)]">
-                <span className="text-[color:var(--primary)]">Metallurgical Engineering and Materials Science</span>
+                <span className="text-[color:var(--primary)]">
+                  Metallurgical Engineering and Materials Science
+                </span>
               </h2>
             </div>
 
@@ -235,7 +238,7 @@ export default function About() {
               </p>
 
               <p>
-                With a strong foundation in both fundamental science and applied research, MEMS actively addresses contemporary challenges in energy, sustainability, advanced manufacturing, and next-generation materials technology. MEMS offers undergraduate, postgraduate, and doctoral programs, supported by state-of-the-art laboratories in physical metallurgy, 2D materials, nanomaterials, functional and electronic materials, biomaterials, and computational materials science, creating a dynamic ecosystem for research excellence and technological impact
+                With a strong foundation in both fundamental science and applied research, MEMS actively addresses contemporary challenges in energy, sustainability, advanced manufacturing, and next-generation materials technology. MEMS offers undergraduate, postgraduate, and doctoral programs, supported by state-of-the-art laboratories in physical metallurgy, 2D materials, nanomaterials, functional and electronic materials, biomaterials, and computational materials science, creating a dynamic ecosystem for research excellence and technological impact.
               </p>
 
               <p>
@@ -250,17 +253,54 @@ export default function About() {
                 </a>.
               </p>
             </div>
-
           </div>
+        </motion.div>
+        {/* SECTION 3 — MEMS text only */}
+        <motion.div
+          className="bg-[color:var(--primary-foreground)] rounded-lg shadow flex flex-col overflow-hidden"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+        >
+          <div className="p-6">
+            <div className="mb-4">
+              <div className="h-1 w-10 bg-[color:var(--primary)] rounded mb-2" />
+              <h2 className="text-2xl font-semibold text-[color:var(--nav)]">
+                <span className="text-[color:var(--primary)]">
+                Center for Electric Vehicle and Intelligent Transport Systems (CEVITS)
+                </span>
+              </h2>
+            </div>
 
-          <div className="md:col-span-2 relative min-h-[260px] order-first md:order-none">
-            <Image
-              src="/convocation.jpg"
-              alt="MEMS IIT Indore"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 40vw"
-            />
+            <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed">
+              <p>
+              Center for Electric Vehicle and Intelligent Transport Systems
+(CEVITS) at IIT Indore is an interdisciplinary hub for research and
+innovation in electric mobility and intelligent transportation. It
+develops sustainable, next-generation transport solutions by
+integrating diverse expertise.
+              </p>
+
+              <p>
+              CEVITS provides a comprehensive
+platform for electric vehicle technologies, connecting academia,
+industry, and research to train skilled professionals and innovators
+in e-mobility and to shape the future of sustainable transportation.
+              </p>
+
+              <p>
+                For more information, visit the{" "}
+                <a
+                  href="https://cevits.iiti.ac.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[color:var(--primary)] underline hover:text-[color:var(--nav)]"
+                >
+                  CEVITS website
+                </a>.
+              </p>
+            </div>
           </div>
         </motion.div>
 
@@ -318,7 +358,7 @@ export default function About() {
 
             <div className="space-y-3 text-base text-[color:var(--nav)]/80 leading-relaxed text-left">
               <p>
-              Raja Ramanna Centre for Advanced Technology (RRCAT), a premier unit of the Department of Atomic Energy, Govt. of India, is engaged in advanced non-nuclear R&D in lasers, particle accelerators, and related frontier technologies. Centre houses two national synchrotron radiation facilities:  Indus-1 and Indus-2. Indus-1 is a 450 MeV, 100 mA electron storage ring that delivers radiation from mid-infrared to soft X-ray region, with a critical wavelength of ~61 Å. Indus-2 is a 2.5 GeV 3rd generation synchrotron radiation source, indigenously designed and developed at RRCAT, producing high-brilliance photon beams from infrared to hard X-rays. With low-emittance operation, state-of-the-art accelerator systems, precision beam diagnostics, ultra-high vacuum infrastructure, and sophisticated beamline instrumentation, Indus-2 enables high-resolution structural, spectroscopic, and imaging studies across materials science, condensed matter physics, chemistry, biology, nanoscience, environmental science, and industrial R&D, serving as a key national platform for multidisciplinary research and strategic technological advancement.
+                Raja Ramanna Centre for Advanced Technology (RRCAT), a premier unit of the Department of Atomic Energy, Govt. of India, is engaged in advanced non-nuclear R&D in lasers, particle accelerators, and related frontier technologies. Centre houses two national synchrotron radiation facilities:  Indus-1 and Indus-2. Indus-1 is a 450 MeV, 100 mA electron storage ring that delivers radiation from mid-infrared to soft X-ray region, with a critical wavelength of ~61 Å. Indus-2 is a 2.5 GeV 3rd generation synchrotron radiation source, indigenously designed and developed at RRCAT, producing high-brilliance photon beams from infrared to hard X-rays. With low-emittance operation, state-of-the-art accelerator systems, precision beam diagnostics, ultra-high vacuum infrastructure, and sophisticated beamline instrumentation, Indus-2 enables high-resolution structural, spectroscopic, and imaging studies across materials science, condensed matter physics, chemistry, biology, nanoscience, environmental science, and industrial R&D, serving as a key national platform for multidisciplinary research and strategic technological advancement.
               </p>
 
               <p>

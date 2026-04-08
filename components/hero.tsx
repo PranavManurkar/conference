@@ -33,7 +33,7 @@ export default function Hero() {
   }
   const handleDownloadBrochure = () => {
     const link = document.createElement("a")
-    link.href = "/Brochure for 2DMatTech - 2025-03-05.pdf"
+    link.href = "/Brochure for 2DMatTech - 2026-03-23.pdf"
     link.download = "Brochure-2DMatTech-2026.pdf"
     document.body.appendChild(link)
     link.click()
