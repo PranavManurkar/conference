@@ -1,678 +1,3 @@
-
-
-
-// "use client"
-
-// import React, { useEffect, useState } from "react"
-// import { useRouter } from "next/navigation"
-// import { logout, type User, getAccessToken, refreshAccessToken } from "@/lib/auth"
-// import { Button } from "@/components/ui/button"
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-// import { Input } from "@/components/ui/input"
-// import { Label } from "@/components/ui/label"
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-// import { Badge } from "@/components/ui/badge"
-// import { LogOut, CheckCircle, Clock, XCircle, AlertCircle, PartyPopper, Loader2, Trash2 } from "lucide-react"
-
-// const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "https://tdmtg.iiti.ac.in"
-
-// type Registration = {
-//   id: string
-//   full_name: string
-//   email: string
-//   phone: string
-//   institution_organization: string
-//   designation: string
-//   country: string
-//   delegate_type: string
-//   registration_period: string
-//   participant_region: string
-//   payment_amount: number
-//   transaction_id: string | null
-//   payment_date: string | null
-//   // removed abstract/presentation fields per request
-//   status: string
-//   admin_notes: string | null
-//   created_at: string
-// }
-
-// async function authFetch(input: RequestInfo, init?: RequestInit) {
-//   const token = getAccessToken()
-//   const headers = new Headers(init?.headers || {})
-//   if (!headers.get("Content-Type")) headers.set("Content-Type", "application/json")
-//   if (token) headers.set("Authorization", `Bearer ${token}`)
-
-//   const res = await fetch(input, { ...init, headers })
-
-//   if (res.status === 401) {
-//     const newAccess = await refreshAccessToken()
-//     if (newAccess) {
-//       const retryHeaders = new Headers(init?.headers || {})
-//       if (!retryHeaders.get("Content-Type")) retryHeaders.set("Content-Type", "application/json")
-//       retryHeaders.set("Authorization", `Bearer ${newAccess}`)
-//       return fetch(input, { ...init, headers: retryHeaders })
-//     }
-//   }
-
-//   return res
-// }
-
-// export default function DashboardClient({ user }: { user: User }) {
-//   const router = useRouter()
-//   const [isLoading, setIsLoading] = useState(false)
-//   const [isFetchingStatus, setIsFetchingStatus] = useState(true)
-//   const [error, setError] = useState<string | null>(null)
-//   const [success, setSuccess] = useState<string | null>(null)
-//   const [existingRegistration, setExistingRegistration] = useState<Registration | null>(null)
-
-//   const [formData, setFormData] = useState({
-//     full_name: "",
-//     email: user.email || "",
-//     phone: "",
-//     institution_organization: "",
-//     designation: "",
-//     country: "",
-//     delegate_type: "",
-//     registration_period: "",
-//     participant_region: "",
-//     transaction_id: "",
-//     payment_date: "",
-//   })
-//   useEffect(() => {
-//     const fetchRegistrationStatus = async () => {
-//       // 1. DEBUG: Log the user object to see if email exists
-//       console.log("DEBUG: User Object received:", user);
-
-//       // If user is missing or email is missing, we log it but DON'T return yet 
-//       // just to test if the fetch works.
-//       const userEmail = user?.email || ""; 
-
-//       if (!userEmail) {
-//          console.error("CRITICAL: User email is missing. Check your auth logic.");
-//          // We will try to fetch anyway using the 'list' endpoint which relies on Token, not email param
-//       }
-
-//       try {
-//         console.log("DEBUG: Attempting to fetch list from:", `${DJANGO_API_URL}/api/registrations/`);
-
-//         // Try listing registrations (This relies on the Token in headers, not the email variable)
-//         const listRes = await authFetch(`${DJANGO_API_URL}/api/registrations/`, { method: "GET" });
-
-//         console.log("DEBUG: List Fetch Status:", listRes.status);
-
-//         if (listRes.ok) {
-//           const listData = await listRes.json();
-//           console.log("DEBUG: List Data received:", listData);
-
-//           const reg = Array.isArray(listData) ? listData[0] ?? null : listData;
-//           if (reg) {
-//             setExistingRegistration(reg);
-//             // ... (your setFormData logic here) ...
-//             setIsFetchingStatus(false);
-//             return;
-//           }
-//         }
-
-//         // Fallback: check-by-email (Only run this if we actually have an email)
-//         if (userEmail) {
-//             console.log("DEBUG: Attempting check-by-email for:", userEmail);
-//             const response = await authFetch(`${DJANGO_API_URL}/api/registrations/check-by-email/?email=${encodeURIComponent(userEmail)}`);
-
-//             if (response.ok) {
-//               const data = await response.json();
-//               setExistingRegistration(data);
-//               // ... (your setFormData logic here) ...
-//             } else if (response.status === 404) {
-//               console.log("DEBUG: No registration found (404)");
-//               setExistingRegistration(null);
-//             }
-//         } else {
-//              console.warn("Skipping check-by-email because email is empty");
-//         }
-
-//       } catch (err) {
-//         console.error("DEBUG: Fetch FAILED with error:", err);
-//         setError("Unable to connect to server.");
-//       } finally {
-//         setIsFetchingStatus(false);
-//       }
-//     }
-
-//     fetchRegistrationStatus();
-//   }, [user]); // Change dependency to just [user] to be safe
-
-//   const calculatePaymentAmount = () => {
-//     const fees: Record<string, Record<string, Record<string, number>>> = {
-//       "UG/PG Student": {
-//         "Early Bird": { Indian: 4000, SAARC: 75, "Non-SAARC": 125 },
-//         Final: { Indian: 4500, SAARC: 100, "Non-SAARC": 150 },
-//       },
-//       "Research Scholar": {
-//         "Early Bird": { Indian: 6000, SAARC: 200, "Non-SAARC": 250 },
-//         Final: { Indian: 7000, SAARC: 250, "Non-SAARC": 300 },
-//       },
-//       Faculty: {
-//         "Early Bird": { Indian: 10000, SAARC: 300, "Non-SAARC": 400 },
-//         Final: { Indian: 12000, SAARC: 400, "Non-SAARC": 500 },
-//       },
-//       Industry: {
-//         "Early Bird": { Indian: 15000, SAARC: 500, "Non-SAARC": 700 },
-//         Final: { Indian: 17000, SAARC: 650, "Non-SAARC": 850 },
-//       },
-//     }
-
-//     const { delegate_type, registration_period, participant_region } = formData
-
-//     if (delegate_type && registration_period && participant_region) {
-//       return fees[delegate_type]?.[registration_period]?.[participant_region] || 0
-//     }
-//     return 0
-//   }
-
-//   const handleLogout = () => {
-//     logout()
-//     router.push("/")
-//   }
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault()
-//     setIsLoading(true)
-//     setError(null)
-//     setSuccess(null)
-
-//     // client-side validation
-//     if (!formData.full_name || !formData.email || !formData.transaction_id || !formData.payment_date) {
-//       setError("Please fill in required fields: Full name, Email, Transaction ID, Payment Date.")
-//       setIsLoading(false)
-//       return
-//     }
-
-//     const paymentAmount = calculatePaymentAmount()
-
-//     try {
-//       const registrationData = {
-//         ...formData,
-//         payment_amount: paymentAmount,
-//       }
-
-//       const isUpdate = !!existingRegistration
-//       const url = isUpdate ? `${DJANGO_API_URL}/api/registrations/${existingRegistration!.id}/` : `${DJANGO_API_URL}/api/registrations/`
-//       const method = isUpdate ? "PATCH" : "POST"
-
-//       const response = await authFetch(url, {
-//         method,
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(registrationData),
-//       })
-
-//       const data = await response.json().catch(() => null)
-
-//       if (!response.ok) {
-//         if (data) {
-//           const fieldError = (data.transaction_id?.[0] as string) || (data.email?.[0] as string) || (data.detail as string) || Object.values(data)[0] as any || "Failed to submit registration"
-//           throw new Error(typeof fieldError === "string" ? fieldError : JSON.stringify(fieldError))
-//         } else {
-//           throw new Error("Failed to submit registration")
-//         }
-//       }
-
-//       setExistingRegistration(data)
-//       setSuccess(isUpdate ? "Registration updated successfully!" : "Registration submitted successfully! Your application is now under review.")
-//     } catch (err: unknown) {
-//       setError(err instanceof Error ? err.message : "An error occurred")
-//     } finally {
-//       setIsLoading(false)
-//     }
-//   }
-
-//   const deleteRegistration = async (id: string) => {
-//     if (!confirm("Are you sure you want to delete your registration? You can resubmit after deletion.")) return
-//     setIsLoading(true)
-//     setError(null)
-//     setSuccess(null)
-//     try {
-//       const res = await authFetch(`${DJANGO_API_URL}/api/registrations/${id}/`, { method: "DELETE" })
-//       if (res.status === 204 || res.ok) {
-//         setExistingRegistration(null)
-//         // reset form (keep email)
-//         setFormData((prev) => ({
-//           ...prev,
-//           full_name: "",
-//           phone: "",
-//           institution_organization: "",
-//           designation: "",
-//           country: "",
-//           delegate_type: "",
-//           registration_period: "",
-//           participant_region: "",
-//           transaction_id: "",
-//           payment_date: "",
-//         }))
-//         setSuccess("Registration deleted. You can now refill and resubmit.")
-//       } else {
-//         const data = await res.json().catch(() => ({}))
-//         throw new Error(data.detail || "Failed to delete registration")
-//       }
-//     } catch (err: unknown) {
-//       setError(err instanceof Error ? err.message : "An error occurred")
-//     } finally {
-//       setIsLoading(false)
-//     }
-//   }
-
-//   const getStatusBadge = (status: string) => {
-//     switch (status) {
-//       case "Accepted":
-//         return (
-//           <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-//             <CheckCircle className="mr-1 h-3 w-3" />
-//             Accepted
-//           </Badge>
-//         )
-//       case "Rejected":
-//         return (
-//           <Badge className="bg-red-100 text-red-800 hover:bg-red-100">
-//             <XCircle className="mr-1 h-3 w-3" />
-//             Rejected
-//           </Badge>
-//         )
-//       default:
-//         return (
-//           <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
-//             <Clock className="mr-1 h-3 w-3" />
-//             Under Process
-//           </Badge>
-//         )
-//     }
-//   }
-
-//   const canEdit = !existingRegistration || existingRegistration.status === "Rejected"
-
-//   const renderStatusCard = () => {
-//     if (!existingRegistration) return null
-
-//     return (
-//       <Card className="mb-8">
-//         <CardHeader>
-//           <div className="flex items-center justify-between">
-//             <CardTitle>Registration Status</CardTitle>
-//             {getStatusBadge(existingRegistration.status)}
-//           </div>
-//           <CardDescription>
-//             Submitted on {new Date(existingRegistration.created_at).toLocaleDateString()}
-//           </CardDescription>
-//         </CardHeader>
-//         <CardContent className="space-y-4">
-//           {/* Accepted view */}
-//           {existingRegistration.status === "Accepted" && (
-//             <div className="bg-white p-6 rounded-lg shadow-sm border">
-//               <div className="flex items-start gap-4">
-//                 <div className="flex-shrink-0">
-//                   <CheckCircle className="h-8 w-8 text-green-600" />
-//                 </div>
-//                 <div>
-//                   <h3 className="text-lg font-semibold text-green-900">You're registered!</h3>
-//                   <p className="text-sm text-gray-700 mt-1">Thank you — your payment has been verified and your registration is confirmed.</p>
-
-//                   <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-//                     <div className="bg-gray-50 p-3 rounded">
-//                       <p className="text-xs text-gray-500">Name</p>
-//                       <p className="font-medium">{existingRegistration.full_name}</p>
-//                     </div>
-//                     <div className="bg-gray-50 p-3 rounded">
-//                       <p className="text-xs text-gray-500">Email</p>
-//                       <p className="font-medium">{existingRegistration.email}</p>
-//                     </div>
-//                     <div className="bg-gray-50 p-3 rounded">
-//                       <p className="text-xs text-gray-500">Delegate Type</p>
-//                       <p className="font-medium">{existingRegistration.delegate_type}</p>
-//                     </div>
-//                     <div className="bg-gray-50 p-3 rounded">
-//                       <p className="text-xs text-gray-500">Registration Period</p>
-//                       <p className="font-medium">{existingRegistration.registration_period}</p>
-//                     </div>
-//                     <div className="bg-gray-50 p-3 rounded">
-//                       <p className="text-xs text-gray-500">Payment Amount</p>
-//                       <p className="font-medium">{existingRegistration.participant_region === "Indian" ? `₹${existingRegistration.payment_amount}` : `$${existingRegistration.payment_amount}`}</p>
-//                     </div>
-//                     <div className="bg-gray-50 p-3 rounded">
-//                       <p className="text-xs text-gray-500">Transaction ID</p>
-//                       <p className="font-medium">{existingRegistration.transaction_id}</p>
-//                     </div>
-//                   </div>
-
-//                   {existingRegistration.admin_notes && (
-//                     <div className="mt-4 bg-blue-50 p-3 rounded">
-//                       <p className="text-sm font-semibold text-blue-900">Admin Notes</p>
-//                       <p className="text-sm text-blue-800">{existingRegistration.admin_notes}</p>
-//                     </div>
-//                   )}
-//                 </div>
-//               </div>
-//             </div>
-//           )}
-
-//           {/* Under Process view */}
-//           {existingRegistration.status === "Under Process" && (
-//             <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
-//               <div className="flex items-start gap-3">
-//                 <Clock className="h-5 w-5 text-yellow-600 mt-0.5" />
-//                 <div>
-//                   <p className="font-semibold text-yellow-900 mb-1">Your registration is being reviewed</p>
-//                   <p className="text-sm text-yellow-800">Our team is verifying your payment details. This usually takes 2-3 business days.</p>
-//                   <div className="mt-3 bg-gray-50 p-3 rounded">
-//                     <p className="text-xs text-gray-500">Submitted details</p>
-//                     <p className="text-sm font-medium">{existingRegistration.full_name} • {existingRegistration.email}</p>
-//                     <p className="text-sm">Transaction: {existingRegistration.transaction_id} • Paid: {existingRegistration.payment_date}</p>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           )}
-
-//           {/* Rejected view with delete/resubmit */}
-//           {existingRegistration.status === "Rejected" && (
-//             <div className="bg-red-50 border border-red-200 p-4 rounded-lg">
-//               <div className="flex items-start gap-3">
-//                 <AlertCircle className="h-5 w-5 text-red-600 mt-0.5" />
-//                 <div className="flex-1">
-//                   <p className="font-semibold text-red-900 mb-1">Registration Not Approved</p>
-//                   <p className="text-sm text-red-800 mb-2">You can delete this submission, edit your details and resubmit.</p>
-//                   {existingRegistration.admin_notes && (
-//                     <div className="mt-3 bg-white p-3 rounded border border-red-200">
-//                       <p className="text-xs font-semibold text-red-900 mb-1">Reason for Rejection:</p>
-//                       <p className="text-sm text-red-800">{existingRegistration.admin_notes}</p>
-//                     </div>
-//                   )}
-
-//                   <div className="mt-4 flex gap-2">
-//                     <Button variant="outline" onClick={() => deleteRegistration(existingRegistration.id)} disabled={isLoading}>
-//                       <Trash2 className="mr-2 h-4 w-4" /> Delete & Refill
-//                     </Button>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           )}
-//         </CardContent>
-//       </Card>
-//     )
-//   }
-
-//   if (isFetchingStatus) {
-//     return (
-//       <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center">
-//         <div className="text-center">
-//           <Loader2 className="h-8 w-8 animate-spin mx-auto text-blue-600 mb-4" />
-//           <p className="text-gray-600">Loading your registration status...</p>
-//         </div>
-//       </div>
-//     )
-//   }
-
-//   return (
-//     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-//       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-//         <div className="flex items-center justify-between mb-8">
-//           <div>
-//             <h1 className="text-3xl font-bold text-gray-900">Participant Dashboard</h1>
-//             <p className="text-gray-600 mt-1">2D MatTech Global 2026</p>
-//           </div>
-//           <Button onClick={handleLogout} variant="outline">
-//             <LogOut className="mr-2 h-4 w-4" />
-//             Log Out
-//           </Button>
-//         </div>
-
-//         {renderStatusCard()}
-
-//         <Card>
-//           <CardHeader>
-//             <CardTitle>Registration Form</CardTitle>
-//             <CardDescription>
-//               {canEdit
-//                 ? "Fill in your details to complete your registration. Make sure to include your Transaction ID for payment verification."
-//                 : "Your registration has been submitted and cannot be edited while it is under review or after acceptance."
-//               }
-//             </CardDescription>
-//           </CardHeader>
-//           <CardContent>
-//             <form onSubmit={handleSubmit} className="space-y-6">
-//               <div className="space-y-4">
-//                 <h3 className="text-lg font-semibold">Personal Information</h3>
-
-//                 <div className="grid gap-4 md:grid-cols-2">
-//                   <div className="space-y-2">
-//                     <Label htmlFor="full_name">Full Name *</Label>
-//                     <Input
-//                       id="full_name"
-//                       required
-//                       disabled={!canEdit}
-//                       value={formData.full_name}
-//                       onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-//                     />
-//                   </div>
-
-//                   <div className="space-y-2">
-//                     <Label htmlFor="email">Email *</Label>
-//                     <Input
-//                       id="email"
-//                       type="email"
-//                       required
-//                       disabled={!canEdit}
-//                       value={formData.email}
-//                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-//                     />
-//                   </div>
-
-//                   <div className="space-y-2">
-//                     <Label htmlFor="phone">Phone Number *</Label>
-//                     <Input
-//                       id="phone"
-//                       type="tel"
-//                       required
-//                       disabled={!canEdit}
-//                       value={formData.phone}
-//                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-//                     />
-//                   </div>
-
-//                   <div className="space-y-2">
-//                     <Label htmlFor="country">Country *</Label>
-//                     <Input
-//                       id="country"
-//                       required
-//                       disabled={!canEdit}
-//                       value={formData.country}
-//                       onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-//                     />
-//                   </div>
-
-//                   <div className="space-y-2">
-//                     <Label htmlFor="institution_organization">Institution/Organization *</Label>
-//                     <Input
-//                       id="institution_organization"
-//                       required
-//                       disabled={!canEdit}
-//                       value={formData.institution_organization}
-//                       onChange={(e) => setFormData({ ...formData, institution_organization: e.target.value })}
-//                     />
-//                   </div>
-
-//                   <div className="space-y-2">
-//                     <Label htmlFor="designation">Designation</Label>
-//                     <Input
-//                       id="designation"
-//                       disabled={!canEdit}
-//                       value={formData.designation}
-//                       onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-//                     />
-//                   </div>
-//                 </div>
-//               </div>
-
-//               <div className="space-y-4">
-//                 <h3 className="text-lg font-semibold">Delegate Information</h3>
-
-//                 <div className="grid gap-4 md:grid-cols-3">
-//                   <div className="space-y-2">
-//                     <Label htmlFor="delegate_type">Delegate Type *</Label>
-//                     <Select
-//                       value={formData.delegate_type}
-//                       onValueChange={(value) => setFormData({ ...formData, delegate_type: value })}
-//                       disabled={!canEdit}
-//                     >
-//                       <SelectTrigger>
-//                         <SelectValue placeholder="Select type" />
-//                       </SelectTrigger>
-//                       <SelectContent>
-//                         <SelectItem value="UG/PG Student">UG/PG Student</SelectItem>
-//                         <SelectItem value="Research Scholar">Research Scholar</SelectItem>
-//                         <SelectItem value="Faculty">Faculty</SelectItem>
-//                         <SelectItem value="Industry">Industry</SelectItem>
-//                       </SelectContent>
-//                     </Select>
-//                   </div>
-
-//                   <div className="space-y-2">
-//                     <Label htmlFor="registration_period">Registration Period *</Label>
-//                     <Select
-//                       value={formData.registration_period}
-//                       onValueChange={(value) => setFormData({ ...formData, registration_period: value })}
-//                       disabled={!canEdit}
-//                     >
-//                       <SelectTrigger>
-//                         <SelectValue placeholder="Select period" />
-//                       </SelectTrigger>
-//                       <SelectContent>
-//                         <SelectItem value="Early Bird">Early Bird (until May 5, 2026)</SelectItem>
-//                         <SelectItem value="Final">Final (after May 5, 2026)</SelectItem>
-//                       </SelectContent>
-//                     </Select>
-//                   </div>
-
-//                   <div className="space-y-2">
-//                     <Label htmlFor="participant_region">Participant Region *</Label>
-//                     <Select
-//                       value={formData.participant_region}
-//                       onValueChange={(value) => setFormData({ ...formData, participant_region: value })}
-//                       disabled={!canEdit}
-//                     >
-//                       <SelectTrigger>
-//                         <SelectValue placeholder="Select region" />
-//                       </SelectTrigger>
-//                       <SelectContent>
-//                         <SelectItem value="Indian">Indian</SelectItem>
-//                         <SelectItem value="SAARC">SAARC</SelectItem>
-//                         <SelectItem value="Non-SAARC">Non-SAARC</SelectItem>
-//                       </SelectContent>
-//                     </Select>
-//                   </div>
-//                 </div>
-
-//                 {formData.delegate_type && formData.registration_period && formData.participant_region && (
-//                   <div className="bg-blue-50 p-4 rounded-lg">
-//                     <p className="text-sm font-semibold text-blue-900">Registration Fee:</p>
-//                     <p className="text-2xl font-bold text-blue-700 mt-1">
-//                       {formData.participant_region === "Indian" ? "₹" : "$"}
-//                       {calculatePaymentAmount()}
-//                     </p>
-//                     <p className="text-xs text-blue-600 mt-1">
-//                       Please pay this amount using the bank details below before submitting
-//                     </p>
-//                   </div>
-//                 )}
-//               </div>
-
-//               <div className="space-y-4">
-//                 <h3 className="text-lg font-semibold">Payment Information</h3>
-
-//                 <div className="bg-gray-50 p-4 rounded-lg mb-4">
-//                   <p className="text-sm font-semibold text-gray-900 mb-2">Bank Details:</p>
-//                   <div className="text-sm text-gray-700 space-y-1">
-//                     <p>
-//                       <span className="font-medium">Account Name:</span> Indian Institute of Technology Indore
-//                     </p>
-//                     <p>
-//                       <span className="font-medium">Account Number:</span> 1476101027440
-//                     </p>
-//                     <p>
-//                       <span className="font-medium">IFSC Code:</span> CNRB0006223
-//                     </p>
-//                     <p>
-//                       <span className="font-medium">Bank:</span> Canara Bank, Simrol IIT Branch
-//                     </p>
-//                     <p>
-//                       <span className="font-medium">SWIFT Code:</span> CNRBINBBMSG (for international transfers)
-//                     </p>
-//                   </div>
-//                 </div>
-
-//                 <div className="grid gap-4 md:grid-cols-2">
-//                   <div className="space-y-2">
-//                     <Label htmlFor="transaction_id">Transaction ID *</Label>
-//                     <Input
-//                       id="transaction_id"
-//                       required
-//                       disabled={!canEdit}
-//                       value={formData.transaction_id || ""}
-//                       onChange={(e) => setFormData({ ...formData, transaction_id: e.target.value })}
-//                       placeholder="Enter your payment transaction ID"
-//                     />
-//                     <p className="text-xs text-gray-500">Enter the transaction/reference ID from your bank payment</p>
-//                   </div>
-
-//                   <div className="space-y-2">
-//                     <Label htmlFor="payment_date">Payment Date *</Label>
-//                     <Input
-//                       id="payment_date"
-//                       type="date"
-//                       required
-//                       disabled={!canEdit}
-//                       value={formData.payment_date || ""}
-//                       onChange={(e) => setFormData({ ...formData, payment_date: e.target.value })}
-//                     />
-//                   </div>
-//                 </div>
-//               </div>
-
-//               {error && (
-//                 <div className="bg-red-50 text-red-700 p-4 rounded-lg flex items-center gap-2">
-//                   <AlertCircle className="h-4 w-4" />
-//                   {error}
-//                 </div>
-//               )}
-
-//               {success && (
-//                 <div className="bg-green-50 text-green-700 p-4 rounded-lg flex items-center gap-2">
-//                   <CheckCircle className="h-4 w-4" />
-//                   {success}
-//                 </div>
-//               )}
-
-//               {canEdit && (
-//                 <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-//                   {isLoading ? (
-//                     <>
-//                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-//                       Submitting...
-//                     </>
-//                   ) : existingRegistration ? (
-//                     "Update Registration"
-//                   ) : (
-//                     "Submit Registration"
-//                   )}
-//                 </Button>
-//               )}
-//             </form>
-//           </CardContent>
-//         </Card>
-//       </div>
-//     </div>
-//   )
-// }
-
-
 "use client"
 
 import type React from "react"
@@ -686,7 +11,18 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { LogOut, CheckCircle, Clock, XCircle, AlertCircle, PartyPopper, Loader2, Trash2, Info, ExternalLink } from "lucide-react"
+import {
+  LogOut,
+  CheckCircle,
+  Clock,
+  XCircle,
+  AlertCircle,
+  PartyPopper,
+  Loader2,
+  Trash2,
+  Info,
+  ExternalLink,
+} from "lucide-react"
 
 const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "https://tdmtg.iiti.ac.in"
 
@@ -711,6 +47,27 @@ type Registration = {
   abstract_id: string | null
   oral_presentation: boolean
   poster_presentation: boolean
+  accompanying_persons: number
+}
+
+// null means "user hasn't chosen yet"
+type FormData = {
+  full_name: string
+  email: string
+  phone: string
+  institution_organization: string
+  designation: string
+  country: string
+  delegate_type: string
+  registration_period: string
+  participant_region: string
+  transaction_id: string
+  payment_date: string
+  abstract_id: string
+  accompanying_persons: number
+  oral_presentation: boolean
+  poster_presentation: boolean
+  is_presenter: boolean | null // null = not yet chosen
 }
 
 async function authFetch(input: RequestInfo, init?: RequestInit) {
@@ -744,7 +101,7 @@ export default function DashboardClient({ user }: { user: User }) {
 
   const userEmail = user?.email || ""
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     full_name: "",
     email: userEmail,
     phone: "",
@@ -760,30 +117,22 @@ export default function DashboardClient({ user }: { user: User }) {
     accompanying_persons: 0,
     oral_presentation: false,
     poster_presentation: false,
-    is_presenter: false,
+    is_presenter: null, // ← null means "not yet selected"
   })
 
   useEffect(() => {
     const fetchRegistrationStatus = async () => {
-      console.log("DEBUG: User Object received:", user)
-
       if (!userEmail) {
-        console.error("CRITICAL: User email is missing. Check your auth logic.")
+        console.error("CRITICAL: User email is missing.")
         setIsFetchingStatus(false)
         return
       }
 
       try {
-        console.log("DEBUG: Attempting to fetch list from:", `${DJANGO_API_URL}/api/registrations/`)
-
         const listRes = await authFetch(`${DJANGO_API_URL}/api/registrations/`, { method: "GET" })
-
-        console.log("DEBUG: List Fetch Status:", listRes.status)
 
         if (listRes.ok) {
           const listData = await listRes.json()
-          console.log("DEBUG: List Data received:", listData)
-
           const reg = Array.isArray(listData) ? (listData[0] ?? null) : listData
           if (reg) {
             setExistingRegistration(reg)
@@ -799,7 +148,8 @@ export default function DashboardClient({ user }: { user: User }) {
               participant_region: reg.participant_region || "",
               transaction_id: reg.transaction_id || "",
               payment_date: reg.payment_date || "",
-              is_presenter: !!reg.is_presenter,
+              // is_presenter from DB is always a real boolean
+              is_presenter: typeof reg.is_presenter === "boolean" ? reg.is_presenter : null,
               abstract_id: reg.abstract_id || "",
               accompanying_persons: reg.accompanying_persons || 0,
               oral_presentation: !!reg.oral_presentation,
@@ -811,11 +161,9 @@ export default function DashboardClient({ user }: { user: User }) {
         }
 
         if (userEmail) {
-          console.log("DEBUG: Attempting check-by-email for:", userEmail)
           const response = await authFetch(
             `${DJANGO_API_URL}/api/registrations/check-by-email/?email=${encodeURIComponent(userEmail)}`,
           )
-
           if (response.ok) {
             const data = await response.json()
             setExistingRegistration(data)
@@ -831,21 +179,18 @@ export default function DashboardClient({ user }: { user: User }) {
               participant_region: data.participant_region || "",
               transaction_id: data.transaction_id || "",
               payment_date: data.payment_date || "",
-              is_presenter: !!data.is_presenter,
+              is_presenter: typeof data.is_presenter === "boolean" ? data.is_presenter : null,
               abstract_id: data.abstract_id || "",
               accompanying_persons: data.accompanying_persons || 0,
               oral_presentation: !!data.oral_presentation,
               poster_presentation: !!data.poster_presentation,
             })
           } else if (response.status === 404) {
-            console.log("DEBUG: No registration found (404)")
             setExistingRegistration(null)
           }
-        } else {
-          console.warn("Skipping check-by-email because email is empty")
         }
       } catch (err) {
-        console.error("DEBUG: Fetch FAILED with error:", err)
+        console.error("Fetch FAILED:", err)
         setError("Unable to connect to server.")
       } finally {
         setIsFetchingStatus(false)
@@ -856,9 +201,10 @@ export default function DashboardClient({ user }: { user: User }) {
   }, [user, userEmail])
 
   const calculatePaymentAmount = () => {
-    type Region = "Indian" | "SAARC" | "Non-SAARC";
-    type Period = "Early Bird" | "Final";
-    type Delegate = "UG/PG Student" | "Research Scholar" | "Faculty" | "Industry";
+    type Region = "Indian" | "SAARC" | "Non-SAARC"
+    type Period = "Early Bird" | "Final"
+    type Delegate = "UG/PG Student" | "Research Scholar" | "Faculty" | "Industry"
+
     const fees: Record<Delegate, Record<Period, Record<Region, number>>> = {
       "UG/PG Student": {
         "Early Bird": { Indian: 4000, SAARC: 75, "Non-SAARC": 125 },
@@ -868,15 +214,16 @@ export default function DashboardClient({ user }: { user: User }) {
         "Early Bird": { Indian: 6000, SAARC: 200, "Non-SAARC": 250 },
         Final: { Indian: 7000, SAARC: 250, "Non-SAARC": 300 },
       },
-      "Faculty": {
+      Faculty: {
         "Early Bird": { Indian: 10000, SAARC: 300, "Non-SAARC": 400 },
         Final: { Indian: 12000, SAARC: 400, "Non-SAARC": 500 },
       },
-      "Industry": {
+      Industry: {
         "Early Bird": { Indian: 15000, SAARC: 500, "Non-SAARC": 700 },
         Final: { Indian: 17000, SAARC: 650, "Non-SAARC": 850 },
       },
     }
+
     const accompany: Record<Delegate, Record<Period, Record<Region, number>>> = {
       "UG/PG Student": {
         "Early Bird": { Indian: 0, SAARC: 0, "Non-SAARC": 0 },
@@ -886,23 +233,24 @@ export default function DashboardClient({ user }: { user: User }) {
         "Early Bird": { Indian: 5000, SAARC: 170, "Non-SAARC": 210 },
         Final: { Indian: 6000, SAARC: 210, "Non-SAARC": 250 },
       },
-      "Faculty": {
+      Faculty: {
         "Early Bird": { Indian: 7500, SAARC: 225, "Non-SAARC": 300 },
         Final: { Indian: 9000, SAARC: 300, "Non-SAARC": 375 },
       },
-      "Industry": {
+      Industry: {
         "Early Bird": { Indian: 11500, SAARC: 375, "Non-SAARC": 525 },
         Final: { Indian: 13000, SAARC: 500, "Non-SAARC": 640 },
       },
     }
+
     const { delegate_type, registration_period, participant_region, accompanying_persons } = formData
 
-    type delegate_type = Delegate;
-    type registration_period = Period;
-    type participant_region = Region;
-
     if (delegate_type && registration_period && participant_region) {
-      return (fees[delegate_type as Delegate][registration_period as Period][participant_region as Region] + (accompany[delegate_type as Delegate][registration_period as Period][participant_region as Region]) * accompanying_persons) || 0
+      const base = fees[delegate_type as Delegate]?.[registration_period as Period]?.[participant_region as Region] || 0
+      const acc =
+        (accompany[delegate_type as Delegate]?.[registration_period as Period]?.[participant_region as Region] || 0) *
+        (accompanying_persons || 0)
+      return base + acc
     }
     return 0
   }
@@ -912,8 +260,7 @@ export default function DashboardClient({ user }: { user: User }) {
       await logout()
       router.push("/")
       router.refresh()
-    } catch (error) {
-      console.error("Logout error:", error)
+    } catch {
       router.push("/")
       router.refresh()
     }
@@ -925,36 +272,40 @@ export default function DashboardClient({ user }: { user: User }) {
     setError(null)
     setSuccess(null)
 
-    // required fields check
-    if (
-      !formData.full_name ||
-      !formData.email ||
-      !formData.transaction_id ||
-      !formData.payment_date ||
-      !formData.is_presenter
-    ) {
-      setError(
-        "Please fill in required fields: Full name, Email, Transaction ID, Payment Date, and Presenting Paper."
-      )
+    // ── FIXED VALIDATION ──────────────────────────────────────────────────────
+    // is_presenter === null means the user never clicked Yes or No yet
+    const missingBasic =
+      !formData.full_name.trim() ||
+      !formData.email.trim() ||
+      !formData.transaction_id.trim() ||
+      !formData.payment_date.trim()
+
+    if (missingBasic) {
+      setError("Please fill in all required fields: Full Name, Email, Transaction ID, and Payment Date.")
       setIsLoading(false)
       return
     }
+
+    if (formData.is_presenter === null) {
+      setError("Please indicate whether you are presenting a paper (Yes or No).")
+      setIsLoading(false)
+      return
+    }
+    // ──────────────────────────────────────────────────────────────────────────
 
     const isPresenter = formData.is_presenter === true
 
     // presenter-specific validation
     if (isPresenter) {
-      if (!formData.abstract_id || !formData.abstract_id.trim()) {
+      if (!formData.abstract_id.trim()) {
         setError("Please provide the Abstract ID since you are presenting a paper.")
         setIsLoading(false)
         return
       }
-
-      // exactly-one validation (xor)
       const oral = !!formData.oral_presentation
       const poster = !!formData.poster_presentation
       if (!oral && !poster) {
-        setError("Please select either Oral or Poster presentation.")
+        setError("Please select either Oral or Poster presentation type.")
         setIsLoading(false)
         return
       }
@@ -968,7 +319,6 @@ export default function DashboardClient({ user }: { user: User }) {
     const paymentAmount = calculatePaymentAmount()
 
     try {
-      // build payload explicitly so we don't accidentally send the string 'presenting_paper'
       const registrationData = {
         full_name: formData.full_name,
         email: formData.email,
@@ -982,19 +332,14 @@ export default function DashboardClient({ user }: { user: User }) {
         transaction_id: formData.transaction_id,
         payment_date: formData.payment_date,
         payment_amount: paymentAmount,
-        // IMPORTANT: send the boolean field the backend expects
         is_presenter: isPresenter,
-        // abstract_id only when presenting; null otherwise to let backend clear it
         abstract_id: isPresenter ? formData.abstract_id : null,
-        // always include both booleans
-        oral_presentation: !!formData.oral_presentation,
-        poster_presentation: !!formData.poster_presentation,
+        oral_presentation: isPresenter ? !!formData.oral_presentation : false,
+        poster_presentation: isPresenter ? !!formData.poster_presentation : false,
         accompanying_persons: Number(formData.accompanying_persons || 0),
-        // add any other explicit fields you want to send...
       }
 
-      // DEBUG: inspect payload in console / network
-      console.debug("DEBUG: registration payload", registrationData)
+      console.debug("Submitting payload:", registrationData)
 
       const isUpdate = !!existingRegistration
       const url = isUpdate
@@ -1009,49 +354,50 @@ export default function DashboardClient({ user }: { user: User }) {
       })
 
       const data = await response.json().catch(() => null)
-
-      // DEBUG: server response
-      console.debug("DEBUG: server response", response.status, data)
+      console.debug("Server response:", response.status, data)
 
       if (!response.ok) {
         if (data) {
+          // Try to surface the most useful error message from DRF
           const fieldError =
+            (data.abstract_id?.[0] as string) ||
+            (data.oral_presentation?.[0] as string) ||
+            (data.poster_presentation?.[0] as string) ||
             (data.transaction_id?.[0] as string) ||
             (data.email?.[0] as string) ||
+            (data.non_field_errors?.[0] as string) ||
             (data.detail as string) ||
             (Object.values(data)[0] as any) ||
             "Failed to submit registration"
           throw new Error(typeof fieldError === "string" ? fieldError : JSON.stringify(fieldError))
         } else {
-          throw new Error("Failed to submit registration")
+          throw new Error("Failed to submit registration. Please check your connection.")
         }
       }
 
-      // success: update local state using server's canonical object
       setExistingRegistration(data)
       setSuccess(
         isUpdate
           ? "Registration updated successfully!"
-          : "Registration submitted successfully! Your application is now under review."
+          : "Registration submitted successfully! Your application is now under review.",
       )
 
-      // sync local formData to returned server values (ensures booleans and presenting_paper stay consistent)
+      // Sync local form state to what the server returned
       if (data) {
         setFormData((prev) => ({
           ...prev,
-          is_presenter: !!data.is_presenter,
+          is_presenter: typeof data.is_presenter === "boolean" ? data.is_presenter : prev.is_presenter,
           abstract_id: data.abstract_id || "",
           oral_presentation: !!data.oral_presentation,
           poster_presentation: !!data.poster_presentation,
         }))
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "An error occurred")
+      setError(err instanceof Error ? err.message : "An error occurred. Please try again.")
     } finally {
       setIsLoading(false)
     }
   }
-
 
   const deleteRegistration = async (id: string) => {
     if (!confirm("Are you sure you want to delete your registration? You can resubmit after deletion.")) return
@@ -1074,10 +420,11 @@ export default function DashboardClient({ user }: { user: User }) {
           participant_region: "",
           transaction_id: "",
           payment_date: "",
-          is_presenter: false,
+          is_presenter: null, // reset to null so radio is unchecked
           abstract_id: "",
           poster_presentation: false,
           oral_presentation: false,
+          accompanying_persons: 0,
         }))
         setSuccess("Registration deleted. You can now refill and resubmit.")
       } else {
@@ -1118,13 +465,54 @@ export default function DashboardClient({ user }: { user: User }) {
   }
 
   const canEdit = !existingRegistration
-  console.log("existingRegistration:", existingRegistration)
+
+  const renderInfoGrid = (reg: Registration) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      {[
+        { label: "Full Name", value: reg.full_name },
+        { label: "Email", value: reg.email },
+        { label: "Phone", value: reg.phone },
+        { label: "Institution", value: reg.institution_organization },
+        { label: "Delegate Type", value: reg.delegate_type },
+        { label: "Registration Period", value: reg.registration_period },
+        {
+          label: "Payment Amount",
+          value:
+            reg.participant_region === "Indian"
+              ? `₹${reg.payment_amount}`
+              : `$${reg.payment_amount}`,
+        },
+        { label: "Transaction ID", value: reg.transaction_id },
+      ].map((item) => (
+        <div
+          key={item.label}
+          className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow"
+        >
+          <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">{item.label}</p>
+          <p className="font-semibold text-gray-900 break-words">{item.value || "—"}</p>
+        </div>
+      ))}
+      {reg.is_presenter && reg.abstract_id && (
+        <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100">
+          <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Abstract ID</p>
+          <p className="font-semibold text-gray-900">{reg.abstract_id}</p>
+        </div>
+      )}
+      {reg.is_presenter && (
+        <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100">
+          <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Presentation Mode</p>
+          <p className="font-semibold text-gray-900">
+            {reg.oral_presentation ? "Oral Presentation" : reg.poster_presentation ? "Poster Presentation" : "—"}
+          </p>
+        </div>
+      )}
+    </div>
+  )
+
   const renderStatusCard = () => {
     if (!existingRegistration) return null
-
     return (
-      <Card className="mb-8 border-0 shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-4 duration-500">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 opacity-50" />
+      <Card className="mb-8 border-0 shadow-xl overflow-hidden">
         <CardHeader className="relative pb-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -1146,88 +534,24 @@ export default function DashboardClient({ user }: { user: User }) {
         </CardHeader>
         <CardContent className="relative space-y-6">
           {existingRegistration.status === "Accepted" && (
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-2xl shadow-inner border-2 border-green-200 animate-in fade-in zoom-in duration-500">
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-2xl shadow-inner border-2 border-green-200">
               <div className="flex items-start gap-6">
                 <div className="flex-shrink-0 bg-gradient-to-br from-green-500 to-emerald-500 p-3 rounded-full shadow-lg">
                   <PartyPopper className="h-8 w-8 text-white" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-2xl font-bold text-green-900 mb-2">Congratulations! You're Registered! 🎉</h3>
-                  <p className="text-base text-green-800 mb-6 leading-relaxed">
-                    Your payment has been verified and your registration is confirmed. We look forward to seeing you at
-                    the conference!
+                  <p className="text-base text-green-800 mb-6">
+                    Your payment has been verified and registration is confirmed.
                   </p>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Full Name</p>
-                      <p className="font-semibold text-gray-900">{existingRegistration.full_name}</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Email</p>
-                      <p className="font-semibold text-gray-900 break-all">{existingRegistration.email}</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Phone</p>
-                      <p className="font-semibold text-gray-900">{existingRegistration.phone}</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Institution</p>
-                      <p className="font-semibold text-gray-900">{existingRegistration.institution_organization}</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Delegate Type</p>
-                      <p className="font-semibold text-gray-900">{existingRegistration.delegate_type}</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">
-                        Registration Period
-                      </p>
-                      <p className="font-semibold text-gray-900">{existingRegistration.registration_period}</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">
-                        Payment Amount
-                      </p>
-                      <p className="font-bold text-lg text-green-700">
-                        {existingRegistration.participant_region === "Indian"
-                          ? `₹${existingRegistration.payment_amount}`
-                          : `$${existingRegistration.payment_amount}`}
-                      </p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow md:col-span-2">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">
-                        Transaction ID
-                      </p>
-                      <p className="font-mono font-semibold text-gray-900">{existingRegistration.transaction_id}</p>
-                    </div>
-                    {existingRegistration.is_presenter && (
-                      <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                        <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Abstract ID:</p>
-                        <p className="font-semibold text-gray-900">{existingRegistration.abstract_id}</p>
-                      </div>
-                    )}
-                    {existingRegistration.is_presenter && existingRegistration.oral_presentation && (
-                      <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                        <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Presentation mode:</p>
-                        <p className="font-semibold text-gray-900"> Oral Presentation</p>
-                      </div>
-                    )}
-                    {existingRegistration.is_presenter && existingRegistration.poster_presentation && (
-                      <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                        <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Presentation mode:</p>
-                        <p className="font-semibold text-gray-900"> Poster Presentation</p>
-                      </div>
-                    )}
-                  </div>
-
+                  {renderInfoGrid(existingRegistration)}
                   {existingRegistration.admin_notes && (
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-xl border-l-4 border-blue-500 shadow-sm">
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-xl border-l-4 border-blue-500">
                       <div className="flex items-start gap-3">
                         <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
                         <div>
                           <p className="text-sm font-bold text-blue-900 mb-1">Message from Admin</p>
-                          <p className="text-sm text-blue-800 leading-relaxed">{existingRegistration.admin_notes}</p>
+                          <p className="text-sm text-blue-800">{existingRegistration.admin_notes}</p>
                         </div>
                       </div>
                     </div>
@@ -1238,110 +562,44 @@ export default function DashboardClient({ user }: { user: User }) {
           )}
 
           {existingRegistration.status === "Under Process" && (
-            <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 p-6 rounded-2xl shadow-inner animate-pulse-subtle">
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 p-6 rounded-2xl">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 bg-gradient-to-br from-amber-500 to-orange-500 p-3 rounded-full shadow-lg">
-                  <Clock className="h-7 w-7 text-white animate-spin-slow" />
+                  <Clock className="h-7 w-7 text-white" />
                 </div>
                 <div className="flex-1">
                   <p className="font-bold text-xl text-amber-900 mb-2">Your registration is being reviewed</p>
-                  <p className="text-base text-amber-800 mb-4 leading-relaxed">
-                    Our team is verifying your payment details. This usually takes 2-3 business days. You'll receive an
-                    email once the verification is complete.
+                  <p className="text-base text-amber-800 mb-4">
+                    Our team is verifying your payment. This usually takes 2–3 business days.
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Full Name</p>
-                      <p className="font-semibold text-gray-900">{existingRegistration.full_name}</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Email</p>
-                      <p className="font-semibold text-gray-900 break-all">{existingRegistration.email}</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Phone</p>
-                      <p className="font-semibold text-gray-900">{existingRegistration.phone}</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Institution</p>
-                      <p className="font-semibold text-gray-900">{existingRegistration.institution_organization}</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Delegate Type</p>
-                      <p className="font-semibold text-gray-900">{existingRegistration.delegate_type}</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">
-                        Registration Period
-                      </p>
-                      <p className="font-semibold text-gray-900">{existingRegistration.registration_period}</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">
-                        Payment Amount
-                      </p>
-                      <p className="font-bold text-lg text-green-700">
-                        {existingRegistration.participant_region === "Indian"
-                          ? `₹${existingRegistration.payment_amount}`
-                          : `$${existingRegistration.payment_amount}`}
-                      </p>
-                    </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow md:col-span-2">
-                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">
-                        Transaction ID
-                      </p>
-                      <p className="font-mono font-semibold text-gray-900">{existingRegistration.transaction_id}</p>
-                    </div>
-                    {existingRegistration.is_presenter && (
-                      <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                        <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Abstract ID:</p>
-                        <p className="font-semibold text-gray-900">{existingRegistration.abstract_id}</p>
-                      </div>
-                    )}
-                    {existingRegistration.is_presenter && existingRegistration.oral_presentation && (
-                      <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                        <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Presentation mode:</p>
-                        <p className="font-semibold text-gray-900"> Oral Presentation</p>
-                      </div>
-                    )}
-                    {existingRegistration.is_presenter && existingRegistration.poster_presentation && (
-                      <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow">
-                        <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Presentation mode:</p>
-                        <p className="font-semibold text-gray-900"> Poster Presentation</p>
-                      </div>
-                    )}
-                  </div>
+                  {renderInfoGrid(existingRegistration)}
                 </div>
               </div>
             </div>
           )}
 
           {existingRegistration.status === "Rejected" && (
-            <div className="bg-gradient-to-br from-red-50 to-rose-50 border-2 border-red-200 p-6 rounded-2xl shadow-inner">
+            <div className="bg-gradient-to-br from-red-50 to-rose-50 border-2 border-red-200 p-6 rounded-2xl">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 bg-gradient-to-br from-red-500 to-rose-500 p-3 rounded-full shadow-lg">
                   <AlertCircle className="h-7 w-7 text-white" />
                 </div>
                 <div className="flex-1">
                   <p className="font-bold text-xl text-red-900 mb-2">Registration Not Approved</p>
-                  <p className="text-base text-red-800 mb-4 leading-relaxed">
-                    Your registration couldn't be verified. Please review the reason below, delete this submission, and
-                    resubmit with correct details.
+                  <p className="text-base text-red-800 mb-4">
+                    Please review the reason below, delete this submission, and resubmit with correct details.
                   </p>
                   {existingRegistration.admin_notes && (
                     <div className="bg-white p-5 rounded-xl border-l-4 border-red-500 shadow-sm mb-4">
-                      <p className="text-xs font-bold text-red-900 uppercase tracking-wide mb-2">
-                        Reason for Rejection
-                      </p>
-                      <p className="text-sm text-red-800 leading-relaxed">{existingRegistration.admin_notes}</p>
+                      <p className="text-xs font-bold text-red-900 uppercase tracking-wide mb-2">Reason for Rejection</p>
+                      <p className="text-sm text-red-800">{existingRegistration.admin_notes}</p>
                     </div>
                   )}
-
                   <Button
                     variant="destructive"
                     onClick={() => deleteRegistration(existingRegistration.id)}
                     disabled={isLoading}
-                    className="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 shadow-md"
+                    className="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700"
                   >
                     {isLoading ? (
                       <>
@@ -1368,16 +626,14 @@ export default function DashboardClient({ user }: { user: User }) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center p-8 bg-white rounded-2xl shadow-2xl">
-          <div className="relative w-20 h-20 mx-auto mb-6">
-            <Loader2 className="h-20 w-20 text-blue-600 animate-spin" />
-            <div className="absolute inset-0 bg-blue-100 rounded-full blur-xl opacity-50 animate-pulse" />
-          </div>
+          <Loader2 className="h-20 w-20 text-blue-600 animate-spin mx-auto mb-6" />
           <p className="text-lg font-semibold text-gray-800 mb-2">Loading Your Dashboard</p>
-          <p className="text-sm text-gray-500">Please wait while we fetch your registration status...</p>
+          <p className="text-sm text-gray-500">Fetching your registration status…</p>
         </div>
       </div>
     )
   }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
@@ -1391,7 +647,7 @@ export default function DashboardClient({ user }: { user: User }) {
             <Button
               onClick={handleLogout}
               variant="outline"
-              className="z-10 bg-white hover:bg-blue-100 hover:text-white border-2 border-gray-300 shadow-md hover:shadow-lg transition-all"
+              className="bg-white hover:bg-blue-50 border-2 border-gray-300 shadow-md"
             >
               <LogOut className="mr-2 h-4 w-4" />
               Log Out
@@ -1402,275 +658,179 @@ export default function DashboardClient({ user }: { user: User }) {
 
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
         {existingRegistration && renderStatusCard()}
+
         {!existingRegistration && (
-          <Card className="border-0 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <Card className="border-0 shadow-2xl overflow-hidden">
             <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500" />
             <CardHeader className="bg-gradient-to-r from-gray-50 to-blue-50 border-b">
-              <CardTitle className="text-2xl font-bold text-gray-900"><span className="text-[color:var(--primary)]"> Registration Form</span></CardTitle>
-              <CardDescription className="text-base mt-2 leading-relaxed">
-                {canEdit
-                  ? "Fill in your details to complete your registration. Make sure to include your Transaction ID for payment verification."
-                  : "Your registration has been submitted and cannot be edited while it is under review or after acceptance."}
+              <CardTitle className="text-2xl font-bold text-gray-900">
+                <span className="text-[color:var(--primary)]">Registration Form</span>
+              </CardTitle>
+              <CardDescription className="text-base mt-2">
+                Fill in your details to complete your registration. Include your Transaction ID for payment
+                verification.
               </CardDescription>
             </CardHeader>
             <CardContent className="p-8">
               <form onSubmit={handleSubmit} className="space-y-8">
-                {/* Personal Information Section */}
+                {/* ── Personal Information ───────────────────────────────────────────── */}
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 pb-3 border-b-2 border-blue-100">
                     <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
                     <h3 className="text-xl font-bold text-gray-900">Personal Information</h3>
                   </div>
-
                   <div className="grid gap-6 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="full_name" className="text-sm font-semibold text-gray-700">
-                        Full Name <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="full_name"
-                        required
-                        disabled={!canEdit}
-                        value={formData.full_name}
-                        onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                        className="h-12 border-2 focus:border-blue-500 transition-colors"
-                        placeholder="Enter your full name"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
-                        Email Address <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        required
-                        disabled={!canEdit}
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="h-12 border-2 focus:border-blue-500 transition-colors"
-                        placeholder="your.email@example.com"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="phone" className="text-sm font-semibold text-gray-700">
-                        Phone Number <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="phone"
-                        type="tel"
-                        required
-                        disabled={!canEdit}
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="h-12 border-2 focus:border-blue-500 transition-colors"
-                        placeholder="+1 234 567 8900"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="country" className="text-sm font-semibold text-gray-700">
-                        Country <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="country"
-                        required
-                        disabled={!canEdit}
-                        value={formData.country}
-                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                        className="h-12 border-2 focus:border-blue-500 transition-colors"
-                        placeholder="Enter your country"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="institution_organization" className="text-sm font-semibold text-gray-700">
-                        Institution/Organization <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="institution_organization"
-                        required
-                        disabled={!canEdit}
-                        value={formData.institution_organization}
-                        onChange={(e) => setFormData({ ...formData, institution_organization: e.target.value })}
-                        className="h-12 border-2 focus:border-blue-500 transition-colors"
-                        placeholder="Your institution name"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="designation" className="text-sm font-semibold text-gray-700">
-                        Designation
-                      </Label>
-                      <Input
-                        id="designation"
-                        disabled={!canEdit}
-                        value={formData.designation}
-                        onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                        className="h-12 border-2 focus:border-blue-500 transition-colors"
-                        placeholder="Your job title or position"
-                      />
-                    </div>
+                    {[
+                      { id: "full_name", label: "Full Name", required: true, placeholder: "Enter your full name" },
+                      {
+                        id: "email",
+                        label: "Email Address",
+                        required: true,
+                        type: "email",
+                        placeholder: "your.email@example.com",
+                      },
+                      { id: "phone", label: "Phone Number", required: true, type: "tel", placeholder: "+91 XXXXX XXXXX" },
+                      { id: "country", label: "Country", required: true, placeholder: "Enter your country" },
+                      {
+                        id: "institution_organization",
+                        label: "Institution/Organization",
+                        required: true,
+                        placeholder: "Your institution name",
+                      },
+                      { id: "designation", label: "Designation", placeholder: "Your job title" },
+                    ].map(({ id, label, required, type = "text", placeholder }) => (
+                      <div key={id} className="space-y-2">
+                        <Label htmlFor={id} className="text-sm font-semibold text-gray-700">
+                          {label} {required && <span className="text-red-500">*</span>}
+                        </Label>
+                        <Input
+                          id={id}
+                          type={type}
+                          required={required}
+                          disabled={!canEdit}
+                          value={(formData as any)[id]}
+                          onChange={(e) => setFormData({ ...formData, [id]: e.target.value })}
+                          className="h-12 border-2 focus:border-blue-500 transition-colors"
+                          placeholder={placeholder}
+                        />
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                {/* Delegate Information Section */}
+                {/* ── Delegate Information ───────────────────────────────────────────── */}
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 pb-3 border-b-2 border-purple-100">
                     <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
                     <h3 className="text-xl font-bold text-gray-900">Delegate Information</h3>
                   </div>
-
                   <div className="grid gap-6 md:grid-cols-3">
+                    {/* Delegate Type */}
                     <div className="space-y-2">
-                      <Label htmlFor="delegate_type" className="text-sm font-semibold text-gray-700">
+                      <Label className="text-sm font-semibold text-gray-700">
                         Delegate Type <span className="text-red-500">*</span>
                       </Label>
                       <Select
                         value={formData.delegate_type}
-                        onValueChange={(value) => setFormData({ ...formData, delegate_type: value })}
+                        onValueChange={(v) => setFormData({ ...formData, delegate_type: v })}
                         disabled={!canEdit}
                         required
                       >
-                        <SelectTrigger id="delegate_type" className="h-12 border-2 focus:border-purple-500">
+                        <SelectTrigger className="h-12 border-2">
                           <SelectValue placeholder="Select delegate type" />
                         </SelectTrigger>
-
-                        <SelectContent className="bg-white rounded-lg shadow-lg border border-gray-200 p-1">
-                          <SelectItem
-                            value="UG/PG Student"
-                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                          >
-                            UG/PG Student
-                          </SelectItem>
-
-                          <SelectItem
-                            value="Research Scholar"
-                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                          >
-                            Research Scholar
-                          </SelectItem>
-
-                          <SelectItem
-                            value="Faculty"
-                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                          >
-                            Faculty
-                          </SelectItem>
-
-                          <SelectItem
-                            value="Industry"
-                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                          >
-                            Industry
-                          </SelectItem>
+                        <SelectContent className="bg-white">
+                          {["UG/PG Student", "Research Scholar", "Faculty", "Industry"].map((v) => (
+                            <SelectItem key={v} value={v}>
+                              {v}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
-
                       </Select>
                     </div>
-
+                    {/* Registration Period */}
                     <div className="space-y-2">
-                      <Label htmlFor="registration_period" className="text-sm font-semibold text-gray-700">
+                      <Label className="text-sm font-semibold text-gray-700">
                         Registration Period <span className="text-red-500">*</span>
                       </Label>
                       <Select
                         value={formData.registration_period}
-                        onValueChange={(value) => setFormData({ ...formData, registration_period: value })}
+                        onValueChange={(v) => setFormData({ ...formData, registration_period: v })}
                         disabled={!canEdit}
                         required
                       >
-                        <SelectTrigger id="registration_period" className="h-12 border-2 focus:border-purple-500">
+                        <SelectTrigger className="h-12 border-2">
                           <SelectValue placeholder="Select period" />
                         </SelectTrigger>
                         <SelectContent className="bg-white">
-                          <SelectItem value="Early Bird"
-                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                          >Early Bird (until May 5, 2026)</SelectItem>
-
-                          <SelectItem value="Final"
-                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                          >Final (after May 5, 2026)</SelectItem>
+                          <SelectItem value="Early Bird">Early Bird (until May 5, 2026)</SelectItem>
+                          <SelectItem value="Final">Final (after May 5, 2026)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
-
+                    {/* Participant Region */}
                     <div className="space-y-2">
-                      <Label htmlFor="participant_region" className="text-sm font-semibold text-gray-700">
+                      <Label className="text-sm font-semibold text-gray-700">
                         Participant Region <span className="text-red-500">*</span>
                       </Label>
                       <Select
                         value={formData.participant_region}
-                        onValueChange={(value) => setFormData({ ...formData, participant_region: value })}
+                        onValueChange={(v) => setFormData({ ...formData, participant_region: v })}
                         disabled={!canEdit}
                         required
                       >
-                        <SelectTrigger id="participant_region" className="h-12 border-2 focus:border-purple-500">
+                        <SelectTrigger className="h-12 border-2">
                           <SelectValue placeholder="Select region" />
                         </SelectTrigger>
                         <SelectContent className="bg-white">
-                          <SelectItem value="Indian"
-                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                          >Indian</SelectItem>
-                          <SelectItem value="SAARC"
-                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                          >SAARC</SelectItem>
-                          <SelectItem value="Non-SAARC"
-                            className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                          >Non-SAARC</SelectItem>
+                          {["Indian", "SAARC", "Non-SAARC"].map((v) => (
+                            <SelectItem key={v} value={v}>
+                              {v}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>
+                    {/* Accompanying Persons (not for students) */}
                     {formData.delegate_type && formData.delegate_type !== "UG/PG Student" && (
                       <div className="space-y-2">
-                        <Label htmlFor="accompanying_persons" className="text-sm font-semibold text-gray-700">
-                          Accompanying persons <span className="text-red-500">*</span>
-                        </Label>
+                        <Label className="text-sm font-semibold text-gray-700">Accompanying Persons</Label>
                         <Select
-                          value={formData.accompanying_persons != null ? String(formData.accompanying_persons) : "Select number of accompanying people"}
-                          onValueChange={(value) =>
-                            setFormData({ ...formData, accompanying_persons: Number.parseInt(value, 10) || 0 })
+                          value={String(formData.accompanying_persons ?? 0)}
+                          onValueChange={(v) =>
+                            setFormData({ ...formData, accompanying_persons: parseInt(v, 10) || 0 })
                           }
                           disabled={!canEdit}
-                          required
                         >
-                          <SelectTrigger id="accompanying_persons" className="h-12 border-2 focus:border-purple-500">
-                            <SelectValue placeholder="Select number of accompanying people" />
+                          <SelectTrigger className="h-12 border-2">
+                            <SelectValue placeholder="0" />
                           </SelectTrigger>
                           <SelectContent className="bg-white">
-                            <SelectItem value="0"
-                              className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                            >0</SelectItem>
-                            <SelectItem value="1"
-                              className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                            >1</SelectItem>
-                            <SelectItem value="2"
-                              className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                            >2</SelectItem>
-                            <SelectItem value="3"
-                              className="cursor-pointer rounded-md px-3 py-2 text-sm text-gray-800 focus:bg-blue-50 focus:text-blue-700 data-[state=checked]:bg-blue-50 data-[state=checked]:text-blue-700"
-                            >3</SelectItem>
+                            {["0", "1", "2", "3"].map((v) => (
+                              <SelectItem key={v} value={v}>
+                                {v}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
-                      </div>)}
+                      </div>
+                    )}
                   </div>
 
-                  {/* Presenting Paper Section */}
+                  {/* ── Presenting Paper ──────────────────────────────────────────── */}
                   <div className="space-y-4 mt-6">
                     <div className="space-y-3">
                       <Label className="text-sm font-semibold text-gray-700">
                         Are you presenting a paper? <span className="text-red-500">*</span>
                       </Label>
                       <RadioGroup
-                        value={formData.is_presenter ? "yes" : "no"}           // render from boolean
+                        // When is_presenter is null (not chosen), pass empty string so nothing is selected
+                        value={formData.is_presenter === null ? "" : formData.is_presenter ? "yes" : "no"}
                         onValueChange={(value) =>
                           setFormData({
                             ...formData,
-                            is_presenter: value === "yes",                     // store boolean
-                            // clear abstract when switching to no
+                            is_presenter: value === "yes",
                             abstract_id: value === "no" ? "" : formData.abstract_id,
-                            // if switching to no, also clear presentation type booleans
                             ...(value === "no" ? { oral_presentation: false, poster_presentation: false } : {}),
                           })
                         }
@@ -1690,31 +850,34 @@ export default function DashboardClient({ user }: { user: User }) {
                           </Label>
                         </div>
                       </RadioGroup>
-
                     </div>
 
+                    {/* Abstract ID + presentation type — only shown when presenter = yes */}
                     {formData.is_presenter === true && (
-                      <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-                        <Label htmlFor="abstract_id" className="text-sm font-semibold text-gray-700">
-                          Abstract ID <span className="text-red-500">*</span>
-                        </Label>
-                        <Input
-                          id="abstract_id"
-                          required
-                          disabled={!canEdit}
-                          value={formData.abstract_id}
-                          onChange={(e) => setFormData({ ...formData, abstract_id: e.target.value })}
-                          className="h-12 border-2 focus:border-purple-500 transition-colors"
-                          placeholder="Enter your abstract ID"
-                        />
-                        <p className="text-xs text-gray-500 flex items-center gap-1">
-                          <Info className="h-3 w-3" />
-                          Enter the Abstract ID assigned to your submitted paper
-                        </p>
+                      <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="space-y-2">
+                          <Label htmlFor="abstract_id" className="text-sm font-semibold text-gray-700">
+                            Abstract ID <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            id="abstract_id"
+                            required
+                            disabled={!canEdit}
+                            value={formData.abstract_id}
+                            onChange={(e) => setFormData({ ...formData, abstract_id: e.target.value })}
+                            className="h-12 border-2 focus:border-purple-500 transition-colors"
+                            placeholder="Enter your abstract ID from CMT"
+                          />
+                          <p className="text-xs text-gray-500 flex items-center gap-1">
+                            <Info className="h-3 w-3" />
+                            The Abstract ID assigned after your CMT submission
+                          </p>
+                        </div>
 
-                        {/* Single-select (radio) that directly sets the two booleans */}
                         <fieldset className="mt-3">
-                          <legend className="text-sm font-semibold text-gray-700">Presentation type <span className="text-red-500">*</span></legend>
+                          <legend className="text-sm font-semibold text-gray-700">
+                            Presentation Type <span className="text-red-500">*</span>
+                          </legend>
                           <div className="flex gap-6 mt-2">
                             <label className="flex items-center gap-2 cursor-pointer">
                               <input
@@ -1723,15 +886,12 @@ export default function DashboardClient({ user }: { user: User }) {
                                 value="oral"
                                 checked={!!formData.oral_presentation}
                                 disabled={!canEdit}
-                                onChange={() => setFormData({
-                                  ...formData,
-                                  oral_presentation: true,
-                                  poster_presentation: false
-                                })}
+                                onChange={() =>
+                                  setFormData({ ...formData, oral_presentation: true, poster_presentation: false })
+                                }
                               />
-                              <span className="ml-1 text-sm">Oral presentation</span>
+                              <span className="ml-1 text-sm">Oral Presentation</span>
                             </label>
-
                             <label className="flex items-center gap-2 cursor-pointer">
                               <input
                                 type="radio"
@@ -1739,91 +899,71 @@ export default function DashboardClient({ user }: { user: User }) {
                                 value="poster"
                                 checked={!!formData.poster_presentation}
                                 disabled={!canEdit}
-                                onChange={() => setFormData({
-                                  ...formData,
-                                  oral_presentation: false,
-                                  poster_presentation: true
-                                })}
+                                onChange={() =>
+                                  setFormData({ ...formData, oral_presentation: false, poster_presentation: true })
+                                }
                               />
-                              <span className="ml-1 text-sm">Poster presentation</span>
+                              <span className="ml-1 text-sm">Poster Presentation</span>
                             </label>
                           </div>
                         </fieldset>
                       </div>
                     )}
-
-
-
                   </div>
 
+                  {/* Fee display */}
                   {formData.delegate_type && formData.registration_period && formData.participant_region && (
-                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border-2 border-blue-200 shadow-lg animate-in fade-in zoom-in duration-300">
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border-2 border-blue-200 shadow-lg">
                       <div className="flex items-center justify-between flex-wrap gap-4">
                         <div>
-                          <p className="text-sm font-bold text-blue-900 uppercase tracking-wide mb-1">Registration Fee</p>
+                          <p className="text-sm font-bold text-blue-900 uppercase tracking-wide mb-1">
+                            Registration Fee
+                          </p>
                           <p className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                             {formData.participant_region === "Indian" ? "₹" : "$"}
                             {calculatePaymentAmount()}
                           </p>
                         </div>
-                        <div className="bg-white/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-blue-200">
-                          <p className="text-xs text-blue-700 font-medium">💡 Please pay this amount before submitting</p>
+                        <div className="bg-white/80 px-4 py-3 rounded-xl border border-blue-200">
+                          <p className="text-xs text-blue-700 font-medium">💡 Please pay before submitting</p>
                         </div>
                       </div>
                     </div>
                   )}
                 </div>
 
-                {/* Payment Information Section */}
+                {/* ── Payment Information ────────────────────────────────────────────── */}
                 <div className="space-y-6">
-                  {/* Header Section */}
                   <div className="flex items-center gap-3 pb-3 border-b-2 border-indigo-100">
                     <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
                     <h3 className="text-xl font-bold text-gray-900">Payment Information</h3>
                   </div>
 
                   <div className="flex flex-col lg:flex-row gap-6">
-
-                    {/* LEFT COLUMN: Bank Details Grid */}
+                    {/* Bank details */}
                     <div className="flex-1 bg-gradient-to-br from-gray-50 to-blue-50 p-6 rounded-2xl border-2 border-gray-200 shadow-inner">
                       <p className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
                         <Info className="h-5 w-5 text-[color:var(--primary)]" />
                         Bank Details for Payment
                       </p>
-
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-
-                        {/* Row 1: Account Name & Account Number */}
-                        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                          <p className="font-semibold text-gray-700 mb-1">Account Name</p>
-                          <p className="text-gray-900 font-medium">Indian Institute of Technology Indore</p>
-                        </div>
-                        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                          <p className="font-semibold text-gray-700 mb-1">Account Number</p>
-                          <p className="text-gray-900 font-mono tracking-wide">1476101027440</p>
-                        </div>
-
-                        {/* Row 2: IFSC & Bank Name */}
-                        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                          <p className="font-semibold text-gray-700 mb-1">IFSC Code</p>
-                          <p className="text-gray-900 font-mono tracking-wide">CNRB0006223</p>
-                        </div>
-                        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                          <p className="font-semibold text-gray-700 mb-1">Bank Name</p>
-                          <p className="text-gray-900">Canara Bank, Simrol IIT Branch</p>
-                        </div>
-
-                        {/* Row 3: SWIFT & PayU Button */}
-                        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                          <p className="font-semibold text-gray-700 mb-1">SWIFT Code (International)</p>
-                          <p className="text-gray-900 font-mono tracking-wide">CNRBINBBMSG</p>
-                        </div>
-
+                        {[
+                          { label: "Account Name", value: "Indian Institute of Technology Indore" },
+                          { label: "Account Number", value: "1476101027440" },
+                          { label: "IFSC Code", value: "CNRB0006223" },
+                          { label: "Bank Name", value: "Canara Bank, Simrol IIT Branch" },
+                          { label: "SWIFT Code (International)", value: "CNRBINBBMSG" },
+                        ].map(({ label, value }) => (
+                          <div key={label} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                            <p className="font-semibold text-gray-700 mb-1">{label}</p>
+                            <p className="text-gray-900 font-mono">{value}</p>
+                          </div>
+                        ))}
                         <a
                           href="https://payu.in/web/EB3AF4CBC22FB4C90B5ABC9A52E5CAC3"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-[color:var(--primary)] hover:bg-blue-700 text-white p-4 rounded-xl shadow-sm transition-all flex flex-col justify-center items-center text-center group cursor-pointer"
+                          className="bg-[color:var(--primary)] hover:opacity-90 text-white p-4 rounded-xl shadow-sm transition-all flex flex-col justify-center items-center text-center group cursor-pointer"
                         >
                           <span className="font-bold flex items-center gap-2 text-base">
                             Pay Now
@@ -1831,24 +971,15 @@ export default function DashboardClient({ user }: { user: User }) {
                           </span>
                           <span className="text-xs opacity-90 mt-0.5">via PayU Gateway</span>
                         </a>
-
                       </div>
                     </div>
-
-                    {/* RIGHT COLUMN: QR Code Card */}
+                    {/* QR Code */}
                     <div className="lg:w-80 bg-white p-6 rounded-2xl border-2 border-gray-200 shadow-sm flex flex-col items-center justify-center text-center">
-                      <div className="mb-4">
-                        <h4 className="text-lg font-bold text-[color:var(--primary)]">Scan to Pay</h4>
-                      </div>
+                      <h4 className="text-lg font-bold text-[color:var(--primary)] mb-4">Scan to Pay</h4>
                       <div className="bg-white p-2 rounded-xl border-2 border-dashed border-gray-200">
-                        <img
-                          src="payuqr.png"
-                          alt="Payment QR Code"
-                          className="w-48 h-48 object-contain"
-                        />
+                        <img src="payuqr.png" alt="Payment QR Code" className="w-48 h-48 object-contain" />
                       </div>
                     </div>
-
                   </div>
 
                   <div className="grid gap-6 md:grid-cols-2">
@@ -1860,17 +991,12 @@ export default function DashboardClient({ user }: { user: User }) {
                         id="transaction_id"
                         required
                         disabled={!canEdit}
-                        value={formData.transaction_id || ""}
+                        value={formData.transaction_id}
                         onChange={(e) => setFormData({ ...formData, transaction_id: e.target.value })}
-                        placeholder="Enter payment transaction ID"
-                        className="h-12 border-2 focus:border-indigo-500 transition-colors font-mono"
+                        placeholder="Bank transaction / reference ID"
+                        className="h-12 border-2 focus:border-indigo-500 font-mono"
                       />
-                      <p className="text-xs text-gray-500 flex items-center gap-1">
-                        <Info className="h-3 w-3" />
-                        Enter the transaction/reference ID from your bank
-                      </p>
                     </div>
-
                     <div className="space-y-2">
                       <Label htmlFor="payment_date" className="text-sm font-semibold text-gray-700">
                         Payment Date <span className="text-red-500">*</span>
@@ -1880,26 +1006,25 @@ export default function DashboardClient({ user }: { user: User }) {
                         type="date"
                         required
                         disabled={!canEdit}
-                        value={formData.payment_date || ""}
+                        value={formData.payment_date}
                         onChange={(e) => setFormData({ ...formData, payment_date: e.target.value })}
-                        className="h-12 border-2 focus:border-indigo-500 transition-colors"
+                        className="h-12 border-2 focus:border-indigo-500"
                       />
                     </div>
                   </div>
                 </div>
 
-                {/* Alert Messages */}
+                {/* ── Alerts ────────────────────────────────────────────────────────── */}
                 {error && (
-                  <div className="bg-gradient-to-r from-red-50 to-rose-50 border-l-4 border-red-500 p-5 rounded-xl shadow-md animate-in slide-in-from-top-2 duration-300">
+                  <div className="bg-gradient-to-r from-red-50 to-rose-50 border-l-4 border-red-500 p-5 rounded-xl shadow-md">
                     <div className="flex items-start gap-3">
                       <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
                       <p className="text-sm text-red-800 font-medium leading-relaxed">{error}</p>
                     </div>
                   </div>
                 )}
-
                 {success && (
-                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 p-5 rounded-xl shadow-md animate-in slide-in-from-top-2 duration-300">
+                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 p-5 rounded-xl shadow-md">
                     <div className="flex items-start gap-3">
                       <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                       <p className="text-sm text-green-800 font-medium leading-relaxed">{success}</p>
@@ -1907,20 +1032,18 @@ export default function DashboardClient({ user }: { user: User }) {
                   </div>
                 )}
 
-                {/* Submit Button */}
+                {/* ── Submit ────────────────────────────────────────────────────────── */}
                 {canEdit && (
                   <Button
                     type="submit"
-                    className="w-full h-14 text-lg font-bold bg-[color:var(--primary)] hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-200"
+                    className="w-full h-14 text-lg font-bold bg-[color:var(--primary)] hover:opacity-90 shadow-xl"
                     disabled={isLoading}
                   >
                     {isLoading ? (
                       <>
                         <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Submitting Your Registration...
+                        Submitting…
                       </>
-                    ) : existingRegistration ? (
-                      "Update Registration"
                     ) : (
                       "Submit Registration"
                     )}
@@ -1930,28 +1053,14 @@ export default function DashboardClient({ user }: { user: User }) {
             </CardContent>
           </Card>
         )}
-        {/* Footer note */}
-        <p className="text-center text-sm text-gray-500 mt-8">Need help? Contact us at support@2dmattech.org</p>
-      </div>
 
-      <style jsx global>{`
-        @keyframes spin-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-        
-        .animate-spin-slow {
-          animation: spin-slow 3s linear infinite;
-        }
-        
-        .animate-pulse-subtle {
-          animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-      `}</style>
+        <p className="text-center text-sm text-gray-500 mt-8">
+          Need help? Contact us at{" "}
+          <a href="mailto:2dmtg@iiti.ac.in" className="text-[color:var(--primary)] underline">
+            2dmtg@iiti.ac.in
+          </a>
+        </p>
+      </div>
     </div>
   )
 }
