@@ -100,6 +100,9 @@ export default function Awards() {
             <h1 className="text-4xl font-bold text-[var(--foreground)] mb-3">
               <span className="text-[var(--primary)]">Conference </span>Awards
             </h1>
+            <h6 className="text-2xl font-bold text-[var(--foreground)] mb-3">
+                Sponsored by <span className="text-[var(--primary)]">WILEY </span> 
+            </h6>
             <p className="text-[var(--muted-foreground)] text-base max-w-xl mx-auto">
               Recognize excellence across oral presentations, poster sessions, and doctoral research at{" "}
               <span className="font-semibold text-[var(--primary)]">2D MatTech Global 2026</span>.
