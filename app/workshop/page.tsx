@@ -734,9 +734,12 @@ export default function WorkshopPage() {
           <p className="font-semibold text-[color:var(--nav)] mb-2">Important Note</p>
           <ul className="space-y-1.5 list-none">
             {[
-              "Each participant may register for only one workshop.",
+              "Only one workshop can be selected per participant.",
               "Workshop registration is separate from the main conference registration.",
-              "Seats are limited. Registration is confirmed only after payment completion.",
+              "Seats are limited and allotted on a first-come, first-served basis",
+              "Register first to secure seat allotment",
+              "Complete payment after allotment to confirm participation",
+              "Registration is confirmed only after payment",
               "For queries, contact: 2dmtg@iiti.ac.in",
             ].map((note, i) => (
               <li key={i} className="flex items-start gap-2">

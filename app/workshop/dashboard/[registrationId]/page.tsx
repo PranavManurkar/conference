@@ -6,6 +6,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { AlertCircle, CheckCircle, ChevronDown, ChevronUp, Clock, ExternalLink, Loader2, MapPin, Send, ShieldCheck, Users } from "lucide-react"
 
 const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "https://tdmtg.iiti.ac.in"
+const PAYMENT_URL = "https://payu.in/web/EB3AF4CBC22FB4C90B5ABC9A52E5CAC3"
 
 type WorkshopRegistration = {
   id: number
@@ -383,7 +384,7 @@ export default function WorkshopRegistrationStatusPage() {
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[color:var(--primary)] mb-2">Workshop Details</p>
                           <h2 className="text-2xl font-bold text-[color:var(--nav)]">Workshop 1: XRD & XRF Characterization</h2>
-                          <p className="mt-2 text-[color:var(--nav)]/70 max-w-2xl">
+                          <p className="mt-2 text-[color:var(--nav)]/70 max-w-3xl">
                             A full-day pre-conference workshop on XRD & XRF fundamentals, particle characterization, sample preparation best practices, and a live Empyrean XRD & Zetasizer demonstration.
                           </p>
                         </div>
@@ -420,17 +421,42 @@ export default function WorkshopRegistrationStatusPage() {
                           {agendaOpen ? <><ChevronUp size={14} /> Hide Agenda</> : <><ChevronDown size={14} /> View Full Agenda</>}
                         </button>
                       </div>
-
-                      {agendaOpen && (
-                        <div className="mt-4">
-                          <AgendaTable />
-                        </div>
-                      )}
                     </div>
                   )}
+
                 </div>
 
                 <div className="space-y-6">
+                  {registration.status === "Approved for Payment" && (
+                    <div className="rounded-3xl border border-amber-200 bg-[linear-gradient(180deg,rgba(245,158,11,0.10),rgba(255,255,255,0.96))] p-6 shadow-lg">
+                      <div className="flex items-center gap-3 pb-3 border-b border-amber-100">
+                        <div className="w-1 h-8 bg-amber-500 rounded-full" />
+                        <h2 className="text-xl font-bold text-[color:var(--nav)]">Payment Information</h2>
+                      </div>
+
+                      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                        <div className="rounded-2xl border border-white/70 bg-white p-4 shadow-sm">
+                          <p className="text-xs uppercase tracking-wide text-[color:var(--nav)]/50">Workshop Fee</p>
+                          <p className="mt-1 text-lg font-semibold text-[color:var(--nav)]">INR {registration.fee_amount}</p>
+                          <p className="mt-2 text-sm text-[color:var(--nav)]/65">Please use the PayU gateway below to complete payment.</p>
+                        </div>
+
+                        <a
+                          href={PAYMENT_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="rounded-2xl bg-[color:var(--primary)] text-white p-4 shadow-sm transition-all hover:opacity-90 flex flex-col justify-center items-center text-center group min-h-[96px]"
+                        >
+                          <span className="font-bold flex items-center gap-2 text-lg">
+                            Pay Now
+                            <ExternalLink className="w-4 h-4 opacity-80 group-hover:translate-x-1 transition-transform" />
+                          </span>
+                          <span className="text-xs opacity-90 mt-0.5">via PayU Gateway</span>
+                        </a>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="rounded-3xl border border-[color:var(--nav)]/10 bg-[linear-gradient(180deg,rgba(8,84,120,0.08),rgba(255,255,255,0.9))] p-6 shadow-lg">
                     <div className="flex items-center gap-3 mb-4">
                       <div className={`rounded-2xl ${theme.accentSoft} p-3 ${theme.text}`}>
@@ -481,6 +507,25 @@ export default function WorkshopRegistrationStatusPage() {
                     </ol>
                   </div>
                 </div>
+
+                {showWorkshopDetails && agendaOpen && (
+                  <div className="lg:col-span-2 rounded-3xl border border-[color:var(--nav)]/10 bg-white p-5 md:p-6 shadow-sm">
+                    <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[color:var(--primary)] mb-2">Workshop Agenda</p>
+                        <h2 className="text-2xl font-bold text-[color:var(--nav)]">Full Day Schedule</h2>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setAgendaOpen(false)}
+                        className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--nav)]/10 bg-[color:var(--nav)]/5 px-4 py-2 text-sm font-semibold text-[color:var(--nav)] hover:bg-[color:var(--primary)] hover:text-white hover:border-[color:var(--primary)] transition-colors"
+                      >
+                        Hide Agenda <ChevronUp size={14} />
+                      </button>
+                    </div>
+                    <AgendaTable />
+                  </div>
+                )}
               </div>
             )}
           </div>
