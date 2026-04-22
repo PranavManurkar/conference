@@ -7,8 +7,6 @@ from .views import (
     register_view,
     RegistrationViewSet,
     LogoutView,
-    PasswordResetRequestView,
-    PasswordResetConfirmView,
     WorkshopRegistrationCreateView,
     WorkshopRegistrationLookupView,
     WorkshopTransactionSubmitView,
@@ -26,6 +24,4 @@ urlpatterns = [
     path("workshop-registrations/submit-transaction/", WorkshopTransactionSubmitView.as_view(), name="workshop-transaction-submit"),
     path("auth/register/", register_view, name="register"),
     path("auth/logout/", LogoutView.as_view(), name="auth-logout"),
-    path("auth/password-reset/request/", PasswordResetRequestView.as_view(), name="password-reset-request"),
-    path("auth/password-reset/confirm/", PasswordResetConfirmView.as_view(), name="password-reset-confirm"),
 ]
