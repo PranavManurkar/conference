@@ -582,10 +582,13 @@ export default function WorkshopPage() {
             </div>
             <a
               href="/workshop/dashboard"
-              className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-[color:var(--primary)] hover:bg-[color:var(--primary)] hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 rounded-full border border-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-[color:var(--primary)] hover:bg-[color:var(--primary)] hover:text-white transition-colors shadow-sm"
             >
               Already registered? Open dashboard
             </a>
+          </div>
+          <div className="mt-4 inline-flex items-center rounded-full bg-[color:var(--primary)]/5 px-4 py-2 text-sm text-[color:var(--nav)]/70">
+            Each participant may register for only one workshop.
           </div>
         </div>
 
@@ -598,12 +601,6 @@ export default function WorkshopPage() {
             >
               {/* Card top accent */}
               <div className={`h-1.5 w-full ${ws.status === "open" ? "bg-[color:var(--primary)]" : "bg-[color:var(--nav)]/20"}`} />
-              <a
-                href="/workshop/dashboard"
-                className="text-sm text-[color:var(--primary)] font-semibold hover:underline"
-              >
-                Already registered? Go to dashboard to load your registration.
-              </a>
 
               <div className="p-6 flex flex-col flex-1">
                 {/* Status badge */}
@@ -666,18 +663,18 @@ export default function WorkshopPage() {
                 {ws.status === "open" && (
                   <button
                     onClick={() => { setSelectedWorkshop(ws); setModalOpen(true) }}
-                    className="w-full bg-[color:var(--primary)] text-white font-bold py-2.5 px-4 rounded-xl hover:opacity-90 transition-opacity text-sm"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-[linear-gradient(135deg,var(--primary),#8a2d73)] text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg hover:translate-y-[-1px] transition-all text-sm"
                   >
                     Register Now
                   </button>
                 )}
                 {ws.status === "coming_soon" && (
-                  <button disabled className="w-full bg-[color:var(--nav)]/10 text-[color:var(--nav)]/40 font-semibold py-2.5 px-4 rounded-xl text-sm cursor-not-allowed">
+                  <button disabled className="w-full bg-[color:var(--nav)]/8 text-[color:var(--nav)]/45 font-semibold py-3 px-4 rounded-xl text-sm cursor-not-allowed border border-[color:var(--nav)]/10">
                     Details Coming Soon
                   </button>
                 )}
                 {ws.status === "closed" && (
-                  <button disabled className="w-full bg-red-50 text-red-400 font-semibold py-2.5 px-4 rounded-xl text-sm cursor-not-allowed">
+                  <button disabled className="w-full bg-red-50 text-red-500 font-semibold py-3 px-4 rounded-xl text-sm cursor-not-allowed border border-red-100">
                     Registration Closed
                   </button>
                 )}
@@ -737,6 +734,7 @@ export default function WorkshopPage() {
           <p className="font-semibold text-[color:var(--nav)] mb-2">Important Note</p>
           <ul className="space-y-1.5 list-none">
             {[
+              "Each participant may register for only one workshop.",
               "Workshop registration is separate from the main conference registration.",
               "Seats are limited. Registration is confirmed only after payment completion.",
               "For queries, contact: 2dmtg@iiti.ac.in",
