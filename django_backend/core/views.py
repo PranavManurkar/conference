@@ -4,6 +4,7 @@ from rest_framework.decorators import action, api_view, permission_classes,authe
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from .models import Registration, WorkshopRegistration
 from .serializers import (
     RegisterSerializer,
@@ -13,6 +14,13 @@ from .serializers import (
 )
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from rest_framework_simplejwt.views import TokenViewBase
 from rest_framework.views import APIView
 
@@ -234,6 +242,89 @@ class LogoutView(APIView):
         except Exception:
             # token could already be blacklisted/invalid — still clear client tokens
             return Response({"detail": "Invalid token or already logged out"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PasswordResetRequestView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = (request.data.get("email") or "").strip().lower()
+        generic_response = {
+            "detail": "If this email exists, password reset instructions have been sent."
+        }
+
+        if not email:
+            # Keep response generic to avoid account enumeration.
+            return Response(generic_response, status=status.HTTP_200_OK)
+
+        user = User.objects.filter(email__iexact=email).first()
+        if not user:
+            return Response(generic_response, status=status.HTTP_200_OK)
+
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        reset_url = f"{settings.FRONTEND_BASE_URL.rstrip('/')}/auth/reset-password?uid={uid}&token={token}"
+
+        subject = "2D MatTech Global 2026 - Password Reset"
+        message = (
+            "We received a request to reset your password for your 2D MatTech Global account.\n\n"
+            f"Reset your password using this link:\n{reset_url}\n\n"
+            f"This link expires in {settings.PASSWORD_RESET_TIMEOUT // 60} minutes. "
+            "If you did not request this, you can ignore this email."
+        )
+
+        try:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+        except Exception:
+            # Return generic response even if email fails, to avoid leaking account state.
+            pass
+
+        return Response(generic_response, status=status.HTTP_200_OK)
+
+
+class PasswordResetConfirmView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        uid = request.data.get("uid")
+        token = request.data.get("token")
+        new_password = request.data.get("new_password")
+
+        if not uid or not token or not new_password:
+            return Response(
+                {"detail": "uid, token, and new_password are required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            user_id = urlsafe_base64_decode(uid).decode()
+            user = User.objects.get(pk=user_id)
+        except Exception:
+            return Response({"detail": "Invalid reset link."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not default_token_generator.check_token(user, token):
+            return Response({"detail": "Invalid or expired reset link."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            validate_password(new_password, user=user)
+        except ValidationError as exc:
+            return Response({"detail": exc.messages[0]}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(new_password)
+        user.save(update_fields=["password"])
+
+        # Invalidate all outstanding refresh tokens for security after password change.
+        outstanding_tokens = OutstandingToken.objects.filter(user=user)
+        for outstanding_token in outstanding_tokens:
+            BlacklistedToken.objects.get_or_create(token=outstanding_token)
+
+        return Response({"detail": "Password reset successful."}, status=status.HTTP_200_OK)
         
 from rest_framework.decorators import api_view
 from rest_framework.response import Response

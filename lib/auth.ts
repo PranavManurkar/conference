@@ -236,6 +236,69 @@ export async function signUp(
   }
 }
 
+export async function requestPasswordReset(
+  email: string
+): Promise<{ success: boolean; error: string | null; message: string }> {
+  const fallbackMessage = "If this email exists, password reset instructions have been sent."
+
+  try {
+    const response = await fetch(`${DJANGO_API_URL}/api/auth/password-reset/request/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
+
+    const data = await response.json().catch(() => ({}))
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.detail || "Unable to process reset request. Please try again.",
+        message: fallbackMessage,
+      }
+    }
+
+    return {
+      success: true,
+      error: null,
+      message: data.detail || fallbackMessage,
+    }
+  } catch {
+    return {
+      success: false,
+      error: "Network error. Please try again.",
+      message: fallbackMessage,
+    }
+  }
+}
+
+export async function confirmPasswordReset(
+  uid: string,
+  token: string,
+  newPassword: string
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    const response = await fetch(`${DJANGO_API_URL}/api/auth/password-reset/confirm/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid, token, new_password: newPassword }),
+    })
+
+    const data = await response.json().catch(() => ({}))
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.detail || "Reset link is invalid or expired.",
+      }
+    }
+
+    return { success: true, error: null }
+  } catch {
+    return { success: false, error: "Network error. Please try again." }
+  }
+}
+
 // immediate, synchronous local logout (good UX)
 export function logout(): void {
   clearTokens()
