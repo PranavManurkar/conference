@@ -156,13 +156,21 @@ export default function Hero() {
         </div>
       </div>
       <div className="mt-15 mb- 3flex items-center justify-center">
-          <h2 className="text-4xl font-bold text-[color:var(--nav)] text-center">
+        <div className="text-center">
+          <h2 className="text-4xl font-bold text-[color:var(--nav)]">
             "Join the conference and publish with{" "}
             <Link href="/paper_publish" className="text-[color:var(--primary)] hover:underline underline-offset-4">
               WILEY"
             </Link>
           </h2>
+          <p className="mt-3 text-xl font-semibold text-[color:var(--nav)]">
+            Opportunity to join Pre-conference{" "}
+            <Link href="/workshop" className="text-[color:var(--primary)] hover:underline underline-offset-4">
+              workshop
+            </Link>
+          </p>
         </div>
+      </div>
     </section>
   )
 }
