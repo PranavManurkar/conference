@@ -4,8 +4,13 @@ from rest_framework.decorators import action, api_view, permission_classes,authe
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Registration
-from .serializers import RegisterSerializer, RegistrationSerializer, EmailTokenObtainPairSerializer
+from .models import Registration, WorkshopRegistration
+from .serializers import (
+    RegisterSerializer,
+    RegistrationSerializer,
+    EmailTokenObtainPairSerializer,
+    WorkshopRegistrationSerializer,
+)
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.views import TokenViewBase
@@ -104,6 +109,66 @@ class RegistrationViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # attach authenticated user
         serializer.save(user=self.request.user)
+
+
+class WorkshopRegistrationCreateView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = WorkshopRegistrationSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        registration = serializer.save()
+        return Response(WorkshopRegistrationSerializer(registration).data, status=status.HTTP_201_CREATED)
+
+
+class WorkshopRegistrationLookupView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        registration_id = request.query_params.get("registration_id")
+        email = request.query_params.get("email")
+
+        queryset = WorkshopRegistration.objects.all()
+
+        if registration_id:
+            queryset = queryset.filter(pk=registration_id)
+        if email:
+            queryset = queryset.filter(email__iexact=email.strip())
+
+        registration = queryset.first()
+        if not registration:
+            return Response({"detail": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(WorkshopRegistrationSerializer(registration).data)
+
+
+class WorkshopTransactionSubmitView(APIView):
+    permission_classes = [AllowAny]
+
+    def patch(self, request):
+        registration_id = request.data.get("registration_id")
+        email = request.data.get("email", "").strip().lower()
+        transaction_id = request.data.get("transaction_id", "").strip()
+
+        if not registration_id or not email or not transaction_id:
+            return Response(
+                {"detail": "registration_id, email, and transaction_id are required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        registration = get_object_or_404(WorkshopRegistration, pk=registration_id, email__iexact=email)
+
+        if registration.status != WorkshopRegistration.STATUS_APPROVED_FOR_PAYMENT:
+            return Response(
+                {"detail": "Transaction ID can only be submitted after approval for payment."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        registration.transaction_id = transaction_id
+        registration.status = WorkshopRegistration.STATUS_PAYMENT_SUBMITTED
+        registration.save(update_fields=["transaction_id", "status", "updated_at"])
+
+        return Response(WorkshopRegistrationSerializer(registration).data)
         
 # from django.db import transaction
 # @api_view(["POST"])

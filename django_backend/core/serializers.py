@@ -1,6 +1,6 @@
 # core/serializers.py
 from rest_framework import serializers
-from .models import CustomUser, Registration
+from .models import CustomUser, Registration, WorkshopRegistration
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -176,4 +176,79 @@ class RegistrationSerializer(serializers.ModelSerializer):
             validated_data["abstract_id"] = None
             validated_data["oral_presentation"] = False
             validated_data["poster_presentation"] = False
+        return super().update(instance, validated_data)
+
+
+class WorkshopRegistrationSerializer(serializers.ModelSerializer):
+    registration_id = serializers.SerializerMethodField(read_only=True)
+    status_display = serializers.CharField(source="get_status_display", read_only=True)
+
+    class Meta:
+        model = WorkshopRegistration
+        fields = (
+            "id",
+            "registration_id",
+            "workshop_id",
+            "workshop_title",
+            "full_name",
+            "email",
+            "phone",
+            "institution",
+            "designation",
+            "participant_type",
+            "fee_amount",
+            "transaction_id",
+            "status",
+            "status_display",
+            "admin_notes",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = (
+            "id",
+            "registration_id",
+            "fee_amount",
+            "status",
+            "status_display",
+            "admin_notes",
+            "created_at",
+            "updated_at",
+        )
+
+    def get_registration_id(self, obj):
+        return obj.registration_reference
+
+    def validate_email(self, value):
+        return value.strip().lower()
+
+    def validate(self, attrs):
+        workshop_id = attrs.get("workshop_id")
+        email = attrs.get("email")
+
+        if self.instance is None and workshop_id and email:
+            existing = WorkshopRegistration.objects.filter(
+                workshop_id=workshop_id,
+                email__iexact=email,
+            ).exclude(status=WorkshopRegistration.STATUS_REJECTED)
+            if existing.exists():
+                raise serializers.ValidationError({
+                    "email": "You already have a workshop registration in progress or approved."
+                })
+
+        participant_type = attrs.get("participant_type")
+        if self.instance is not None and participant_type is None:
+            participant_type = self.instance.participant_type
+
+        if participant_type not in dict(WorkshopRegistration.PARTICIPANT_CHOICES):
+            raise serializers.ValidationError({"participant_type": "Select a valid participant type."})
+
+        return attrs
+
+    def create(self, validated_data):
+        validated_data["status"] = WorkshopRegistration.STATUS_UNDER_PROCESS
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        if validated_data.get("transaction_id") and instance.status == WorkshopRegistration.STATUS_APPROVED_FOR_PAYMENT:
+            validated_data["status"] = WorkshopRegistration.STATUS_PAYMENT_SUBMITTED
         return super().update(instance, validated_data)

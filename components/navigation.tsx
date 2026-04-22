@@ -24,6 +24,7 @@ export default function Navigation() {
         
       ],
     },
+    { label: "Workshop", href: "/workshop" },
     { label: "Abstract-Paper-Awards Submission", href: "/",
       children:[
         {label: "Abstract Submission", href: "/paper-submission"},
