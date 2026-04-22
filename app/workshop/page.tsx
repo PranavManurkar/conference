@@ -580,6 +580,12 @@ export default function WorkshopPage() {
               <Users size={16} className="text-[color:var(--primary)]" />
               Limited seats per workshop
             </div>
+            <a
+              href="/workshop/dashboard"
+              className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-[color:var(--primary)] hover:bg-[color:var(--primary)] hover:text-white transition-colors"
+            >
+              Already registered? Open dashboard
+            </a>
           </div>
         </div>
 
@@ -592,6 +598,12 @@ export default function WorkshopPage() {
             >
               {/* Card top accent */}
               <div className={`h-1.5 w-full ${ws.status === "open" ? "bg-[color:var(--primary)]" : "bg-[color:var(--nav)]/20"}`} />
+              <a
+                href="/workshop/dashboard"
+                className="text-sm text-[color:var(--primary)] font-semibold hover:underline"
+              >
+                Already registered? Go to dashboard to load your registration.
+              </a>
 
               <div className="p-6 flex flex-col flex-1">
                 {/* Status badge */}

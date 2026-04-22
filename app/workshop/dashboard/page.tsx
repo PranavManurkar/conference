@@ -65,7 +65,7 @@ export default function WorkshopDashboardPage() {
 
     try {
       const params = new URLSearchParams()
-      if (registrationId) params.set("registration_id", registrationId.trim())
+      if (registrationId) params.set("registration_reference", registrationId.trim())
       if (email) params.set("email", email.trim().toLowerCase())
 
       const res = await fetch(`${DJANGO_API_URL}/api/workshop-registrations/lookup/?${params.toString()}`)
@@ -163,6 +163,19 @@ export default function WorkshopDashboardPage() {
               </div>
             </div>
 
+            <div className="mb-4 rounded-2xl border border-[color:var(--primary)]/15 bg-[color:var(--primary)]/5 p-4 text-sm text-[color:var(--nav)]/75 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="font-semibold text-[color:var(--nav)]">Already registered?</p>
+                <p className="text-[color:var(--nav)]/65">Open your workshop dashboard and load your reference to continue.</p>
+              </div>
+              <a
+                href="/workshop"
+                className="inline-flex items-center justify-center rounded-xl border border-[color:var(--primary)] px-4 py-2 font-semibold text-[color:var(--primary)] hover:bg-[color:var(--primary)] hover:text-white transition-colors"
+              >
+                Go to Workshop
+              </a>
+            </div>
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-[color:var(--nav)] mb-2">Registration Reference</label>
@@ -204,6 +217,14 @@ export default function WorkshopDashboardPage() {
               >
                 {loading ? <Loader2 size={18} className="animate-spin" /> : <ShieldCheck size={18} />}
                 {loading ? "Loading..." : "Load Registration"}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => router.push("/workshop")}
+                className="w-full rounded-xl border border-[color:var(--nav)]/10 px-5 py-3 font-semibold text-[color:var(--nav)] hover:bg-[color:var(--nav)]/5 transition-colors"
+              >
+                Back to workshop registration
               </button>
             </div>
 

@@ -126,12 +126,35 @@ class WorkshopRegistrationLookupView(APIView):
 
     def get(self, request):
         registration_id = request.query_params.get("registration_id")
+        registration_reference = request.query_params.get("registration_reference")
         email = request.query_params.get("email")
 
         queryset = WorkshopRegistration.objects.all()
 
-        if registration_id:
-            queryset = queryset.filter(pk=registration_id)
+        if registration_reference:
+            reference = registration_reference.strip()
+            if reference.upper().startswith("WS") and "-" in reference:
+                maybe_pk = reference.rsplit("-", 1)[-1]
+                if maybe_pk.isdigit():
+                    queryset = queryset.filter(pk=int(maybe_pk))
+                else:
+                    queryset = queryset.none()
+            elif reference.isdigit():
+                queryset = queryset.filter(pk=int(reference))
+            else:
+                queryset = queryset.none()
+        elif registration_id:
+            reference = registration_id.strip()
+            if reference.isdigit():
+                queryset = queryset.filter(pk=int(reference))
+            elif reference.upper().startswith("WS") and "-" in reference:
+                maybe_pk = reference.rsplit("-", 1)[-1]
+                if maybe_pk.isdigit():
+                    queryset = queryset.filter(pk=int(maybe_pk))
+                else:
+                    queryset = queryset.none()
+            else:
+                queryset = queryset.none()
         if email:
             queryset = queryset.filter(email__iexact=email.strip())
 
