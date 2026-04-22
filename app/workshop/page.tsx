@@ -39,7 +39,7 @@ const agenda: AgendaItem[] = [
     time: "11:45 – 12:30",
     title: "Role of Particle Size, Zeta Potential & Rheology in Powders & Slurries",
     speaker: "Mr. Tejas Kharva",
-    speakerRole: "Application Specialist, Aimil",
+    speakerRole: "Application Specialist",
     highlight: true,
   },
   {
@@ -526,7 +526,7 @@ const workshops: WorkshopCard[] = [
     date: "June 23, 2026",
     time: "10:30 AM – 05:30 PM",
     venue: "IIT Indore",
-    partners: "Malvern Panalytical & Aimil",
+    partners: "Malvern Panalytical",
     status: "open",
     description:
       "A full-day pre-conference workshop on XRD & XRF fundamentals, particle characterization, sample preparation best practices, and a live Empyrean XRD & Zetasizer demonstration.",
@@ -717,7 +717,7 @@ export default function WorkshopPage() {
                   { label: "Speakers", value: "4 Industry Experts" },
                   { label: "Duration", value: "Full Day (7 hrs)" },
                   { label: "Date", value: "June 23, 2026" },
-                  { label: "Partners", value: "Malvern Panalytical & Aimil" },
+                  { label: "Partners", value: "Malvern Panalytical" },
                 ].map((item) => (
                   <div key={item.label} className="text-center">
                     <p className="text-[color:var(--nav)]/50 text-xs uppercase tracking-wide">{item.label}</p>
