@@ -39,12 +39,16 @@ type Registration = {
   participant_region: string
   payment_amount: number
   transaction_id: string | null
+  transaction_screenshot: string | null
   payment_date: string | null
   status: string
   admin_notes: string | null
   created_at: string
   is_presenter: boolean
   abstract_id: string | null
+  cmt_id: string | null
+  abstract_title: string | null
+  presentation_type: "oral" | "poster" | "thesis" | null
   oral_presentation: boolean
   poster_presentation: boolean
   accompanying_persons: number
@@ -62,9 +66,12 @@ type FormData = {
   registration_period: string
   participant_region: string
   transaction_id: string
+  transaction_screenshot: File | null
   payment_date: string
   abstract_id: string
+  abstract_title: string
   accompanying_persons: number
+  presentation_type: "oral" | "poster" | "thesis" | ""
   oral_presentation: boolean
   poster_presentation: boolean
   is_presenter: boolean | null // null = not yet chosen
@@ -73,7 +80,8 @@ type FormData = {
 async function authFetch(input: RequestInfo, init?: RequestInit) {
   const token = getAccessToken()
   const headers = new Headers(init?.headers || {})
-  if (!headers.get("Content-Type")) headers.set("Content-Type", "application/json")
+  const isMultipart = init?.body instanceof FormData
+  if (!isMultipart && !headers.get("Content-Type")) headers.set("Content-Type", "application/json")
   if (token) headers.set("Authorization", `Bearer ${token}`)
 
   const res = await fetch(input, { ...init, headers })
@@ -82,7 +90,7 @@ async function authFetch(input: RequestInfo, init?: RequestInit) {
     const newAccess = await refreshAccessToken()
     if (newAccess) {
       const retryHeaders = new Headers(init?.headers || {})
-      if (!retryHeaders.get("Content-Type")) retryHeaders.set("Content-Type", "application/json")
+      if (!isMultipart && !retryHeaders.get("Content-Type")) retryHeaders.set("Content-Type", "application/json")
       retryHeaders.set("Authorization", `Bearer ${newAccess}`)
       return fetch(input, { ...init, headers: retryHeaders })
     }
@@ -112,9 +120,12 @@ export default function DashboardClient({ user }: { user: User }) {
     registration_period: "",
     participant_region: "",
     transaction_id: "",
+    transaction_screenshot: null,
     payment_date: "",
     abstract_id: "",
+    abstract_title: "",
     accompanying_persons: 0,
+    presentation_type: "",
     oral_presentation: false,
     poster_presentation: false,
     is_presenter: null, // ← null means "not yet selected"
@@ -147,11 +158,15 @@ export default function DashboardClient({ user }: { user: User }) {
               registration_period: reg.registration_period || "",
               participant_region: reg.participant_region || "",
               transaction_id: reg.transaction_id || "",
+              transaction_screenshot: null,
               payment_date: reg.payment_date || "",
               // is_presenter from DB is always a real boolean
               is_presenter: typeof reg.is_presenter === "boolean" ? reg.is_presenter : null,
-              abstract_id: reg.abstract_id || "",
+              abstract_id: reg.cmt_id || reg.abstract_id || "",
+              abstract_title: reg.abstract_title || "",
               accompanying_persons: reg.accompanying_persons || 0,
+              presentation_type:
+                reg.presentation_type || (reg.oral_presentation ? "oral" : reg.poster_presentation ? "poster" : ""),
               oral_presentation: !!reg.oral_presentation,
               poster_presentation: !!reg.poster_presentation,
             })
@@ -178,10 +193,14 @@ export default function DashboardClient({ user }: { user: User }) {
               registration_period: data.registration_period || "",
               participant_region: data.participant_region || "",
               transaction_id: data.transaction_id || "",
+              transaction_screenshot: null,
               payment_date: data.payment_date || "",
               is_presenter: typeof data.is_presenter === "boolean" ? data.is_presenter : null,
-              abstract_id: data.abstract_id || "",
+              abstract_id: data.cmt_id || data.abstract_id || "",
+              abstract_title: data.abstract_title || "",
               accompanying_persons: data.accompanying_persons || 0,
+              presentation_type:
+                data.presentation_type || (data.oral_presentation ? "oral" : data.poster_presentation ? "poster" : ""),
               oral_presentation: !!data.oral_presentation,
               poster_presentation: !!data.poster_presentation,
             })
@@ -278,10 +297,11 @@ export default function DashboardClient({ user }: { user: User }) {
       !formData.full_name.trim() ||
       !formData.email.trim() ||
       !formData.transaction_id.trim() ||
-      !formData.payment_date.trim()
+      !formData.payment_date.trim() ||
+      !formData.transaction_screenshot
 
     if (missingBasic) {
-      setError("Please fill in all required fields: Full Name, Email, Transaction ID, and Payment Date.")
+      setError("Please fill in all required fields and upload the transaction screenshot.")
       setIsLoading(false)
       return
     }
@@ -298,19 +318,17 @@ export default function DashboardClient({ user }: { user: User }) {
     // presenter-specific validation
     if (isPresenter) {
       if (!formData.abstract_id.trim()) {
-        setError("Please provide the Abstract ID since you are presenting a paper.")
+        setError("Please provide the CMT ID since you are presenting a paper.")
         setIsLoading(false)
         return
       }
-      const oral = !!formData.oral_presentation
-      const poster = !!formData.poster_presentation
-      if (!oral && !poster) {
-        setError("Please select either Oral or Poster presentation type.")
+      if (!formData.abstract_title.trim()) {
+        setError("Please provide the abstract title since you are presenting a paper.")
         setIsLoading(false)
         return
       }
-      if (oral && poster) {
-        setError("Please select only one presentation type (either Oral OR Poster).")
+      if (!formData.presentation_type) {
+        setError("Please select Oral, Poster, or Thesis presentation type.")
         setIsLoading(false)
         return
       }
@@ -319,24 +337,29 @@ export default function DashboardClient({ user }: { user: User }) {
     const paymentAmount = calculatePaymentAmount()
 
     try {
-      const registrationData = {
-        full_name: formData.full_name,
-        email: formData.email,
-        phone: formData.phone,
-        institution_organization: formData.institution_organization,
-        designation: formData.designation,
-        country: formData.country,
-        delegate_type: formData.delegate_type,
-        registration_period: formData.registration_period,
-        participant_region: formData.participant_region,
-        transaction_id: formData.transaction_id,
-        payment_date: formData.payment_date,
-        payment_amount: paymentAmount,
-        is_presenter: isPresenter,
-        abstract_id: isPresenter ? formData.abstract_id : null,
-        oral_presentation: isPresenter ? !!formData.oral_presentation : false,
-        poster_presentation: isPresenter ? !!formData.poster_presentation : false,
-        accompanying_persons: Number(formData.accompanying_persons || 0),
+      const registrationData = new FormData()
+      registrationData.append("full_name", formData.full_name)
+      registrationData.append("email", formData.email)
+      registrationData.append("phone", formData.phone)
+      registrationData.append("institution_organization", formData.institution_organization)
+      registrationData.append("designation", formData.designation)
+      registrationData.append("country", formData.country)
+      registrationData.append("delegate_type", formData.delegate_type)
+      registrationData.append("registration_period", formData.registration_period)
+      registrationData.append("participant_region", formData.participant_region)
+      registrationData.append("transaction_id", formData.transaction_id)
+      registrationData.append("payment_date", formData.payment_date)
+      registrationData.append("payment_amount", String(paymentAmount))
+      registrationData.append("is_presenter", String(isPresenter))
+      registrationData.append("abstract_id", isPresenter ? formData.abstract_id : "")
+      registrationData.append("cmt_id", isPresenter ? formData.abstract_id : "")
+      registrationData.append("abstract_title", isPresenter ? formData.abstract_title : "")
+      registrationData.append("presentation_type", isPresenter ? formData.presentation_type : "")
+      registrationData.append("oral_presentation", String(isPresenter && formData.presentation_type === "oral"))
+      registrationData.append("poster_presentation", String(isPresenter && formData.presentation_type === "poster"))
+      registrationData.append("accompanying_persons", String(Number(formData.accompanying_persons || 0)))
+      if (formData.transaction_screenshot) {
+        registrationData.append("transaction_screenshot", formData.transaction_screenshot)
       }
 
       console.debug("Submitting payload:", registrationData)
@@ -360,10 +383,14 @@ export default function DashboardClient({ user }: { user: User }) {
         if (data) {
           // Try to surface the most useful error message from DRF
           const fieldError =
+              (data.cmt_id?.[0] as string) ||
             (data.abstract_id?.[0] as string) ||
+              (data.abstract_title?.[0] as string) ||
+              (data.presentation_type?.[0] as string) ||
             (data.oral_presentation?.[0] as string) ||
             (data.poster_presentation?.[0] as string) ||
             (data.transaction_id?.[0] as string) ||
+              (data.transaction_screenshot?.[0] as string) ||
             (data.email?.[0] as string) ||
             (data.non_field_errors?.[0] as string) ||
             (data.detail as string) ||
@@ -387,9 +414,13 @@ export default function DashboardClient({ user }: { user: User }) {
         setFormData((prev) => ({
           ...prev,
           is_presenter: typeof data.is_presenter === "boolean" ? data.is_presenter : prev.is_presenter,
-          abstract_id: data.abstract_id || "",
+          abstract_id: data.cmt_id || data.abstract_id || "",
+          abstract_title: data.abstract_title || "",
+          presentation_type:
+            data.presentation_type || (data.oral_presentation ? "oral" : data.poster_presentation ? "poster" : ""),
           oral_presentation: !!data.oral_presentation,
           poster_presentation: !!data.poster_presentation,
+          transaction_screenshot: null,
         }))
       }
     } catch (err: unknown) {
@@ -420,8 +451,11 @@ export default function DashboardClient({ user }: { user: User }) {
           participant_region: "",
           transaction_id: "",
           payment_date: "",
+          transaction_screenshot: null,
           is_presenter: null, // reset to null so radio is unchecked
           abstract_id: "",
+          abstract_title: "",
+          presentation_type: "",
           poster_presentation: false,
           oral_presentation: false,
           accompanying_persons: 0,
@@ -483,6 +517,7 @@ export default function DashboardClient({ user }: { user: User }) {
               : `$${reg.payment_amount}`,
         },
         { label: "Transaction ID", value: reg.transaction_id },
+          { label: "Transaction Screenshot", value: reg.transaction_screenshot ? "Uploaded" : "—" },
       ].map((item) => (
         <div
           key={item.label}
@@ -492,17 +527,33 @@ export default function DashboardClient({ user }: { user: User }) {
           <p className="font-semibold text-gray-900 break-words">{item.value || "—"}</p>
         </div>
       ))}
-      {reg.is_presenter && reg.abstract_id && (
+        {reg.is_presenter && (reg.cmt_id || reg.abstract_id) && (
         <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100">
-          <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Abstract ID</p>
-          <p className="font-semibold text-gray-900">{reg.abstract_id}</p>
+            <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">CMT ID</p>
+            <p className="font-semibold text-gray-900">{reg.cmt_id || reg.abstract_id}</p>
+          </div>
+        )}
+        {reg.is_presenter && reg.abstract_title && (
+          <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100">
+            <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Abstract Title</p>
+            <p className="font-semibold text-gray-900">{reg.abstract_title}</p>
         </div>
       )}
       {reg.is_presenter && (
         <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100">
           <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Presentation Mode</p>
           <p className="font-semibold text-gray-900">
-            {reg.oral_presentation ? "Oral Presentation" : reg.poster_presentation ? "Poster Presentation" : "—"}
+              {reg.presentation_type === "oral"
+                ? "Oral Presentation"
+                : reg.presentation_type === "poster"
+                  ? "Poster Presentation"
+                  : reg.presentation_type === "thesis"
+                    ? "Thesis Presentation"
+                    : reg.oral_presentation
+                      ? "Oral Presentation"
+                      : reg.poster_presentation
+                        ? "Poster Presentation"
+                        : "—"}
           </p>
         </div>
       )}
@@ -852,12 +903,31 @@ export default function DashboardClient({ user }: { user: User }) {
                       </RadioGroup>
                     </div>
 
-                    {/* Abstract ID + presentation type — only shown when presenter = yes */}
+                    {/* CMT ID + abstract title + presentation type — only shown when presenter = yes */}
                     {formData.is_presenter === true && (
                       <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
                         <div className="space-y-2">
+                          <Label htmlFor="abstract_title" className="text-sm font-semibold text-gray-700">
+                            Abstract Title <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            id="abstract_title"
+                            required
+                            disabled={!canEdit}
+                            value={formData.abstract_title}
+                            onChange={(e) => setFormData({ ...formData, abstract_title: e.target.value })}
+                            className="h-12 border-2 focus:border-purple-500 transition-colors"
+                            placeholder="Enter your abstract title"
+                          />
+                          <p className="text-xs text-gray-500 flex items-center gap-1">
+                            <Info className="h-3 w-3" />
+                            Title used in your CMT submission
+                          </p>
+                        </div>
+
+                        <div className="space-y-2">
                           <Label htmlFor="abstract_id" className="text-sm font-semibold text-gray-700">
-                            Abstract ID <span className="text-red-500">*</span>
+                            CMT ID <span className="text-red-500">*</span>
                           </Label>
                           <Input
                             id="abstract_id"
@@ -866,11 +936,11 @@ export default function DashboardClient({ user }: { user: User }) {
                             value={formData.abstract_id}
                             onChange={(e) => setFormData({ ...formData, abstract_id: e.target.value })}
                             className="h-12 border-2 focus:border-purple-500 transition-colors"
-                            placeholder="Enter your abstract ID from CMT"
+                            placeholder="Enter your CMT paper ID"
                           />
                           <p className="text-xs text-gray-500 flex items-center gap-1">
                             <Info className="h-3 w-3" />
-                            The Abstract ID assigned after your CMT submission
+                            The CMT ID assigned after your submission
                           </p>
                         </div>
 
@@ -878,33 +948,34 @@ export default function DashboardClient({ user }: { user: User }) {
                           <legend className="text-sm font-semibold text-gray-700">
                             Presentation Type <span className="text-red-500">*</span>
                           </legend>
-                          <div className="flex gap-6 mt-2">
-                            <label className="flex items-center gap-2 cursor-pointer">
-                              <input
-                                type="radio"
-                                name="presentation_type"
-                                value="oral"
-                                checked={!!formData.oral_presentation}
-                                disabled={!canEdit}
-                                onChange={() =>
-                                  setFormData({ ...formData, oral_presentation: true, poster_presentation: false })
-                                }
-                              />
-                              <span className="ml-1 text-sm">Oral Presentation</span>
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer">
-                              <input
-                                type="radio"
-                                name="presentation_type"
-                                value="poster"
-                                checked={!!formData.poster_presentation}
-                                disabled={!canEdit}
-                                onChange={() =>
-                                  setFormData({ ...formData, oral_presentation: false, poster_presentation: true })
-                                }
-                              />
-                              <span className="ml-1 text-sm">Poster Presentation</span>
-                            </label>
+                          <div className="grid gap-3 sm:grid-cols-3 mt-2">
+                            {[
+                              { value: "oral", label: "Oral Presentation" },
+                              { value: "poster", label: "Poster Presentation" },
+                              { value: "thesis", label: "Thesis Presentation" },
+                            ].map((option) => (
+                              <label
+                                key={option.value}
+                                className="flex items-center gap-2 cursor-pointer rounded-xl border border-gray-200 bg-white px-4 py-3"
+                              >
+                                <input
+                                  type="radio"
+                                  name="presentation_type"
+                                  value={option.value}
+                                  checked={formData.presentation_type === option.value}
+                                  disabled={!canEdit}
+                                  onChange={() =>
+                                    setFormData({
+                                      ...formData,
+                                      presentation_type: option.value as FormData["presentation_type"],
+                                      oral_presentation: option.value === "oral",
+                                      poster_presentation: option.value === "poster",
+                                    })
+                                  }
+                                />
+                                <span className="ml-1 text-sm">{option.label}</span>
+                              </label>
+                            ))}
                           </div>
                         </fieldset>
                       </div>
@@ -1011,6 +1082,27 @@ export default function DashboardClient({ user }: { user: User }) {
                         className="h-12 border-2 focus:border-indigo-500"
                       />
                     </div>
+                  </div>
+
+                  <div className="space-y-2 max-w-2xl">
+                    <Label htmlFor="transaction_screenshot" className="text-sm font-semibold text-gray-700">
+                      Transaction Screenshot <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="transaction_screenshot"
+                      type="file"
+                      accept="image/*"
+                      required
+                      disabled={!canEdit}
+                      onChange={(e) =>
+                        setFormData({ ...formData, transaction_screenshot: e.target.files?.[0] || null })
+                      }
+                      className="h-12 border-2 focus:border-indigo-500 bg-white"
+                    />
+                    <p className="text-xs text-gray-500 flex items-center gap-1">
+                      <Info className="h-3 w-3" />
+                      Upload the payment receipt or bank screenshot as an image.
+                    </p>
                   </div>
                 </div>
 

@@ -99,6 +99,14 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     is_presenter = serializers.BooleanField(required=False)
     abstract_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    cmt_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    presentation_type = serializers.ChoiceField(
+        required=False,
+        allow_blank=True,
+        allow_null=True,
+        choices=Registration.PRESENTATION_CHOICES,
+    )
+    transaction_screenshot = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Registration
@@ -107,6 +115,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         request = self.context.get("request")
+        presentation_choice_values = dict(Registration.PRESENTATION_CHOICES)
 
         # Prevent multiple active registrations
         if request and request.method == "POST" and request.user.is_authenticated:
@@ -121,43 +130,80 @@ class RegistrationSerializer(serializers.ModelSerializer):
         # Get values (handle partial update)
         is_presenter = attrs.get("is_presenter")
         abstract_id = attrs.get("abstract_id")
+        cmt_id = attrs.get("cmt_id")
+        presentation_type = attrs.get("presentation_type")
         oral = attrs.get("oral_presentation")
         poster = attrs.get("poster_presentation")
+        transaction_screenshot = attrs.get("transaction_screenshot")
 
         if self.instance is not None:
             if is_presenter is None:
                 is_presenter = self.instance.is_presenter
             if abstract_id is None:
                 abstract_id = self.instance.abstract_id
+            if cmt_id is None:
+                cmt_id = self.instance.cmt_id or self.instance.abstract_id
+            if presentation_type is None:
+                presentation_type = self.instance.presentation_type
             if oral is None:
                 oral = self.instance.oral_presentation
             if poster is None:
                 poster = self.instance.poster_presentation
 
+        if not cmt_id:
+            cmt_id = abstract_id
+
+        selected_presentation = (presentation_type or "").strip().lower() if presentation_type else ""
+        if not selected_presentation:
+            if oral:
+                selected_presentation = Registration.PRESENTATION_ORAL
+            elif poster:
+                selected_presentation = Registration.PRESENTATION_POSTER
+
+        if selected_presentation == Registration.PRESENTATION_ORAL:
+            oral = True
+            poster = False
+        elif selected_presentation == Registration.PRESENTATION_POSTER:
+            oral = False
+            poster = True
+        elif selected_presentation == Registration.PRESENTATION_THESIS:
+            oral = False
+            poster = False
+
         # Defaults
         oral = bool(oral)
         poster = bool(poster)
 
+        if request and request.method == "POST" and not transaction_screenshot:
+            raise serializers.ValidationError({
+                "transaction_screenshot": "Transaction screenshot is required with the transaction ID."
+            })
+
         # ---------------- PRESENTER LOGIC ----------------
         if is_presenter:
             # Require abstract_id
-            if not abstract_id:
+            if not cmt_id:
                 raise serializers.ValidationError({
-                    "abstract_id": "Required when is_presenter is true."
+                    "cmt_id": "Required when is_presenter is true."
                 })
 
-            # Require oral or poster
-            if not (oral or poster):
+            # Require a presentation type
+            if selected_presentation not in presentation_choice_values:
                 raise serializers.ValidationError({
-                    "oral_presentation": "Select oral or poster presentation."
+                    "presentation_type": "Select oral, poster, or thesis presentation."
                 })
 
+            attrs["cmt_id"] = cmt_id
+            attrs["abstract_id"] = abstract_id or cmt_id
+            attrs["presentation_type"] = selected_presentation
             attrs["oral_presentation"] = oral
             attrs["poster_presentation"] = poster
 
         else:
             # Not presenter → clear everything
             attrs["abstract_id"] = None
+            attrs["cmt_id"] = None
+            attrs["presentation_type"] = None
             attrs["oral_presentation"] = False
             attrs["poster_presentation"] = False
 
@@ -198,6 +244,7 @@ class WorkshopRegistrationSerializer(serializers.ModelSerializer):
             "participant_type",
             "fee_amount",
             "transaction_id",
+            "transaction_screenshot",
             "status",
             "status_display",
             "admin_notes",

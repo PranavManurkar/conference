@@ -16,7 +16,9 @@ Including another URLconf
 """
 # backend_project/urls.py
 from django.contrib import admin
+from django.conf import settings
 from django.urls import path, include
+from django.conf.urls.static import static
 from core.views import EmailTokenObtainPairView,visit_counter
 from rest_framework_simplejwt.views import TokenRefreshView
 
@@ -27,4 +29,7 @@ urlpatterns = [
     path("api/", include("core.urls")),
     path('api/visit-counter/', visit_counter, name='visit-counter'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

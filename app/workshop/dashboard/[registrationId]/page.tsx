@@ -21,6 +21,7 @@ type WorkshopRegistration = {
   participant_type: string
   fee_amount: string
   transaction_id: string | null
+  transaction_screenshot: string | null
   status: string
   status_display: string
   admin_notes: string | null
@@ -205,6 +206,7 @@ export default function WorkshopRegistrationStatusPage() {
   const [error, setError] = useState<string | null>(null)
   const [agendaOpen, setAgendaOpen] = useState(false)
   const [transactionId, setTransactionId] = useState("")
+  const [transactionScreenshot, setTransactionScreenshot] = useState<File | null>(null)
   const [submittingTransaction, setSubmittingTransaction] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
 
@@ -256,8 +258,8 @@ export default function WorkshopRegistrationStatusPage() {
 
   const submitTransaction = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!registration || !transactionId.trim()) {
-      setError("Enter the transaction ID before submitting.")
+    if (!registration || !transactionId.trim() || !transactionScreenshot) {
+      setError("Enter the transaction ID and upload the transaction screenshot before submitting.")
       return
     }
 
@@ -266,14 +268,15 @@ export default function WorkshopRegistrationStatusPage() {
     setMessage(null)
 
     try {
+      const payload = new FormData()
+      payload.append("registration_id", String(registration.id))
+      payload.append("email", registration.email)
+      payload.append("transaction_id", transactionId.trim())
+      payload.append("transaction_screenshot", transactionScreenshot)
+
       const res = await fetch(`${DJANGO_API_URL}/api/workshop-registrations/submit-transaction/`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          registration_id: registration.id,
-          email: registration.email,
-          transaction_id: transactionId.trim(),
-        }),
+        body: payload,
       })
       const data = await res.json().catch(() => ({}))
 
@@ -283,7 +286,8 @@ export default function WorkshopRegistrationStatusPage() {
       }
 
       setRegistration(data)
-      setMessage("Transaction ID submitted. Your payment is now awaiting admin verification.")
+      setTransactionScreenshot(null)
+      setMessage("Transaction ID and screenshot submitted. Your payment is now awaiting admin verification.")
     } catch {
       setError("Could not submit the transaction ID right now.")
     } finally {
@@ -479,6 +483,16 @@ export default function WorkshopRegistrationStatusPage() {
                             className="w-full rounded-xl border border-[color:var(--nav)]/15 px-4 py-3 outline-none focus:border-[color:var(--primary)]"
                           />
                         </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-[color:var(--nav)] mb-2">Transaction Screenshot</label>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => setTransactionScreenshot(e.target.files?.[0] || null)}
+                            className="w-full rounded-xl border border-[color:var(--nav)]/15 px-4 py-3 outline-none focus:border-[color:var(--primary)] bg-white"
+                          />
+                          <p className="mt-2 text-xs text-[color:var(--nav)]/55">Upload the payment receipt or screenshot as an image.</p>
+                        </div>
                         <button
                           type="submit"
                           disabled={submittingTransaction}
@@ -491,7 +505,9 @@ export default function WorkshopRegistrationStatusPage() {
                     ) : (
                       <div className="rounded-2xl border border-dashed border-[color:var(--nav)]/15 bg-white/70 p-4 text-sm text-[color:var(--nav)]/65 leading-relaxed">
                         {registration.transaction_id
-                          ? `Transaction ID already submitted: ${registration.transaction_id}`
+                          ? registration.transaction_screenshot
+                            ? `Transaction ID and screenshot already submitted: ${registration.transaction_id}`
+                            : `Transaction ID already submitted: ${registration.transaction_id}`
                           : "The transaction field unlocks after the committee selects you for payment."}
                       </div>
                     )}

@@ -5,14 +5,14 @@ import InternationalAdvisoryCarousel from "@/components/international-advisory-c
 import OrganisingCommitteeCarousel from "@/components/organising-committee-carousel"
 
 export default function CommitteePage() {
-  const [activeTab, setActiveTab] = useState("international")
+  const [activeTab, setActiveTab] = useState<"international" | "organizing">("international")
 
   return (
     <div className="min-h-screen bg-[color:var(--primary-foreground)]">
       <div className="max-w-7xl mx-auto px-4 pt-8">
         <h1 className="text-4xl font-bold text-[color:var(--nav)] mb-8">Committee</h1>
 
-        <div className="flex gap-4 mb-8 flex-wrap">
+        <div className="flex flex-wrap gap-4 mb-8">
           <button
             onClick={() => setActiveTab("international")}
             className={`px-6 py-3 rounded-lg font-semibold transition-all ${
@@ -24,14 +24,14 @@ export default function CommitteePage() {
             International Advisory Committee
           </button>
           <button
-            onClick={() => setActiveTab("organising")}
-            className={`hidden px-6 py-3 rounded-lg font-semibold transition-all ${
-              activeTab === "organising"
+            onClick={() => setActiveTab("organizing")}
+            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+              activeTab === "organizing"
                 ? "bg-[color:var(--primary)] text-white shadow-lg"
                 : "bg-[color:var(--primary-foreground)] text-[color:var(--nav)] border-2 border-[color:var(--primary)] hover:bg-[color:var(--primary)]/10"
             }`}
           >
-            Organising Committee
+            Organizing Committee
           </button>
         </div>
 
@@ -42,7 +42,7 @@ export default function CommitteePage() {
               <span className="text-[color:var(--primary)]">International</span> Advisory Committee
               </>
             ) : (
-              "Organising Committee"
+              "Organizing Committee"
             )}
             </h2>
 

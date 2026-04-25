@@ -12,7 +12,7 @@ class CustomUserAdmin(UserAdmin):
 class RegistrationAdmin(admin.ModelAdmin):
     list_display = ("full_name", "email", "status", "created_at")
     list_filter = ("status", "participant_region", "delegate_type",'accompanying_persons')
-    search_fields = ("full_name", "email", "transaction_id")
+    search_fields = ("full_name", "email", "transaction_id", "cmt_id", "abstract_id")
     readonly_fields = ("created_at",)
 
 

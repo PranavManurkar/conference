@@ -23,6 +23,16 @@ class Registration(models.Model):
     STATUS_ACCEPTED = "Accepted"
     STATUS_REJECTED = "Rejected"
 
+    PRESENTATION_ORAL = "oral"
+    PRESENTATION_POSTER = "poster"
+    PRESENTATION_THESIS = "thesis"
+
+    PRESENTATION_CHOICES = [
+        (PRESENTATION_ORAL, "Oral"),
+        (PRESENTATION_POSTER, "Poster"),
+        (PRESENTATION_THESIS, "Thesis"),
+    ]
+
     STATUS_CHOICES = [
         (STATUS_UNDER, "Under Process"),
         (STATUS_ACCEPTED, "Accepted"),
@@ -35,8 +45,10 @@ class Registration(models.Model):
     phone = models.CharField(max_length=50, blank=True)
     is_presenter = models.BooleanField(default=False)
     abstract_id = models.CharField(max_length=255, null=True, blank=True)
+    cmt_id = models.CharField(max_length=255, null=True, blank=True)
     poster_presentation = models.BooleanField(default=False)
     oral_presentation = models.BooleanField(default=False)
+    presentation_type = models.CharField(max_length=20, choices=PRESENTATION_CHOICES, null=True, blank=True)
     institution_organization = models.CharField(max_length=255, blank=True)
     designation = models.CharField(max_length=255, blank=True)
     country = models.CharField(max_length=100, blank=True)
@@ -45,6 +57,7 @@ class Registration(models.Model):
     participant_region = models.CharField(max_length=100, blank=True)
     payment_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     transaction_id = models.CharField(max_length=255, null=True, blank=True)
+    transaction_screenshot = models.ImageField(upload_to="conference_transactions/", null=True, blank=True)
     payment_date = models.DateField(null=True, blank=True)
     abstract_title = models.CharField(max_length=500, null=True, blank=True)
     accompanying_persons = models.IntegerField(default=0)
@@ -99,6 +112,7 @@ class WorkshopRegistration(models.Model):
     participant_type = models.CharField(max_length=20, choices=PARTICIPANT_CHOICES, default=PARTICIPANT_STUDENT)
     fee_amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("1000.00"))
     transaction_id = models.CharField(max_length=255, null=True, blank=True)
+    transaction_screenshot = models.ImageField(upload_to="workshop_transactions/", null=True, blank=True)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default=STATUS_UNDER_PROCESS)
     admin_notes = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

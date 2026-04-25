@@ -3,6 +3,7 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action, api_view, permission_classes,authentication_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Registration, WorkshopRegistration
 from .serializers import (
@@ -98,6 +99,7 @@ class RegistrationViewSet(viewsets.ModelViewSet):
     queryset = Registration.objects.all()
     serializer_class = RegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [JSONParser, FormParser, MultiPartParser]
 
     def get_queryset(self):
         # staff can see all, normal users only their registrations
@@ -113,6 +115,7 @@ class RegistrationViewSet(viewsets.ModelViewSet):
 
 class WorkshopRegistrationCreateView(APIView):
     permission_classes = [AllowAny]
+    parser_classes = [JSONParser, FormParser, MultiPartParser]
 
     def post(self, request):
         serializer = WorkshopRegistrationSerializer(data=request.data)
@@ -167,15 +170,17 @@ class WorkshopRegistrationLookupView(APIView):
 
 class WorkshopTransactionSubmitView(APIView):
     permission_classes = [AllowAny]
+    parser_classes = [JSONParser, FormParser, MultiPartParser]
 
     def patch(self, request):
         registration_id = request.data.get("registration_id")
         email = request.data.get("email", "").strip().lower()
         transaction_id = request.data.get("transaction_id", "").strip()
+        transaction_screenshot = request.FILES.get("transaction_screenshot") or request.data.get("transaction_screenshot")
 
-        if not registration_id or not email or not transaction_id:
+        if not registration_id or not email or not transaction_id or not transaction_screenshot:
             return Response(
-                {"detail": "registration_id, email, and transaction_id are required"},
+                {"detail": "registration_id, email, transaction_id, and transaction_screenshot are required"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -188,8 +193,9 @@ class WorkshopTransactionSubmitView(APIView):
             )
 
         registration.transaction_id = transaction_id
+        registration.transaction_screenshot = transaction_screenshot
         registration.status = WorkshopRegistration.STATUS_PAYMENT_SUBMITTED
-        registration.save(update_fields=["transaction_id", "status", "updated_at"])
+        registration.save(update_fields=["transaction_id", "transaction_screenshot", "status", "updated_at"])
 
         return Response(WorkshopRegistrationSerializer(registration).data)
         
