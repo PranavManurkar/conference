@@ -372,8 +372,7 @@ export default function DashboardClient({ user }: { user: User }) {
 
       const response = await authFetch(url, {
         method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(registrationData),
+        body: registrationData,
       })
 
       const data = await response.json().catch(() => null)
