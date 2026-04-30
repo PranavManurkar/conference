@@ -136,6 +136,21 @@ const committeeMembers: CommitteeMember[] = [
 
 
 
+  const renderAffiliation = (aff: string) => {
+    const parts = aff.split(/(\(C\))/i)
+    return (
+      <>
+        {parts.map((part, i) =>
+          /\(C\)/i.test(part) ? (
+            <strong key={i} className="font-semibold">{part}</strong>
+          ) : (
+            <span key={i}>{part}</span>
+          )
+        )}
+      </>
+    )
+  }
+
   return (
     <div className="py-12">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -168,7 +183,7 @@ const committeeMembers: CommitteeMember[] = [
                   {member.name}
                 </h3>
                 <p className="text-sm text-[color:var(--nav)]/80 line-clamp-2">
-                  {member.affiliation}
+                  {renderAffiliation(member.affiliation)}
                 </p>
               </div>
 

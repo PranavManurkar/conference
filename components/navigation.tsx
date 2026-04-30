@@ -42,7 +42,14 @@ export default function Navigation() {
     },
     { label: "Important Dates", href: "/important-dates" },
     { label: "Schedule", href: "/schedule" },
-    { label: "Committee", href: "/committee" },
+    {
+      label: "Committee",
+      href: "/committee",
+      children: [
+        { label: "International", href: "/committee/international" },
+        { label: "Organizing", href: "/committee/organizing" },
+      ],
+    },
   ];
 
   const isActive = (href: string) => pathname === href;

@@ -1,52 +1,35 @@
 "use client"
 
-import { useState } from "react"
-import InternationalAdvisoryCarousel from "@/components/international-advisory-carousel"
-import OrganisingCommitteeCarousel from "@/components/organising-committee-carousel"
+import Link from "next/link"
 
 export default function CommitteePage() {
-  const [activeTab, setActiveTab] = useState<"international" | "organizing">("international")
-
   return (
     <div className="min-h-screen bg-[color:var(--primary-foreground)]">
       <div className="max-w-7xl mx-auto px-4 pt-8">
-        <h1 className="text-4xl font-bold text-[color:var(--nav)] mb-8">Committee</h1>
-
-        <div className="flex flex-wrap gap-4 mb-8">
-          <button
-            onClick={() => setActiveTab("international")}
-            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-              activeTab === "international"
-                ? "bg-[color:var(--primary)] text-white shadow-lg"
-                : "bg-[color:var(--primary-foreground)] text-[color:var(--nav)] border-2 border-[color:var(--primary)] hover:bg-[color:var(--primary)]/10"
-            }`}
-          >
-            International Advisory Committee
-          </button>
-          <button
-            onClick={() => setActiveTab("organizing")}
-            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-              activeTab === "organizing"
-                ? "bg-[color:var(--primary)] text-white shadow-lg"
-                : "bg-[color:var(--primary-foreground)] text-[color:var(--nav)] border-2 border-[color:var(--primary)] hover:bg-[color:var(--primary)]/10"
-            }`}
-          >
-            Organizing Committee
-          </button>
-        </div>
-
         <div className="bg-[color:var(--primary-foreground)] rounded-lg shadow-lg p-8">
-            <h2 className="text-2xl font-bold text-[color:var(--nav)] mb-8">
-            {activeTab === "international" ? (
-              <>
-              <span className="text-[color:var(--primary)]">International</span> Advisory Committee
-              </>
-            ) : (
-              "Organizing Committee"
-            )}
-            </h2>
-
-          {activeTab === "international" ? <InternationalAdvisoryCarousel /> : <OrganisingCommitteeCarousel />}
+          <h1 className="text-3xl font-bold text-[color:var(--nav)] mb-6">Committee</h1>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Link
+              href="/committee/international"
+              className="rounded-xl border border-[color:var(--nav)]/10 bg-white p-6 shadow-md hover:shadow-lg transition"
+            >
+              <h2 className="text-xl font-bold text-[color:var(--nav)]">
+                <span className="text-[color:var(--primary)]">International</span> Advisory Committee
+              </h2>
+              <p className="mt-2 text-sm text-[color:var(--nav)]/70">
+                View the international advisory members
+              </p>
+            </Link>
+            <Link
+              href="/committee/organizing"
+              className="rounded-xl border border-[color:var(--nav)]/10 bg-white p-6 shadow-md hover:shadow-lg transition"
+            >
+              <h2 className="text-xl font-bold text-[color:var(--nav)]">Organizing Committee</h2>
+              <p className="mt-2 text-sm text-[color:var(--nav)]/70">
+                View the organizing committee members
+              </p>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

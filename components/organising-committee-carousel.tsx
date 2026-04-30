@@ -1,5 +1,6 @@
 "use client"
 
+
 type CommitteeMember = {
   name: string
   affiliation: string
@@ -137,6 +138,21 @@ export default function OrganisingCommitteeCarousel() {
     },
   ]
 
+  const renderAffiliation = (aff: string) => {
+    const parts = aff.split(/(\(C\))/i)
+    return (
+      <>
+        {parts.map((part, i) =>
+          /\(C\)/i.test(part) ? (
+            <strong key={i} className="font-semibold">{part}</strong>
+          ) : (
+            <span key={i}>{part}</span>
+          )
+        )}
+      </>
+    )
+  }
+
   return (
     <div className="py-12">
       <div className="grid gap-6 md:grid-cols-2">
@@ -150,12 +166,24 @@ export default function OrganisingCommitteeCarousel() {
             </div>
 
             <div className="p-5 space-y-3">
-              {group.members.map((member) => (
-                <div key={`${group.role}-${member.name}`} className="rounded-xl border border-[color:var(--nav)]/10 bg-white p-4">
-                  <p className="font-semibold text-[color:var(--nav)]">{member.name}</p>
-                  <p className="text-sm text-[color:var(--nav)]/70 mt-1">{member.affiliation}</p>
+              {/** Patron and Convenor groups keep stacked card layout */}
+              {/Patron|Convenor/i.test(group.role) ? (
+                group.members.map((member) => (
+                  <div key={`${group.role}-${member.name}`} className="rounded-xl border border-[color:var(--nav)]/10 bg-white p-4">
+                    <p className="font-semibold text-[color:var(--nav)]">{member.name}</p>
+                    <p className="text-sm text-[color:var(--nav)]/70 mt-1">{renderAffiliation(member.affiliation)}</p>
+                  </div>
+                ))
+              ) : (
+                <div className="flex flex-wrap items-center gap-4">
+                  {group.members.map((member) => (
+                    <div key={`${group.role}-${member.name}`} className="inline-flex items-baseline gap-2 bg-white rounded-md px-3 py-2 border border-[color:var(--nav)]/10">
+                      <p className="font-semibold text-[color:var(--nav)]">{member.name}</p>
+                      <p className="text-sm text-[color:var(--nav)]/70">{renderAffiliation(member.affiliation)}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
           </section>
         ))}

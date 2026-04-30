@@ -47,6 +47,7 @@ export default function InvitedSpeaker() {
   { name: "Prof. Umesh V Waghmare", title: "President", affiliation: "President, JNCASR Bangalore, India", image: "/invited_speaker/umesh.png" },
   { name: "Dr. K. Pillai Vijayamohanan", title: "Professor", affiliation: "Professor, IISER Tirupati Honorary Fellow Electrochemical Society of India.", image: "/invited_speaker/pillai.png" },
   { name: "Prof. S. B. Ogale", title: "Director, RISE; Emeritus Professor", affiliation: "Director, RISE, TCG-CREST, Kolkata, India. Emeritus Professor, IISER Pune, India.", image: "/invited_speaker/ogale.jpg" },
+  { name: "Prof. Bikramjit Basu", title: "Director", affiliation: "CSIR-CGCRI, India", image: "/invited_speaker/basu.jpeg" },
   { name: "Prof. Sanjay Mathur", title: "Director, IIMC", affiliation: "Director, IIMC, Univ. of Cologne, Germany", image: "/invited_speaker/mathur.jpg" },
   { name: "Prof. Sebastien Royer", title: "Professor", affiliation: "Distinguished Professor of Chemistry, Université du Littoral Côte d'Opale (ULCO) in France", image: "/invited_speaker/royer2.jpg" },
   { name: "Prof. Anirudha V. Sumant", title: "Group Leader / Scientist", affiliation: "Group Leader Nanofabrication and Devices, Argonne National Lab., USA", image: "/invited_speaker/sumant.png" },
@@ -78,6 +79,11 @@ export default function InvitedSpeaker() {
   { name: "Dr. Ashutosh Singh", title: "Material Scientist", affiliation: "CeNS, Bangalore", image: "/invited_speaker/scientist.jpeg" },
   { name: "Prof. Pankaj Koinkar", title: "Professor", affiliation: "Institute of Post-LED Photonics, Tokushima University, Japan", image: "/invited_speaker/Professor.png" },
   { name: "Dr. Vikas Thakare", title: " Scientist G & Associate Director", affiliation: "DRDE, Gwalior.", image: "/invited_speaker/thakare.jpg" },
+  { name: "Prof. Nanasaheb Thorat", title: "Associate Professor", affiliation: "University of Limerick", image: "/invited_speaker/thorat.png"  },
+  { name: "Prof. Dhanvir Singh Rana", title: "Professor", affiliation: "IISER Bhopal", image: "/invited_speaker/rana.png"  },
+  { name: "Prof. Kiran Singh", title: "Associate Professor", affiliation: "NIT Jalandhar", image: "/invited_speaker/kiran.png" },
+  { name: "Dr. Nishad Deshpande", title: "Asst. Professor", affiliation: "IIIT Surat" , image: "/invited_speaker/nishad.png"},
+  { name: "Prof. Saket Asthana", title: "Professor", affiliation: "IIT Hyderabad", image: "/invited_speaker/saket.png" },
 ];
 
 
