@@ -242,6 +242,11 @@ export default function Navigation() {
           )}
         </div>
       </div>
+      <div className="bg-[color:var(--primary)]/10 text-[color:var(--nav)] text-sm sm:text-base">
+        <div className="mx-auto max-w-7xl px-4 py-3 text-center">
+          On popular demand and upon receiving multiple requests from participants, the abstract submission deadline has been extended to <span className="text-red-600 font-semibold">10th May 2026</span>. Kindly note that all other dates remain unchanged.
+        </div>
+      </div>
     </nav>
   );
 }
