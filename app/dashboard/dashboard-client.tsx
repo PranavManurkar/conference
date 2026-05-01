@@ -37,6 +37,8 @@ type Registration = {
   delegate_type: string
   registration_period: string
   participant_region: string
+  food_preference: string | null
+  beverage_choice: string | null
   payment_amount: number
   transaction_id: string | null
   transaction_screenshot: string | null
@@ -65,6 +67,8 @@ type FormData = {
   delegate_type: string
   registration_period: string
   participant_region: string
+  food_preference: string
+  beverage_choice: string
   transaction_id: string
   transaction_screenshot: File | null
   payment_date: string
@@ -119,6 +123,8 @@ export default function DashboardClient({ user }: { user: User }) {
     delegate_type: "",
     registration_period: "",
     participant_region: "",
+    food_preference: "",
+    beverage_choice: "",
     transaction_id: "",
     transaction_screenshot: null,
     payment_date: "",
@@ -157,6 +163,8 @@ export default function DashboardClient({ user }: { user: User }) {
               delegate_type: reg.delegate_type || "",
               registration_period: reg.registration_period || "",
               participant_region: reg.participant_region || "",
+              food_preference: reg.food_preference || "",
+              beverage_choice: reg.beverage_choice || "",
               transaction_id: reg.transaction_id || "",
               transaction_screenshot: null,
               payment_date: reg.payment_date || "",
@@ -192,6 +200,8 @@ export default function DashboardClient({ user }: { user: User }) {
               delegate_type: data.delegate_type || "",
               registration_period: data.registration_period || "",
               participant_region: data.participant_region || "",
+              food_preference: data.food_preference || "",
+              beverage_choice: data.beverage_choice || "",
               transaction_id: data.transaction_id || "",
               transaction_screenshot: null,
               payment_date: data.payment_date || "",
@@ -298,6 +308,8 @@ export default function DashboardClient({ user }: { user: User }) {
       !formData.email.trim() ||
       !formData.transaction_id.trim() ||
       !formData.payment_date.trim() ||
+      !formData.food_preference.trim() ||
+      !formData.beverage_choice.trim() ||
       !formData.transaction_screenshot
 
     if (missingBasic) {
@@ -347,6 +359,8 @@ export default function DashboardClient({ user }: { user: User }) {
       registrationData.append("delegate_type", formData.delegate_type)
       registrationData.append("registration_period", formData.registration_period)
       registrationData.append("participant_region", formData.participant_region)
+      registrationData.append("food_preference", formData.food_preference)
+      registrationData.append("beverage_choice", formData.beverage_choice)
       registrationData.append("transaction_id", formData.transaction_id)
       registrationData.append("payment_date", formData.payment_date)
       registrationData.append("payment_amount", String(paymentAmount))
@@ -508,6 +522,8 @@ export default function DashboardClient({ user }: { user: User }) {
         { label: "Institution", value: reg.institution_organization },
         { label: "Delegate Type", value: reg.delegate_type },
         { label: "Registration Period", value: reg.registration_period },
+        { label: "Food Preference", value: reg.food_preference },
+        { label: "Beverage Choice", value: reg.beverage_choice },
         {
           label: "Payment Amount",
           value:
@@ -865,6 +881,66 @@ export default function DashboardClient({ user }: { user: User }) {
                         </Select>
                       </div>
                     )}
+                  </div>
+
+                  {/* ── Food Preferences ───────────────────────────────────────────── */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3 pb-3 border-b-2 border-emerald-100">
+                      <div className="w-1 h-8 bg-[color:var(--primary)] rounded-full" />
+                      <h3 className="text-xl font-bold text-gray-900">Food Preferences</h3>
+                    </div>
+                    <div className="grid gap-6 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label className="text-sm font-semibold text-gray-700">
+                          Food Preference <span className="text-red-500">*</span>
+                        </Label>
+                        <Select
+                          value={formData.food_preference}
+                          onValueChange={(v) => setFormData({ ...formData, food_preference: v })}
+                          disabled={!canEdit}
+                          required
+                        >
+                          <SelectTrigger className="h-12 border-2">
+                            <SelectValue placeholder="Select food preference" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white">
+                            {[
+                              { value: "Veg", label: "Veg" },
+                              { value: "Non-Veg", label: "Non-Veg" },
+                            ].map((option) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-semibold text-gray-700">
+                          Beverage Choice <span className="text-red-500">*</span>
+                        </Label>
+                        <Select
+                          value={formData.beverage_choice}
+                          onValueChange={(v) => setFormData({ ...formData, beverage_choice: v })}
+                          disabled={!canEdit}
+                          required
+                        >
+                          <SelectTrigger className="h-12 border-2">
+                            <SelectValue placeholder="Select beverage choice" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white">
+                            {[
+                              { value: "Alcoholic", label: "Alcoholic" },
+                              { value: "Non-Alcoholic", label: "Non-Alcoholic" },
+                            ].map((option) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
                   </div>
 
                   {/* ── Presenting Paper ──────────────────────────────────────────── */}

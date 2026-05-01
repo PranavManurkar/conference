@@ -107,6 +107,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
         choices=Registration.PRESENTATION_CHOICES,
     )
     transaction_screenshot = serializers.ImageField(required=False, allow_null=True)
+    food_preference = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    beverage_choice = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = Registration
@@ -206,6 +208,37 @@ class RegistrationSerializer(serializers.ModelSerializer):
             attrs["presentation_type"] = None
             attrs["oral_presentation"] = False
             attrs["poster_presentation"] = False
+
+        # ---- FOOD PREFERENCES VALIDATION ----
+        food_preference = attrs.get("food_preference", "").strip()
+        beverage_choice = attrs.get("beverage_choice", "").strip()
+        
+        valid_food_prefs = ["Veg", "Non-Veg"]
+        valid_beverages = ["Alcoholic", "Non-Alcoholic"]
+
+        if request and request.method == "POST":
+            # Require food preferences on creation
+            if not food_preference:
+                raise serializers.ValidationError({
+                    "food_preference": "Food preference is required."
+                })
+            if not beverage_choice:
+                raise serializers.ValidationError({
+                    "beverage_choice": "Beverage choice is required."
+                })
+
+        if food_preference and food_preference not in valid_food_prefs:
+            raise serializers.ValidationError({
+                "food_preference": f"Invalid choice. Must be one of: {', '.join(valid_food_prefs)}"
+            })
+
+        if beverage_choice and beverage_choice not in valid_beverages:
+            raise serializers.ValidationError({
+                "beverage_choice": f"Invalid choice. Must be one of: {', '.join(valid_beverages)}"
+            })
+
+        attrs["food_preference"] = food_preference
+        attrs["beverage_choice"] = beverage_choice
 
         return attrs
 

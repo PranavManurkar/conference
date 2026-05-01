@@ -62,6 +62,8 @@ class Registration(models.Model):
     abstract_title = models.CharField(max_length=500, null=True, blank=True)
     accompanying_persons = models.IntegerField(default=0)
     presentation_preference = models.CharField(max_length=100, null=True, blank=True)
+    food_preference = models.CharField(max_length=50, blank=True, default="")
+    beverage_choice = models.CharField(max_length=50, blank=True, default="")
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default=STATUS_UNDER)
     admin_notes = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
