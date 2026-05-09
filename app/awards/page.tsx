@@ -44,7 +44,7 @@ export default function Awards() {
       },
       {
         title: "Oral Presentation",
-        count: "3 Awards",
+        count: "4+ Awards",
         prize: "Certificate + ₹ 10,000 (or equivalent)",
         color: "var(--primary)",         // purple
         icon: (
@@ -54,7 +54,7 @@ export default function Awards() {
           </svg>
         ),
         details: [
-          { label: "Number of Awards", value: "3 awards" },
+          { label: "Number of Awards", value: "4+ awards" },
           { label: "Prize", value: "Certificate + ₹ 10,000 (or equivalent)" },
           { label: "Total Presentation Time", value: "(10 + 3) minutes" },
           { label: "Maximum Slides", value: "10 slides" },
@@ -64,7 +64,7 @@ export default function Awards() {
       },
       {
         title: "Poster Presentation",
-        count: "12 Awards",
+        count: "12+ Awards",
         prize: "Certificate + ₹ 5,000 (or equivalent)",
         color: "var(--primary)",         // orange — middle card
         icon: (
@@ -74,7 +74,7 @@ export default function Awards() {
           </svg>
         ),
         details: [
-          { label: "Number of Awards", value: "12 awards — 3 in each theme" },
+          { label: "Number of Awards", value: "12+ awards" },
           { label: "Prize", value: "Certificate + ₹ 5,000 (or equivalent)" },
           { label: "Poster Size", value: "80 cm (W) × 100 cm (H)" },
           { label: "Template",  value: (

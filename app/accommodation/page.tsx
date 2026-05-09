@@ -236,6 +236,60 @@ export default function Accommodation() {
           )
         })()}
 
+        {/* IIT Indore Students Hostel (styled card) */}
+        <div className="mb-8 bg-gradient-to-r from-[color:var(--primary)]/10 to-[color:var(--primary)]/5 border-2 border-[color:var(--primary)]/30 rounded-2xl p-6 shadow-md">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-2 flex-wrap">
+                <span className="text-xs font-bold uppercase tracking-widest text-[color:var(--primary)] bg-[color:var(--primary)]/10 px-3 py-1 rounded-full">
+                  Hostel - IIT Indore
+                </span>
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-green-100 text-green-700">
+                  Available: 220 seats
+                </span>
+              </div>
+
+              <h2 className="text-2xl font-bold text-[color:var(--nav)] mb-1">IIT Indore Students Hostel</h2>
+
+              <div className="flex flex-wrap gap-x-6 gap-y-1 mt-3 text-sm text-[color:var(--nav)]/70">
+                <span className="flex items-center gap-1.5">
+                  <span className="font-semibold text-[color:var(--nav)]">Occupancy:</span> Double occupancy
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="font-semibold text-[color:var(--nav)]">Rate:</span> Rs. 473/- per day per person (incl. GST)
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="font-semibold text-[color:var(--nav)]">Dates:</span> 23rd–27th June 2026
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-3 mt-4">
+                <a
+                  href="https://forms.gle/t5129u9Y3smRz89Y7"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-[color:var(--primary)] text-white font-semibold text-sm px-5 py-2.5 rounded-xl hover:opacity-90 transition-opacity"
+                >
+                  Apply via Form <ExternalLink size={14} />
+                </a>
+              </div>
+
+              <p className="text-[color:var(--nav)]/70 text-sm mt-3">* Rates are subject to revision. New rates are applicable from the date it is approved by the Competent Authority.</p>
+
+              <div className="mt-4 text-[color:var(--nav)]/80">
+                <p className="font-semibold">Contact</p>
+                <p>Chandrani Mita Sarkar — Office of Chief Warden</p>
+                <p>
+                  Tel: <a href="tel:+9107316603468" className="text-[color:var(--primary)]">+91-0731-6603468</a>
+                </p>
+                <p>
+                  Email: <a href="mailto:chiefwardenoffice@iiti.ac.in" className="text-[color:var(--primary)]">chiefwardenoffice@iiti.ac.in</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Hotels Table — Desktop */}
         <div className="hidden md:block bg-[color:var(--primary-foreground)] rounded-2xl border border-[color:var(--nav)]/10 shadow-md overflow-hidden mb-8">
           <div className="overflow-x-auto">

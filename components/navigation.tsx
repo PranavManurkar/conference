@@ -20,7 +20,8 @@ export default function Navigation() {
       href: "/",
       children: [
         { label: "Sponsorship Opportunities", href: "/sponsorship" },
-        // { label: "Our Sponsors", href: "/sponsors" },
+        { label: "Our Sponsors", href: "/sponsorship/our-sponsors" },
+        // legacy: { label: "Our Sponsors (old)", href: "/sponsors" },
         
       ],
     },
