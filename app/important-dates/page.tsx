@@ -5,9 +5,9 @@ import { Calendar, CheckCircle2 } from "lucide-react"
 export default function ImportantDatesPage() {
   const dates = [
     {
-      date: "May 10, 2026",
+      date: "May 15, 2026",
       title: "Abstract Submission Deadline (Extended)",
-      description: "On popular demand and upon receiving multiple requests from participants, the abstract submission deadline has been extended to 10th May 2026. Kindly note that all other dates remain unchanged.",
+      description: "On popular demand and upon receiving multiple requests from participants, the abstract submission deadline has been extended to 15th May 2026. Kindly note that all other dates remain unchanged.",
     },
     {
       date: "May 15, 2026",
@@ -42,7 +42,7 @@ export default function ImportantDatesPage() {
             <span className="text-[color:var(--primary)]">Important </span>Dates</h1>
           <p className="text-[color:var(--nav)]/80 text-lg">Key milestones and deadlines for the 2D MatTechGlobal 2026 Conference</p>
           <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-[color:var(--primary)]/10 px-4 py-2 text-sm font-medium text-[color:var(--nav)]">
-            Abstract deadline extended to 10th May 2026
+            Abstract deadline extended to 15th May 2026
           </div>
         </div>
 
