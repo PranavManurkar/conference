@@ -59,7 +59,7 @@ export default function Metrics() {
           <MetricsCard icon={Users} label="Expected Participants" value={500} />
           <MetricsCard icon={Globe} label="Countries Represented" value={35} />
           <MetricsCard icon={TrendingUp} label="Website Visitors" value={visitorCount} />
-          <MetricsCard icon={FileText} label="Paper Submissions" value={280} />
+          <MetricsCard icon={FileText} label="Paper Submissions" value={320} />
         </div>
       </div>
     </section>
