@@ -8,6 +8,14 @@ from pathlib import Path
 from datetime import timedelta
 from corsheaders.defaults import default_headers  # Import needed for CORS headers
 
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    env_path = Path(__file__).resolve().parent.parent / '.env'
+    load_dotenv(env_path)
+except ImportError:
+    pass  # dotenv not installed, use system env vars
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -183,3 +191,46 @@ CACHES = {
         }
     }
 }
+
+# === GOOGLE SHEETS INTEGRATION ===
+GOOGLE_SHEETS_ID = os.getenv("GOOGLE_SHEETS_ID", "")  # Sheet ID from URL
+GOOGLE_SHEETS_RANGE = os.getenv("GOOGLE_SHEETS_RANGE", "Approvals!A:Z")  # Range name
+GOOGLE_SHEETS_CREDENTIALS_JSON = BASE_DIR / "credentials.json"  # Path to credentials file
+
+# === LOGGING CONFIGURATION ===
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs' / 'sheets_errors.log',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'core.utils.sheets_utils': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+# === LOCAL SETTINGS OVERRIDE (for development) ===
+try:
+    from .local_settings import *
+except ImportError:
+    pass
