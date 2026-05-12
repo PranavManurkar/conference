@@ -1,7 +1,15 @@
 # core/admin.py
+import logging
 from django.contrib import admin
+from django.contrib import messages
 from django.contrib.auth.admin import UserAdmin
+from django.db import transaction
 from .models import CustomUser, Registration, WorkshopRegistration
+from core.utils.sheets_utils import append_approved_user_to_sheet
+
+
+logger = logging.getLogger(__name__)
+
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
@@ -14,6 +22,120 @@ class RegistrationAdmin(admin.ModelAdmin):
     list_filter = ("status", "participant_region", "delegate_type",'accompanying_persons')
     search_fields = ("full_name", "email", "transaction_id", "cmt_id", "abstract_id")
     readonly_fields = ("created_at",)
+    actions = ["mark_accepted", "mark_rejected", "mark_under_process"]
+    
+    def has_change_permission(self, request, obj=None):
+        """Only main superuser can modify registration records."""
+        return request.user.is_superuser
+    
+    def get_actions(self, request):
+        """Only main superuser sees approval/rejection actions."""
+        actions = super().get_actions(request)
+        if not request.user.is_superuser:
+            actions.clear()
+        return actions
+    
+    @transaction.atomic
+    def mark_accepted(self, request, queryset):
+        """
+        Approve registrations and export to Google Sheet.
+        Sheet export failures do NOT block approval.
+        """
+        if not request.user.is_superuser:
+            messages.error(
+                request,
+                "Only the main administrator can approve or reject registrations."
+            )
+            return
+        
+        updated_count = 0
+        export_count = 0
+        
+        for registration in queryset:
+            # Update status first
+            registration.status = Registration.STATUS_ACCEPTED
+            registration.save(update_fields=["status"])
+            updated_count += 1
+            
+            # Attempt sheet export (non-blocking) via signal
+            try:
+                if append_approved_user_to_sheet(registration):
+                    export_count += 1
+                    logger.info(f"Registration {registration.id} approved and exported successfully")
+                else:
+                    logger.warning(f"Registration {registration.id} approved but export failed (check logs)")
+                    
+            except Exception as e:
+                # Log error but don't raise - approval must succeed even if export fails
+                logger.error(f"Unexpected error exporting registration {registration.id}: {str(e)}")
+        
+        self.message_user(request, f"{updated_count} registration(s) marked as Accepted. {export_count} successfully exported to sheet.")
+    
+    mark_accepted.short_description = "Mark selected registrations as Accepted and export to Google Sheet"
+    
+    @transaction.atomic
+    def mark_rejected(self, request, queryset):
+        """Reject registrations and export to Google Sheet."""
+        if not request.user.is_superuser:
+            messages.error(
+                request,
+                "Only the main administrator can approve or reject registrations."
+            )
+            return
+        
+        updated_count = 0
+        export_count = 0
+        
+        for registration in queryset:
+            registration.status = Registration.STATUS_REJECTED
+            registration.save(update_fields=["status"])
+            updated_count += 1
+            
+            # Attempt sheet export (non-blocking) via signal
+            try:
+                if append_approved_user_to_sheet(registration):
+                    export_count += 1
+                    logger.info(f"Registration {registration.id} rejected and exported successfully")
+                else:
+                    logger.warning(f"Registration {registration.id} rejected but export failed (check logs)")
+            except Exception as e:
+                logger.error(f"Unexpected error exporting rejected registration {registration.id}: {str(e)}")
+        
+        self.message_user(request, f"{updated_count} registration(s) marked as Rejected. {export_count} successfully exported to sheet.")
+    
+    mark_rejected.short_description = "Mark selected registrations as Rejected and export to Google Sheet"
+    
+    @transaction.atomic
+    def mark_under_process(self, request, queryset):
+        """Mark registrations as Under Process and export to Google Sheet."""
+        if not request.user.is_superuser:
+            messages.error(
+                request,
+                "Only the main administrator can approve or reject registrations."
+            )
+            return
+        
+        updated_count = 0
+        export_count = 0
+        
+        for registration in queryset:
+            registration.status = Registration.STATUS_UNDER
+            registration.save(update_fields=["status"])
+            updated_count += 1
+            
+            # Attempt sheet export (non-blocking) via signal
+            try:
+                if append_approved_user_to_sheet(registration):
+                    export_count += 1
+                    logger.info(f"Registration {registration.id} marked Under Process and exported successfully")
+                else:
+                    logger.warning(f"Registration {registration.id} marked Under Process but export failed (check logs)")
+            except Exception as e:
+                logger.error(f"Unexpected error exporting Under Process registration {registration.id}: {str(e)}")
+        
+        self.message_user(request, f"{updated_count} registration(s) marked as Under Process. {export_count} successfully exported to sheet.")
+    
+    mark_under_process.short_description = "Mark selected registrations as Under Process and export to Google Sheet"
 
 
 @admin.register(WorkshopRegistration)
