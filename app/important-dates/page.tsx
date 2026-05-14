@@ -10,7 +10,7 @@ export default function ImportantDatesPage() {
       description: "On popular demand and upon receiving multiple requests from participants, the abstract submission deadline has been extended to 15th May 2026. Kindly note that all other dates remain unchanged.",
     },
     {
-      date: "May 15, 2026",
+      date: "May 16, 2026",
       title: "Abstract Acceptance Notification",
       description: "Decisions on submitted abstracts will be communicated to authors",
     },

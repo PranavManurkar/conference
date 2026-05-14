@@ -23,8 +23,8 @@ export default function KeyDates() {
         </h2>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <DateItem date="April 30, 2026" label="Abstract Submission Deadline" />
-          <DateItem date="May 15, 2026" label="Abstract Acceptance Notification" />
+          <DateItem date="May 15, 2026" label="Abstract Submission Deadline" />
+          <DateItem date="May 16, 2026" label="Abstract Acceptance Notification" />
           <DateItem date="May 20, 2026" label="Early Bird Registration Deadline" />
           <DateItem date="June 5, 2026" label="Final Registration Deadline" />
           <DateItem date="June 24-26, 2026" label="Conference Dates" />

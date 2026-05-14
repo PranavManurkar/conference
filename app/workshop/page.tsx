@@ -532,22 +532,6 @@ const workshops: WorkshopCard[] = [
       "A full-day pre-conference workshop on XRD & XRF fundamentals, particle characterization, sample preparation best practices, and a live Empyrean XRD & Zetasizer demonstration.",
     hasAgenda: true,
   },
-  {
-    id: 2,
-    title: "Workshop 2",
-    tagline: "Pre-Conference Workshop",
-    date: "June 23, 2026",
-    status: "coming_soon",
-    description: "Details for Workshop 2 will be announced soon. Stay tuned for updates.",
-  },
-  {
-    id: 3,
-    title: "Workshop 3",
-    tagline: "Pre-Conference Workshop",
-    date: "June 23, 2026",
-    status: "coming_soon",
-    description: "Details for Workshop 3 will be announced soon. Stay tuned for updates.",
-  },
 ]
 
 export default function WorkshopPage() {
@@ -592,8 +576,8 @@ export default function WorkshopPage() {
           </div>
         </div>
 
-        {/* 3 Workshop Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        {/* Workshop Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {workshops.map((ws) => (
             <div
               key={ws.id}

@@ -42,14 +42,17 @@ export default function OrganisingCommitteeCarousel() {
     {
       role: "Website and Publicity",
       members: [
-        { name: "Dr. Venkata Vamsi Koruprolu", affiliation: "MEMS IIT Indore (C)" },
         { name: "Dr. Praveen Velpulla", affiliation: "UGC-DAE CSR, Indore" },
+        { name: "Dr. Venkata Vamsi Koruprolu", affiliation: "MEMS IIT Indore (C)" },
+        { name: "Mr. Avinash Ojha", affiliation: "RRCAT Indore" },
       ],
     },
     {
       role: "Session Management",
       members: [
         { name: "Dr. Abhinav Raghuvanshi", affiliation: "Chem IIT Indore" },
+        { name: "Dr. C. Kamal", affiliation: "RRCAT Indore" },
+        { name: "Dr. Hinamshu Srivastava", affiliation: "RRCAT Indore (C)" },
         { name: "Prof. Santosh Hosmani", affiliation: "MEMS IIT Indore" },
         { name: "Dr. Sunil Kumar", affiliation: "MEMS IIT INDORE (C)" },
         { name: "Dr. Umesh A. Kshirsagar", affiliation: "Chem IIT Indore" },
@@ -85,20 +88,22 @@ export default function OrganisingCommitteeCarousel() {
         { name: "Dr. Pravarthana Dhanapal", affiliation: "Chem IIT Indore" },
         { name: "Dr. Srashtasrita Das", affiliation: "ChE IIT Indore" },
         { name: "Dr. Gunjan Verma", affiliation: "UGC-DAE CSR, Indore" },
-        { name: "Dr. Praveen Velpulla", affiliation: "UGC-DAE CSR, Indore" },
+        { name: "Dr. Praveen Velpulla", affiliation: "UGC-DAE CSR, Indore (C)" },
         { name: "Dr. Sudip Pal", affiliation: "UGC-DAE CSR, Indore" },
         { name: "Mr. Mahesh Chand Bairwa", affiliation: "MEMS IIT Indore" },
         { name: "Mr. Mayur Dhake", affiliation: "MEMS IIT Indore" },
+        { name: "Mr. Pavitra Sahu", affiliation: "RRCAT Indore" },
       ],
     },
     {
       role: "Award Committee",
       members: [
         { name: "Dr. Rohini Kitture", affiliation: "Wiley" },
+        { name: "Dr. Salahuddin Kahn", affiliation: "RRCAT Indore (C)" },
         { name: "Dr. Sunil Kumar", affiliation: "MEMS/CEVITS IIT Indore (C)" },
         { name: "Prof. Pavan Kankar", affiliation: "ME IIT Indore" },
         { name: "Prof. Trapti Jain", affiliation: "EE/CEVITS IIT Indore" },
-        { name: "Dr. Rajamani Raghunathan", affiliation: "UGC-DAE CSR, Indore" },
+        { name: "Dr. Rajamani Raghunathan", affiliation: "UGC-DAE CSR, Indore (C)" },
         { name: "Mr. Mayur Dhake", affiliation: "MEMS IIT Indore" },
         { name: "Mr. Pranjal Shrimali", affiliation: "MEMS IIT Indore" },
       ],
@@ -107,10 +112,12 @@ export default function OrganisingCommitteeCarousel() {
       role: "Publication & Press",
       members: [
         { name: "Dr. B. Prathap Reddy", affiliation: "EE/CEVITS IIT Indore" },
+        { name: "Dr. Mohammad Sohrab", affiliation: "RRCAT Indore" },
         { name: "Dr. Nisheeth Kumar Prasad", affiliation: "MEMS IIT Indore" },
         { name: "Dr. Onkar Game", affiliation: "Phys IIT Indore (C)" },
         { name: "Prof. Parasharam M. Shirage", affiliation: "MEMS IIT Indore" },
         { name: "Dr. Ranjith Kumar", affiliation: "MEMS IIT Indore (C)" },
+        { name: "Dr. Salahuddin Khan", affiliation: "RRCAT Indore (C)" },
         { name: "Dr. Sandeep Singh", affiliation: "ME IIT Indore" },
         { name: "Dr. Subhadeep Paladhi", affiliation: "EE/CEVITS IIT Indore" },
         { name: "Dr. Sumanta Samal", affiliation: "MEMS IIT Indore" },
@@ -129,7 +136,6 @@ export default function OrganisingCommitteeCarousel() {
         { name: "Dr. Onkar Game", affiliation: "Phys IIT Indore" },
         { name: "Dr. Ranjith Kumar", affiliation: "MEMS IIT Indore" },
         { name: "Dr. Dilip Kumar", affiliation: "UGC-DAE CSR, Indore" },
-        { name: "Dr. Uday Deshpande", affiliation: "UGC-DAE CSR, Indore" },
         { name: "Mr. Mayur Dhake", affiliation: "MEMS IIT Indore" },
       ],
     },
@@ -140,9 +146,10 @@ export default function OrganisingCommitteeCarousel() {
         { name: "Dr. Dhirendra Kumar Rai", affiliation: "MEMS IIT Indore" },
         { name: "Dr. Jayaprakash Muragesan", affiliation: "MEMS IIT Indore (C)" },
         { name: "Dr. Saptarshi Ghosh", affiliation: "EE IIT Indore" },
-        { name: "Dr. Dilip Kumar", affiliation: "UGC-DAE CSR, Indore" },
+        { name: "Dr. Dilip Kumar", affiliation: "UGC-DAE CSR, Indore (C)" },
         { name: "Dr. R. Venkatesh", affiliation: "UGC-DAE CSR, Indore" },
         { name: "Mr. Shubham Verma", affiliation: "MEMS IIT Indore" },
+        { name: "Mr. Suresh Chandra Patidar", affiliation: "RRCAT Indore" },
       ],
     },
     {
@@ -177,7 +184,7 @@ export default function OrganisingCommitteeCarousel() {
   return (
     <div className="py-12">
       <div className="grid gap-6 md:grid-cols-2">
-        {committeeGroups.map((group) => (
+        {committeeGroups.map((group, groupIndex) => (
           <section
             key={group.role}
             className="rounded-2xl border border-[color:var(--nav)]/10 bg-[color:var(--primary-foreground)] shadow-md overflow-hidden"
@@ -186,21 +193,24 @@ export default function OrganisingCommitteeCarousel() {
               <h3 className="text-white text-lg font-bold">{group.role}</h3>
             </div>
 
-            <div className="p-5 space-y-3">
-              {/** Patron and Convenor groups keep stacked card layout */}
-              {/Patron|Convenor/i.test(group.role) ? (
+            <div className="p-5 space-y-1.5">
+              {groupIndex < 4 ? (
                 group.members.map((member) => (
-                  <div key={`${group.role}-${member.name}`} className="rounded-xl border border-[color:var(--nav)]/10 bg-white p-4">
-                    <p className="font-semibold text-[color:var(--nav)]">{member.name}</p>
-                    <p className="text-sm text-[color:var(--nav)]/70 mt-1">{renderAffiliation(member.affiliation)}</p>
+                  <div key={`${group.role}-${member.name}`} className="rounded-xl border border-[color:var(--nav)]/10 bg-white px-3 py-2">
+                    <p className="text-sm text-[color:var(--nav)] leading-snug">
+                      <span className="font-semibold">{member.name}</span>{" "}
+                      <span className="text-[color:var(--nav)]/70">{renderAffiliation(member.affiliation)}</span>
+                    </p>
                   </div>
                 ))
               ) : (
-                <div className="flex flex-wrap items-center gap-4">
+                <div className="space-y-1.5">
                   {group.members.map((member) => (
-                    <div key={`${group.role}-${member.name}`} className="inline-flex items-baseline gap-2 bg-white rounded-md px-3 py-2 border border-[color:var(--nav)]/10">
-                      <p className="font-semibold text-[color:var(--nav)]">{member.name}</p>
-                      <p className="text-sm text-[color:var(--nav)]/70">{renderAffiliation(member.affiliation)}</p>
+                    <div key={`${group.role}-${member.name}`} className="border-b border-[color:var(--nav)]/10 pb-1.5 last:border-b-0 last:pb-0">
+                      <p className="text-sm text-[color:var(--nav)] leading-snug">
+                        <span className="font-semibold">{member.name}</span>{" "}
+                        <span className="text-[color:var(--nav)]/70">{renderAffiliation(member.affiliation)}</span>
+                      </p>
                     </div>
                   ))}
                 </div>
