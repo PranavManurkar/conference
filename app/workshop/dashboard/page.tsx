@@ -85,7 +85,7 @@ export default function WorkshopDashboardPage() {
             <input
               value={registrationId}
               onChange={(e) => setRegistrationId(e.target.value)}
-              placeholder="WS1-123"
+              placeholder="WS1-123 or WS2-456"
               className="w-full rounded-2xl border border-[color:var(--nav)]/15 px-4 py-3.5 outline-none focus:border-[color:var(--primary)] focus:ring-4 focus:ring-[color:var(--primary)]/10 transition"
             />
           </div>
