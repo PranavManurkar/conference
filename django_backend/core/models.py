@@ -77,9 +77,11 @@ class Registration(models.Model):
 
 class WorkshopRegistration(models.Model):
     WORKSHOP_1 = 1
+    WORKSHOP_2 = 2
 
     WORKSHOP_CHOICES = [
         (WORKSHOP_1, "Workshop 1 - XRD & XRF Characterization"),
+        (WORKSHOP_2, "Workshop 2 - Synchrotron-Based Techniques for Materials Characterization"),
     ]
 
     PARTICIPANT_STUDENT = "student"
@@ -132,6 +134,10 @@ class WorkshopRegistration(models.Model):
     @property
     def registration_reference(self):
         return f"WS{self.workshop_id}-{self.pk}"
+
+    @classmethod
+    def get_workshop_title(cls, workshop_id):
+        return dict(cls.WORKSHOP_CHOICES).get(workshop_id, "Workshop")
 
     def calculate_fee_amount(self):
         if self.participant_type == self.PARTICIPANT_STUDENT:
@@ -203,6 +209,8 @@ class WorkshopRegistration(models.Model):
         previous_status = None
         if self.pk:
             previous_status = type(self).objects.filter(pk=self.pk).values_list("status", flat=True).first()
+
+        self.workshop_title = self.get_workshop_title(self.workshop_id)
 
         self.fee_amount = self.calculate_fee_amount()
         super().save(*args, **kwargs)

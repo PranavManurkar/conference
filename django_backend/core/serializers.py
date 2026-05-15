@@ -325,6 +325,9 @@ class WorkshopRegistrationSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        workshop_id = validated_data.get("workshop_id")
+        if workshop_id:
+            validated_data["workshop_title"] = WorkshopRegistration.get_workshop_title(workshop_id)
         validated_data["status"] = WorkshopRegistration.STATUS_UNDER_PROCESS
         return super().create(validated_data)
 
