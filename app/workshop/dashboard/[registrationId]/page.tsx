@@ -8,6 +8,15 @@ import { AlertCircle, CheckCircle, ChevronDown, ChevronUp, Clock, ExternalLink, 
 const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "https://tdmtg.iiti.ac.in"
 const PAYMENT_URL = "https://payu.in/web/EB3AF4CBC22FB4C90B5ABC9A52E5CAC3"
 
+type AgendaItem = {
+  time: string
+  title: string
+  speaker?: string
+  speakerRole?: string
+  isBreak?: boolean
+  highlight?: boolean
+}
+
 type WorkshopRegistration = {
   id: number
   registration_id: string
@@ -81,7 +90,7 @@ const STATUS_THEME: Record<string, StatusTheme> = {
   },
 }
 
-const agenda = [
+const agenda: AgendaItem[] = [
   {
     time: "10:30 – 11:30",
     title: "Latest Trends & Advancements in X-ray Diffraction (XRD)",
@@ -141,7 +150,39 @@ const agenda = [
   },
 ]
 
-function AgendaTable() {
+const agenda2: AgendaItem[] = [
+  { time: "09:30 – 10:00 AM", title: "Registration & Welcome Tea" },
+  { time: "10:00 – 10:30 AM", title: "Inauguration & Opening Remarks" },
+  { time: "10:30 – 11:05 AM", title: "Lecture 1: X-ray diffraction and Its Applications", speaker: "Dr. Archna Sagdeo, ISUD/ RRCAT" },
+  { time: "11:05 – 11:40 AM", title: "Lecture 2: XANES and EXAFS measurements and Its Applications", speaker: "Prof. Preeti A. Bhobe, IIT Indore" },
+  { time: "11:40 AM – 12:25 PM", title: "Lecture 3: X-ray photo-electron spectroscopy and Its Applications", speaker: "Dr. Soma Banik, ISUD RRCAT" },
+  { time: "12:25 – 02:00 PM", title: "Lunch Break", isBreak: true },
+  { time: "02:00 – 03:00 PM", title: "Travel to RRCAT (Indus-2 Facility)" },
+  { time: "03:00 – 03:30 PM", title: "Introduction to the Indus-2 Synchrotron Facility" },
+  { time: "03:30 – 05:30 PM", title: "Hands-on Session / Demonstration at Beamlines" },
+  { time: "05:30 – 06:00 PM", title: "Discussion, Feedback, and Certificate Distribution" },
+]
+
+const WORKSHOP_DETAILS: Record<number, { title: string; description: string; date: string; venue: string; partners: string }> = {
+  1: {
+    title: "Workshop 1: XRD & XRF Characterization",
+    description:
+      "A full-day pre-conference workshop on XRD & XRF fundamentals, particle characterization, sample preparation best practices, and a live Empyrean XRD & Zetasizer demonstration.",
+    date: "June 23, 2026",
+    venue: "IIT Indore",
+    partners: "Malvern Panalytical & Aimil",
+  },
+  2: {
+    title: "Workshop 2: Synchrotron-Based Techniques for Materials Characterization",
+    description:
+      "Morning lectures on XRD, XANES/EXAFS and XPS at IIT Indore, followed by travel to RRCAT (Indus-2) for hands-on beamline demonstrations and discussions.",
+    date: "June 23, 2026",
+    venue: "Morning: IIT Indore; Afternoon: RRCAT (Indus-2)",
+    partners: "RRCAT / IIT Indore",
+  },
+}
+
+function AgendaTable({ items }: { items: AgendaItem[] }) {
   return (
     <div className="overflow-x-auto rounded-2xl border border-[color:var(--nav)]/10 shadow-sm">
       <table className="w-full text-sm">
@@ -153,7 +194,7 @@ function AgendaTable() {
           </tr>
         </thead>
         <tbody>
-          {agenda.map((item, index) => {
+          {items.map((item, index) => {
             if (item.isBreak) {
               return (
                 <tr key={index} className="bg-[color:var(--primary)]/5 border-y border-[color:var(--primary)]/10">
@@ -212,6 +253,8 @@ export default function WorkshopRegistrationStatusPage() {
 
   const theme = useMemo(() => STATUS_THEME[registration?.status || "Under Process"] ?? STATUS_THEME["Under Process"], [registration?.status])
   const showWorkshopDetails = registration?.status === "Approved for Payment" || registration?.status === "Payment Submitted" || registration?.status === "Accepted"
+  const workshopDetails = registration ? WORKSHOP_DETAILS[registration.workshop_id] : undefined
+  const agendaItems = registration?.workshop_id === 2 ? agenda2 : agenda
   const canSubmitTransaction = registration?.status === "Approved for Payment" && !registration?.transaction_id
 
   useEffect(() => {
@@ -387,9 +430,11 @@ export default function WorkshopRegistrationStatusPage() {
                       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[color:var(--primary)] mb-2">Workshop Details</p>
-                          <h2 className="text-2xl font-bold text-[color:var(--nav)]">Workshop 1: XRD & XRF Characterization</h2>
+                          <h2 className="text-2xl font-bold text-[color:var(--nav)]">
+                            {workshopDetails?.title || registration.workshop_title}
+                          </h2>
                           <p className="mt-2 text-[color:var(--nav)]/70 max-w-3xl">
-                            A full-day pre-conference workshop on XRD & XRF fundamentals, particle characterization, sample preparation best practices, and a live Empyrean XRD & Zetasizer demonstration.
+                            {workshopDetails?.description || "Workshop details will be shared after approval."}
                           </p>
                         </div>
                         <a
@@ -403,15 +448,15 @@ export default function WorkshopRegistrationStatusPage() {
                       <div className="mt-5 grid gap-3 sm:grid-cols-3 text-sm">
                         <div className="rounded-2xl bg-[color:var(--primary-foreground)] p-4 border border-[color:var(--nav)]/10">
                           <p className="text-[color:var(--nav)]/50 text-xs uppercase tracking-wide">Date</p>
-                          <p className="font-semibold text-[color:var(--nav)] mt-1">June 23, 2026</p>
+                          <p className="font-semibold text-[color:var(--nav)] mt-1">{workshopDetails?.date || "June 23, 2026"}</p>
                         </div>
                         <div className="rounded-2xl bg-[color:var(--primary-foreground)] p-4 border border-[color:var(--nav)]/10">
                           <p className="text-[color:var(--nav)]/50 text-xs uppercase tracking-wide">Venue</p>
-                          <p className="font-semibold text-[color:var(--nav)] mt-1">IIT Indore</p>
+                          <p className="font-semibold text-[color:var(--nav)] mt-1">{workshopDetails?.venue || "IIT Indore"}</p>
                         </div>
                         <div className="rounded-2xl bg-[color:var(--primary-foreground)] p-4 border border-[color:var(--nav)]/10">
                           <p className="text-[color:var(--nav)]/50 text-xs uppercase tracking-wide">Partners</p>
-                          <p className="font-semibold text-[color:var(--nav)] mt-1">Malvern Panalytical & Aimil</p>
+                          <p className="font-semibold text-[color:var(--nav)] mt-1">{workshopDetails?.partners || ""}</p>
                         </div>
                       </div>
 
@@ -516,7 +561,7 @@ export default function WorkshopRegistrationStatusPage() {
                   <div className="rounded-3xl border border-[color:var(--nav)]/10 bg-white p-6 shadow-lg">
                     <h2 className="text-lg font-bold text-[color:var(--nav)] mb-3">Workflow</h2>
                     <ol className="space-y-3 text-sm text-[color:var(--nav)]/75">
-                      <li className="flex gap-3"><span className="font-bold text-[color:var(--primary)]">1.</span> Register for Workshop 1 without paying.</li>
+                      <li className="flex gap-3"><span className="font-bold text-[color:var(--primary)]">1.</span> Register for your workshop without paying.</li>
                       <li className="flex gap-3"><span className="font-bold text-[color:var(--primary)]">2.</span> Wait for the committee to approve or reject your request.</li>
                       <li className="flex gap-3"><span className="font-bold text-[color:var(--primary)]">3.</span> If approved for payment, submit the transaction ID here.</li>
                       <li className="flex gap-3"><span className="font-bold text-[color:var(--primary)]">4.</span> Final acceptance or rejection is recorded by the admin team.</li>
@@ -539,7 +584,7 @@ export default function WorkshopRegistrationStatusPage() {
                         Hide Agenda <ChevronUp size={14} />
                       </button>
                     </div>
-                    <AgendaTable />
+                    <AgendaTable items={agendaItems} />
                   </div>
                 )}
               </div>

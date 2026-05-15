@@ -88,18 +88,20 @@ const agenda: AgendaItem[] = [
   },
 ]
 
-type FormData = {
-  full_name: string
-  email: string
-  phone: string
-  institution: string
-  designation: string
-  participant_type: "student" | "other"
-}
+const agenda2: AgendaItem[] = [
+  { time: "09:30 – 10:00 AM", title: "Registration & Welcome Tea" },
+  { time: "10:00 – 10:30 AM", title: "Inauguration & Opening Remarks" },
+  { time: "10:30 – 11:05 AM", title: "Lecture 1: X-ray diffraction and Its Applications", speaker: "Dr. Archna Sagdeo, ISUD/ RRCAT" },
+  { time: "11:05 – 11:40 AM", title: "Lecture 2: XANES and EXAFS measurements and Its Applications", speaker: "Prof. Preeti A. Bhobe, IIT Indore" },
+  { time: "11:40 AM – 12:25 PM", title: "Lecture 3: X-ray photo-electron spectroscopy and Its Applications", speaker: "Dr. Soma Banik, ISUD RRCAT" },
+  { time: "12:25 – 02:00 PM", title: "Lunch Break", isBreak: true },
+  { time: "02:00 – 03:00 PM", title: "Travel to RRCAT (Indus-2 Facility)" },
+  { time: "03:00 – 03:30 PM", title: "Introduction to the Indus-2 Synchrotron Facility" },
+  { time: "03:30 – 05:30 PM", title: "Hands-on Session / Demonstration at Beamlines" },
+  { time: "05:30 – 06:00 PM", title: "Discussion, Feedback, and Certificate Distribution" },
+]
 
-type RegistrationState = "idle" | "submitting" | "success" | "full" | "duplicate" | "error"
-
-function AgendaTable() {
+function AgendaTable({ items = agenda }: { items?: AgendaItem[] }) {
   return (
     <div className="overflow-x-auto rounded-xl border border-[color:var(--nav)]/10 shadow-sm">
       <table className="w-full text-sm">
@@ -111,7 +113,7 @@ function AgendaTable() {
           </tr>
         </thead>
         <tbody>
-          {agenda.map((item, i) => {
+          {items.map((item, i) => {
             if (item.isBreak) {
               return (
                 <tr key={i} className="bg-[color:var(--primary)]/5 border-y border-[color:var(--primary)]/10">
@@ -176,6 +178,17 @@ function AgendaTable() {
     </div>
   )
 }
+
+type FormData = {
+  full_name: string
+  email: string
+  phone: string
+  institution: string
+  designation: string
+  participant_type: "student" | "other"
+}
+
+type RegistrationState = "idle" | "submitting" | "success" | "full" | "duplicate" | "error"
 
 function RegistrationModal({
   open,
@@ -534,24 +547,22 @@ const workshops: WorkshopCard[] = [
   },
   {
     id: 2,
-    title: "Workshop 2",
-    tagline: "Pre-Conference Workshop",
+    title: "Synchrotron-Based Techniques for Materials Characterization",
+    tagline: "Synchrotron Methods & Beamline Demonstration",
     date: "June 23, 2026",
-    status: "coming_soon",
-    description: "Details for Workshop 2 will be announced soon. Stay tuned for updates.",
-  },
-  {
-    id: 3,
-    title: "Workshop 3",
-    tagline: "Pre-Conference Workshop",
-    date: "June 23, 2026",
-    status: "coming_soon",
-    description: "Details for Workshop 3 will be announced soon. Stay tuned for updates.",
+    time: "09:30 AM – 06:00 PM",
+    venue: "Morning: IIT Indore · Afternoon: RRCAT (Indus-2)",
+    partners: "RRCAT / IIT Indore",
+    status: "open",
+    description:
+      "Morning lectures on XRD, XANES/EXAFS and XPS at IIT Indore, followed by travel to RRCAT (Indus-2) for hands-on beamline demonstrations and discussions.",
+    hasAgenda: true,
   },
 ]
 
 export default function WorkshopPage() {
   const [agendaOpen, setAgendaOpen] = useState(false)
+  const [agenda2Open, setAgenda2Open] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedWorkshop, setSelectedWorkshop] = useState<WorkshopCard | null>(null)
 
@@ -592,8 +603,8 @@ export default function WorkshopPage() {
           </div>
         </div>
 
-        {/* 3 Workshop Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        {/* Workshop Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {workshops.map((ws) => (
             <div
               key={ws.id}
@@ -718,6 +729,52 @@ export default function WorkshopPage() {
                   { label: "Duration", value: "Full Day (7 hrs)" },
                   { label: "Date", value: "June 23, 2026" },
                   { label: "Partners", value: "Malvern Panalytical" },
+                ].map((item) => (
+                  <div key={item.label} className="text-center">
+                    <p className="text-[color:var(--nav)]/50 text-xs uppercase tracking-wide">{item.label}</p>
+                    <p className="font-semibold text-[color:var(--nav)] mt-0.5 text-sm">{item.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Workshop 2 Full Details */}
+        <div className="bg-[color:var(--primary-foreground)] border border-[color:var(--nav)]/10 rounded-2xl shadow-md overflow-hidden mb-10">
+          <div className="bg-[color:var(--nav)] px-6 py-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <p className="text-[color:var(--primary)] text-xs font-semibold uppercase tracking-widest mb-1">
+                  IIT Indore / RRCAT — Workshop Agenda — 23rd June (Pre Event)
+                </p>
+                <h2 className="text-white text-xl font-bold">
+                  Workshop 2: Synchrotron-Based Techniques for Materials Characterization
+                </h2>
+              </div>
+              <button
+                onClick={() => setAgenda2Open((p) => !p)}
+                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors flex-shrink-0"
+              >
+                {agenda2Open ? <><ChevronUp size={16} /> Hide Agenda</> : <><ChevronDown size={16} /> View Full Agenda</>}
+              </button>
+            </div>
+          </div>
+
+          {agenda2Open && (
+            <div className="p-6">
+              <AgendaTable items={agenda2} />
+            </div>
+          )}
+
+          {!agenda2Open && (
+            <div className="px-6 py-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                {[
+                  { label: "Speakers", value: "3 Leading Experts" },
+                  { label: "Duration", value: "Full Day (8.5 hrs incl. travel)" },
+                  { label: "Date", value: "June 23, 2026" },
+                  { label: "Partners", value: "RRCAT, IIT Indore" },
                 ].map((item) => (
                   <div key={item.label} className="text-center">
                     <p className="text-[color:var(--nav)]/50 text-xs uppercase tracking-wide">{item.label}</p>
