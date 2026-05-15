@@ -3,6 +3,7 @@ import React from "react"
 const logos: string[] = [
   "/logo11.png",
   "/logo12.png",
+  "/jeol.png",
   "/logo13.png",
   "/logo14.jpg",
   "/logo15.png",
@@ -34,7 +35,11 @@ export default function OurSponsorsPage() {
                       <img
                         src={logo}
                         alt={`Sponsor ${ri * 3 + ci + 1}`}
-                        style={{ maxWidth: 240, maxHeight: 120, objectFit: "contain" }}
+                        style={{ 
+                          maxWidth: ri === 0 ? 300 : 240, 
+                          maxHeight: ri === 0 ? 150 : 120, 
+                          objectFit: "contain" 
+                        }}
                       />
                     </td>
                   ))}
