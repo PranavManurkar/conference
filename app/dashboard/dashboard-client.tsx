@@ -396,6 +396,9 @@ export default function DashboardClient({ user }: { user: User }) {
         if (data) {
           // Try to surface the most useful error message from DRF
           const fieldError =
+              (data.food_preference?.[0] as string) ||
+            (data.beverage_choice?.[0] as string) ||
+            (data.payment_date?.[0] as string) ||
               (data.cmt_id?.[0] as string) ||
             (data.abstract_id?.[0] as string) ||
               (data.abstract_title?.[0] as string) ||

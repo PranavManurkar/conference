@@ -4,6 +4,10 @@ export default function Awards() {
         title: "Ph.D. Thesis",
         count: "3 Awards",
         prize: "Certificate + ₹ 25,000 (or equivalent)",
+        template: {
+          label: "Thesis Template",
+          href: "/Thesis%20presentation%20format.pptx",
+        },
         color: "var(--primary)",         // purple
         icon: (
           <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,6 +50,10 @@ export default function Awards() {
         title: "Oral Presentation",
         count: "4+ Awards",
         prize: "Certificate + ₹ 10,000 (or equivalent)",
+        template: {
+          label: "Oral Template",
+          href: "/Oral%20presentation%20format.pptx",
+        },
         color: "var(--primary)",         // purple
         icon: (
           <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +66,6 @@ export default function Awards() {
           { label: "Prize", value: "Certificate + ₹ 10,000 (or equivalent)" },
           { label: "Total Presentation Time", value: "(10 + 3) minutes" },
           { label: "Maximum Slides", value: "10 slides" },
-          { label: "Template", value: "Coming soon! " },
         ],
         tagline: "Bring your ideas to the forefront, inspire the global research community, and gain international scientific visibility.",
       },
@@ -66,6 +73,10 @@ export default function Awards() {
         title: "Poster Presentation",
         count: "12+ Awards",
         prize: "Certificate + ₹ 5,000 (or equivalent)",
+        template: {
+          label: "Poster Template",
+          href: "/Poster%20Templat1.pptx",
+        },
         color: "var(--primary)",         // orange — middle card
         icon: (
           <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,16 +88,6 @@ export default function Awards() {
           { label: "Number of Awards", value: "12+ awards" },
           { label: "Prize", value: "Certificate + ₹ 5,000 (or equivalent)" },
           { label: "Poster Size", value: "80 cm (W) × 100 cm (H)" },
-          { label: "Template",  value: (
-            <a
-            href="/Poster Templat1.pptx"
-            download
-            className="hover:underline font-medium transition-colors"
-            style={{ color: "var(--primary)" }}
-          >
-            Click here
-          </a>
-        ), },
         ],
         tagline: "Present your research, compete with the best, and gain international recognition.",
       },
@@ -132,18 +133,38 @@ export default function Awards() {
   
                 {/* Main content */}
                 <div className="flex-1 p-6 flex flex-col gap-4">
-                  {/* Prize banner */}
-                  <div
-                    className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold w-fit"
-                    style={{
-                      background: `color-mix(in srgb, ${award.color} 12%, transparent)`,
-                      color: award.color,
-                    }}
-                  >
-                    <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                    Prize: {award.prize}
+                  {/* Prize banner + template button */}
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div
+                      className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold w-fit"
+                      style={{
+                        background: `color-mix(in srgb, ${award.color} 12%, transparent)`,
+                        color: award.color,
+                      }}
+                    >
+                      <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      Prize: {award.prize}
+                    </div>
+                    {award.template && (
+                      <a
+                        href={award.template.href}
+                        download
+                        className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold w-fit transition-colors hover:underline"
+                        style={{
+                          background: `color-mix(in srgb, ${award.color} 12%, transparent)`,
+                          color: award.color,
+                        }}
+                      >
+                        <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 10l5 5 5-5" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15V4" />
+                        </svg>
+                        {award.template.label}
+                      </a>
+                    )}
                   </div>
   
                   {/* Detail bullets */}
