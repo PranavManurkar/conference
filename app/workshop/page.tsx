@@ -601,6 +601,9 @@ export default function WorkshopPage() {
           <div className="mt-4 inline-flex items-center rounded-full bg-[color:var(--primary)]/5 px-4 py-2 text-sm text-[color:var(--nav)]/70">
             Each participant may register for only one workshop.
           </div>
+          <div className="mt-2 inline-flex items-center rounded-full bg-red-50 px-4 py-2 text-sm text-red-700">
+            Last date of registration for any workshop: 10 June 2026.
+          </div>
         </div>
 
         {/* Workshop Cards */}
