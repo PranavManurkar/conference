@@ -1,0 +1,30 @@
+Payment Due - Workshop Registration
+2DMTG India
+
+Dear {{ recipient_name }},
+
+This is a gentle reminder that the payment for your workshop registration remains pending. To secure your seat, please complete the payment at the earliest.
+
+Workshop Name: {{ workshop_title }}
+Workshop ID: {{ workshop_reference }}
+Amount Due: {{ amount_due }}
+Payment Deadline: 10 June 2026
+
+Payment Instructions:
+Complete the payment using the conference registration link (https://tdmtg.iiti.ac.in/registration). Upon successful payment, kindly upload your Transaction ID and Payment Screenshot through the website for verification and confirmation of your workshop seat.
+
+Please note that registrations with pending payments after the deadline will not be confirmed. We encourage you to complete the process well in advance to avoid any inconvenience.
+
+Warm regards,
+Organizing Committee
+2DMTG | IIT Indore
+
+For any queries or assistance, please feel free to reach out to us:
+Website: https://tdmtg.iiti.ac.in
+Email: 2dmtg@iiti.ac.in
+Phone: +91-731-660-5117/5126/3244
+
+This is an automated email. Please do not reply directly to this message. For support, use the contact details above.
+
+© 2026 2DMTG Conference | IIT Indore
+All rights reserved.

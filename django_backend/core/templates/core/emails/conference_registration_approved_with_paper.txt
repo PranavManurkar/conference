@@ -1,0 +1,40 @@
+Registration Approved - Paper Presentation
+2DMTG India
+
+Dear {{ recipient_name }},
+
+We are pleased to inform you that your registration has been confirmed for 2DMTG with the following details:
+
+Name: {{ recipient_name }}
+Registration ID: {{ registration_id }}
+Conference Dates: 24 - 26 June 2026
+Venue: IIT Indore
+
+Paper Details
+Paper Title: {{ paper_title }}
+Paper ID: {{ paper_id }}
+CMT ID: {{ cmt_id }}
+Presentation Type: {{ presentation_type }}
+
+For the detailed conference schedule, please visit:
+https://tdmtg.iiti.ac.in/schedule
+
+Please ensure your presence for all sessions relevant to your paper presentation. Further communication regarding your presentation slot will be shared closer to the conference dates.
+
+We believe that your work will add significant value to the technical program and enrich the scientific deliberations of the conference.
+
+We look forward to your active participation and to welcoming you to 2DMTG.
+
+Warm regards,
+Organizing Committee
+2DMTG | IIT Indore
+
+For any queries or assistance, please feel free to reach out to us:
+Website: https://tdmtg.iiti.ac.in
+Email: 2dmtg@iiti.ac.in
+Phone: +91-731-660-5117/5126/3244
+
+This is an automated email. Please do not reply directly to this message. For support, use the contact details above.
+
+© 2026 2DMTG Conference | IIT Indore
+All rights reserved.

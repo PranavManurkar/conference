@@ -1,0 +1,30 @@
+Payment Confirmed - Registration Complete
+2DMTG India
+
+Dear {{ recipient_name }},
+
+We are pleased to confirm your registration for the pre-conference workshop at 2DMTG 2026.
+
+Workshop Name: {{ workshop_title }}
+Workshop ID: {{ workshop_reference }}
+Date: 23 June 2026
+Venue: IIT Indore
+Arrival Time: 9:00 AM
+
+Kindly ensure your arrival by 9:00 AM on the day of the workshop. Please carry a copy of this confirmation email and a valid photo ID for on-site verification.
+
+We look forward to your active participation and an enriching workshop experience at IIT Indore.
+
+Warm regards,
+Organizing Committee
+2DMTG | IIT Indore
+
+For any queries or assistance, please feel free to reach out to us:
+Website: https://tdmtg.iiti.ac.in
+Email: 2dmtg@iiti.ac.in
+Phone: +91-731-660-5117/5126/3244
+
+This is an automated email. Please do not reply directly to this message. For support, use the contact details above.
+
+© 2026 2DMTG Conference | IIT Indore
+All rights reserved.

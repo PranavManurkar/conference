@@ -1,4 +1,6 @@
 # core/views.py
+import logging
+
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action, api_view, permission_classes,authentication_classes
 from rest_framework.response import Response
@@ -12,12 +14,14 @@ from .serializers import (
     EmailTokenObtainPairSerializer,
     WorkshopRegistrationSerializer,
 )
+from core.utils.email_utils import send_conference_submission_email, send_workshop_registration_email
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.views import TokenViewBase
 from rest_framework.views import APIView
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 class EmailTokenObtainPairView(TokenViewBase):
     serializer_class = EmailTokenObtainPairSerializer
@@ -110,7 +114,9 @@ class RegistrationViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         # attach authenticated user
-        serializer.save(user=self.request.user)
+        registration = serializer.save(user=self.request.user)
+        try: send_conference_submission_email(registration)
+        except Exception as e: logger.error("Conference submission email failed: %s", e)
 
 
 class WorkshopRegistrationCreateView(APIView):
@@ -121,6 +127,8 @@ class WorkshopRegistrationCreateView(APIView):
         serializer = WorkshopRegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         registration = serializer.save()
+        try: send_workshop_registration_email(registration)
+        except Exception as e: logger.error("Workshop reg email failed: %s", e)
         return Response(WorkshopRegistrationSerializer(registration).data, status=status.HTTP_201_CREATED)
 
 

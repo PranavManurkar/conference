@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration Received - Payment Under Review</title>
+  </head>
+  <body style="margin:0; padding:0; background-color:#f4f6f8;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f6f8;">
+      <tr>
+        <td align="center" style="padding:20px;">
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff; border-radius:8px; overflow:hidden; font-family:Arial, sans-serif; color:#222;">
+            <tr>
+              <td style="padding:20px 24px; background-color:#0b3d91; color:#ffffff;">
+                {% if logo_url %}
+                <img src="{{ logo_url }}" alt="{{ conference_name }} logo" width="120" style="display:block; border:0;" />
+                {% else %}
+                <div style="font-size:20px; font-weight:bold;">2DMTG India</div>
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:24px;">
+                <h2 style="margin:0 0 12px 0; font-size:20px;">Registration Received - Payment Under Review</h2>
+                <p style="margin:0 0 12px 0;">Dear {{ recipient_name }},</p>
+                <p style="margin:0 0 16px 0;">
+                  Thank you for completing your registration for 2DMTG 2026. Your registration will be confirmed subject to verification of your payment by our Accounts Section. Kindly bear with us for the next 2–3 working days.
+                </p>
+
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                  <tr><td style="padding:6px 0; font-weight:bold;">Registration ID:</td><td style="padding:6px 0;">{{ registration_id }}</td></tr>
+                  <tr><td style="padding:6px 0; font-weight:bold;">Full Name:</td><td style="padding:6px 0;">{{ recipient_name }}</td></tr>
+                  <tr><td style="padding:6px 0; font-weight:bold;">Email:</td><td style="padding:6px 0;">{{ email }}</td></tr>
+                  <tr><td style="padding:6px 0; font-weight:bold;">Payment Amount:</td><td style="padding:6px 0;">{{ payment_amount }}</td></tr>
+                  <tr><td style="padding:6px 0; font-weight:bold;">Transaction ID:</td><td style="padding:6px 0;">{{ transaction_id }}</td></tr>
+                </table>
+                <p style="margin:12px 0 0 0;">
+                  Warm regards,<br />
+                  Organizing Committee<br />
+                  2DMTG | IIT Indore
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:16px 24px; background-color:#f0f2f5; font-size:12px; color:#666;">
+                For any queries or assistance, please feel free to reach out to us:<br />
+                Website: https://tdmtg.iiti.ac.in<br />
+                Email: 2dmtg@iiti.ac.in<br />
+                Phone: +91-731-660-5117/5126/3244<br /><br />
+                This is an automated email. Please do not reply directly to this message. For support, use the contact details above.<br /><br />
+                © 2026 2DMTG Conference | IIT Indore<br />
+                All rights reserved.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

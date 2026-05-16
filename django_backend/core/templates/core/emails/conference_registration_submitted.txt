@@ -1,0 +1,26 @@
+Registration Received - Payment Under Review
+2DMTG India
+
+Dear {{ recipient_name }},
+
+Thank you for your interest in {{ conference_name }}. We have received your registration and payment details. Your payment will be verified by the Accounts section. Please allow 2-3 working days for confirmation.
+
+Registration ID: {{ registration_id }}
+Full Name: {{ recipient_name }}
+Email: {{ email }}
+Payment Amount: {{ payment_amount }}
+Transaction ID: {{ transaction_id }}
+
+Warm regards,
+Organizing Committee
+2DMTG | IIT Indore
+
+For any queries or assistance, please feel free to reach out to us:
+Website: https://tdmtg.iiti.ac.in
+Email: 2dmtg@iiti.ac.in
+Phone: +91-731-660-5117/5126/3244
+
+This is an automated email. Please do not reply directly to this message. For support, use the contact details above.
+
+© 2026 2DMTG Conference | IIT Indore
+All rights reserved.

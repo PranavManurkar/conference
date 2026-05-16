@@ -6,6 +6,13 @@ from django.contrib.auth.admin import UserAdmin
 from django.db import transaction
 from .models import CustomUser, Registration, WorkshopRegistration
 from core.utils.sheets_utils import append_approved_user_to_sheet
+from core.utils.email_utils import (
+    send_conference_approval_email,
+    send_conference_rejection_email,
+    send_workshop_registration_email,
+    send_workshop_payment_confirmation_email,
+    send_workshop_payment_reminder_email,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -23,6 +30,21 @@ class RegistrationAdmin(admin.ModelAdmin):
     search_fields = ("full_name", "email", "transaction_id", "cmt_id", "abstract_id")
     readonly_fields = ("created_at",)
     actions = ["mark_accepted", "mark_rejected", "mark_under_process"]
+
+    def save_model(self, request, obj, form, change):
+        previous_status = None
+        if change and obj.pk:
+            previous_status = Registration.objects.filter(pk=obj.pk).values_list("status", flat=True).first()
+
+        super().save_model(request, obj, form, change)
+
+        if previous_status != obj.status:
+            if obj.status == Registration.STATUS_ACCEPTED:
+                try: send_conference_approval_email(obj)
+                except Exception as e: logger.error("Approval email failed: %s", e)
+            elif obj.status == Registration.STATUS_REJECTED:
+                try: send_conference_rejection_email(obj)
+                except Exception as e: logger.error("Rejection email failed: %s", e)
     
     def has_change_permission(self, request, obj=None):
         """Only main superuser can modify registration records."""
@@ -68,6 +90,8 @@ class RegistrationAdmin(admin.ModelAdmin):
             except Exception as e:
                 # Log error but don't raise - approval must succeed even if export fails
                 logger.error(f"Unexpected error exporting registration {registration.id}: {str(e)}")
+            try: send_conference_approval_email(registration)
+            except Exception as e: logger.error("Approval email failed: %s", e)
         
         self.message_user(request, f"{updated_count} registration(s) marked as Accepted. {export_count} successfully exported to sheet.")
     
@@ -100,6 +124,8 @@ class RegistrationAdmin(admin.ModelAdmin):
                     logger.warning(f"Registration {registration.id} rejected but export failed (check logs)")
             except Exception as e:
                 logger.error(f"Unexpected error exporting rejected registration {registration.id}: {str(e)}")
+            try: send_conference_rejection_email(registration)
+            except Exception as e: logger.error("Rejection email failed: %s", e)
         
         self.message_user(request, f"{updated_count} registration(s) marked as Rejected. {export_count} successfully exported to sheet.")
     
@@ -155,10 +181,31 @@ class WorkshopRegistrationAdmin(admin.ModelAdmin):
     readonly_fields = ("fee_amount", "created_at", "updated_at")
     actions = ["mark_approved_for_payment", "mark_rejected", "mark_accepted"]
 
+    def save_model(self, request, obj, form, change):
+        previous_status = None
+        if change and obj.pk:
+            previous_status = WorkshopRegistration.objects.filter(pk=obj.pk).values_list("status", flat=True).first()
+
+        super().save_model(request, obj, form, change)
+
+        if not change:
+            try: send_workshop_registration_email(obj)
+            except Exception as e: logger.error("Workshop reg email failed: %s", e)
+
+        if previous_status != obj.status:
+            if obj.status == WorkshopRegistration.STATUS_APPROVED_FOR_PAYMENT:
+                try: send_workshop_payment_reminder_email(obj)
+                except Exception as e: logger.error("Payment reminder email failed: %s", e)
+            elif obj.status == WorkshopRegistration.STATUS_ACCEPTED:
+                try: send_workshop_payment_confirmation_email(obj)
+                except Exception as e: logger.error("Payment confirmation email failed: %s", e)
+
     def mark_approved_for_payment(self, request, queryset):
         for registration in queryset:
             registration.status = WorkshopRegistration.STATUS_APPROVED_FOR_PAYMENT
             registration.save(update_fields=["status", "updated_at"])
+            try: send_workshop_payment_reminder_email(registration)
+            except Exception as e: logger.error("Payment reminder email failed: %s", e)
     mark_approved_for_payment.short_description = "Mark selected workshop registrations as approved for payment"
 
     def mark_rejected(self, request, queryset):
@@ -171,4 +218,6 @@ class WorkshopRegistrationAdmin(admin.ModelAdmin):
         for registration in queryset:
             registration.status = WorkshopRegistration.STATUS_ACCEPTED
             registration.save(update_fields=["status", "updated_at"])
+            try: send_workshop_payment_confirmation_email(registration)
+            except Exception as e: logger.error("Payment confirmation email failed: %s", e)
     mark_accepted.short_description = "Accept selected workshop registrations"

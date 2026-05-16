@@ -214,6 +214,3 @@ class WorkshopRegistration(models.Model):
 
         self.fee_amount = self.calculate_fee_amount()
         super().save(*args, **kwargs)
-
-        if previous_status != self.status:
-            self._send_status_email(previous_status=previous_status)
