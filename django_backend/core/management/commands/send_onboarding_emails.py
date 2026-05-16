@@ -31,6 +31,11 @@ class Command(BaseCommand):
             default="all",
             help="Choose which records to process (default: all)",
         )
+        parser.add_argument(
+            "--include-pending",
+            action="store_true",
+            help="Include conference registrations with 'Under Process' status (send submission email)",
+        )
 
     @staticmethod
     def _normalize_status(value):
@@ -167,6 +172,13 @@ class Command(BaseCommand):
                 continue
 
             action_name, action_fn = self._resolve_conference_action(status)
+            # If pending and include_pending flag set, treat as submission email
+            include_pending = bool(self._include_pending) if hasattr(self, '_include_pending') else False
+            if action_name == "conference_pending_skip" and include_pending:
+                action_name = "conference_submission"
+                from core.utils.email_utils import send_conference_submission_email
+                action_fn = send_conference_submission_email
+
             if action_name == "conference_pending_skip":
                 self.stdout.write(
                     self.style.WARNING(
@@ -226,6 +238,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         dry_run = bool(options.get("dry_run"))
         record_type = options.get("type", "all")
+        # store include_pending flag on instance for use during processing
+        self._include_pending = bool(options.get("include_pending", False))
 
         self.stdout.write(f"Mode: {'DRY-RUN' if dry_run else 'LIVE'} | Type: {record_type}")
         self._print_discovered_statuses()
