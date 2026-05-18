@@ -4,6 +4,9 @@ import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
+const PAYMENT_URL = 'https://payu.in/web/EB3AF4CBC22FB4C90B5ABC9A52E5CAC3'
+const PAYMENT_QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(PAYMENT_URL)}`
+
 const SponsorshipCard = ({ title, amount, benefits, featured }: { title: string; amount: string; benefits: string[]; featured?: boolean }) => (
   <Card className={`border-2 ${featured ? 'border-[color:var(--primary)] shadow-lg scale-105' : 'border-[color:var(--nav)]/10'}`}>
     <CardHeader className={featured ? 'bg-[color:var(--primary)]/10' : 'bg-[color:var(--nav)]/5'}>
@@ -150,7 +153,7 @@ export default function Sponsorship() {
                 <li className="flex items-center gap-2 pt-2">
                   <span className="font-semibold text-[color:var(--nav)]">Payu link:</span>
                   <a 
-                    href="https://payu.in/web/EB3AF4CBC22FB4C90B5ABC9A52E5CAC3" 
+                    href={PAYMENT_URL} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="px-4 py-1.5 bg-[color:var(--primary)] text-white text-sm font-medium rounded hover:opacity-90 transition-opacity"
@@ -182,7 +185,7 @@ export default function Sponsorship() {
               </h4>
               <div className="bg-white p-2 rounded-lg border border-[var(--border)] shadow-sm">
                 <img 
-                    src="payuqr.png" 
+                    src={PAYMENT_QR_URL} 
                     alt="Payment QR Code" 
                     className="w-40 h-40 object-contain" 
                 />

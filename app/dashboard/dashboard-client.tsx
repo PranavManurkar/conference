@@ -25,6 +25,8 @@ import {
 } from "lucide-react"
 
 const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "https://tdmtg.iiti.ac.in"
+const PAYMENT_URL = "https://payu.in/web/EB3AF4CBC22FB4C90B5ABC9A52E5CAC3"
+const PAYMENT_QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(PAYMENT_URL)}`
 
 type Registration = {
   id: string
@@ -1106,7 +1108,7 @@ export default function DashboardClient({ user }: { user: User }) {
                           </div>
                         ))}
                         <a
-                          href="https://payu.in/web/EB3AF4CBC22FB4C90B5ABC9A52E5CAC3"
+                          href={PAYMENT_URL}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="bg-[color:var(--primary)] hover:opacity-90 text-white p-4 rounded-xl shadow-sm transition-all flex flex-col justify-center items-center text-center group cursor-pointer"
@@ -1123,7 +1125,7 @@ export default function DashboardClient({ user }: { user: User }) {
                     <div className="lg:w-80 bg-white p-6 rounded-2xl border-2 border-gray-200 shadow-sm flex flex-col items-center justify-center text-center">
                       <h4 className="text-lg font-bold text-[color:var(--primary)] mb-4">Scan to Pay</h4>
                       <div className="bg-white p-2 rounded-xl border-2 border-dashed border-gray-200">
-                        <img src="payuqr.png" alt="Payment QR Code" className="w-48 h-48 object-contain" />
+                        <img src={PAYMENT_QR_URL} alt="Payment QR Code" className="w-48 h-48 object-contain" />
                       </div>
                     </div>
                   </div>
