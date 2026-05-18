@@ -3,3 +3,43 @@ node_modules
 
 # Django database
 db.sqlite3
+
+# Django local settings and credentials
+local_settings.py
+credentials.json
+
+# Django backend exports and logs
+django_backend/logs/
+django_backend/exports/
+django_backend/media/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Development and Test Scripts
+django_backend/diag.py
+django_backend/test_sheets_connection.py
+
+# Temporary local test scripts
+test_emails.py
+
+# Django development utilities
+django_backend/test*.py
+django_backend/diag*.py
