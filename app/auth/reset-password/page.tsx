@@ -2,14 +2,14 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { confirmPasswordReset } from "@/lib/auth";
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const searchParams = useSearchParams();
   const uid = searchParams.get("uid") || "";
   const token = searchParams.get("token") || "";
@@ -53,102 +53,125 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="auth-root">
-      <main className="auth-main" role="main">
-        <div className="back-row">
-          <Button asChild>
-            <Link href="/auth/login" className="back-link">
-              <ArrowLeft className="back-icon" />
-              Back to login
-            </Link>
-          </Button>
-        </div>
+    <main className="auth-main" role="main">
+      <div className="back-row">
+        <Button asChild>
+          <Link href="/auth/login" className="back-link">
+            <ArrowLeft className="back-icon" />
+            Back to login
+          </Link>
+        </Button>
+      </div>
 
-        <div className="center-wrapper">
-          <div className="auth-card" role="region" aria-labelledby="reset-title">
-            <div className="card-header">
-              <h1 id="reset-title" className="card-title">Set a new password</h1>
-              <p className="card-desc">
-                Choose a strong password to protect your 2DMTG Conference account.
-              </p>
-            </div>
+      <div className="center-wrapper">
+        <div className="auth-card" role="region" aria-labelledby="reset-title">
+          <div className="card-header">
+            <h1 id="reset-title" className="card-title">Set a new password</h1>
+            <p className="card-desc">
+              Choose a strong password to protect your 2DMTG Conference account.
+            </p>
+          </div>
 
-            <div className="card-body">
-              {status === "success" ? (
-                <div className="sent-panel" aria-live="polite">
-                  <CheckCircle className="sent-icon" />
-                  <h2 className="sent-title">Password updated</h2>
-                  <p className="sent-copy">Your password has been reset. You can now log in.</p>
-                  <Link href="/auth/login" className="link">
-                    Go to login
+          <div className="card-body">
+            {status === "success" ? (
+              <div className="sent-panel" aria-live="polite">
+                <CheckCircle className="sent-icon" />
+                <h2 className="sent-title">Password updated</h2>
+                <p className="sent-copy">Your password has been reset. You can now log in.</p>
+                <Link href="/auth/login" className="link">
+                  Go to login
+                </Link>
+              </div>
+            ) : (
+              <form className="form" onSubmit={handleSubmit} noValidate>
+                <div className="form-row">
+                  <label htmlFor="password" className="label">
+                    New password
+                  </label>
+                  <input
+                    id="password"
+                    type="password"
+                    autoComplete="new-password"
+                    required
+                    className="input"
+                    placeholder="Enter a new password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                  />
+                </div>
+
+                <div className="form-row">
+                  <label htmlFor="confirmPassword" className="label">
+                    Confirm password
+                  </label>
+                  <input
+                    id="confirmPassword"
+                    type="password"
+                    autoComplete="new-password"
+                    required
+                    className="input"
+                    placeholder="Repeat your new password"
+                    value={confirmPassword}
+                    onChange={(event) => setConfirmPassword(event.target.value)}
+                  />
+                </div>
+
+                {linkMissing && (
+                  <div className="error" role="alert">
+                    This reset link is incomplete. Please request a new link.
+                  </div>
+                )}
+
+                {error && !linkMissing && (
+                  <div className="error" role="alert">
+                    {error}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="primary-button"
+                  disabled={status === "loading" || linkMissing}
+                >
+                  {status === "loading" ? "Updating password..." : "Reset password"}
+                </button>
+
+                <div className="footer-text">
+                  Need a new link?{" "}
+                  <Link href="/auth/forgot-password" className="link">
+                    Request again
                   </Link>
                 </div>
-              ) : (
-                <form className="form" onSubmit={handleSubmit} noValidate>
-                  <div className="form-row">
-                    <label htmlFor="password" className="label">
-                      New password
-                    </label>
-                    <input
-                      id="password"
-                      type="password"
-                      autoComplete="new-password"
-                      required
-                      className="input"
-                      placeholder="Enter a new password"
-                      value={password}
-                      onChange={(event) => setPassword(event.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-row">
-                    <label htmlFor="confirmPassword" className="label">
-                      Confirm password
-                    </label>
-                    <input
-                      id="confirmPassword"
-                      type="password"
-                      autoComplete="new-password"
-                      required
-                      className="input"
-                      placeholder="Repeat your new password"
-                      value={confirmPassword}
-                      onChange={(event) => setConfirmPassword(event.target.value)}
-                    />
-                  </div>
-
-                  {linkMissing && (
-                    <div className="error" role="alert">
-                      This reset link is incomplete. Please request a new link.
-                    </div>
-                  )}
-
-                  {error && !linkMissing && (
-                    <div className="error" role="alert">
-                      {error}
-                    </div>
-                  )}
-
-                  <button
-                    type="submit"
-                    className="primary-button"
-                    disabled={status === "loading" || linkMissing}
-                  >
-                    {status === "loading" ? "Updating password..." : "Reset password"}
-                  </button>
-
-                  <div className="footer-text">
-                    Need a new link?{" "}
-                    <Link href="/auth/forgot-password" className="link">
-                      Request again
-                    </Link>
-                  </div>
-                </form>
-              )}
-            </div>
+              </form>
+            )}
           </div>
         </div>
-      </main>
+      </div>
+    </main>
+  );
+}
+
+function ResetPasswordFallback() {
+  return (
+    <main className="auth-main" role="main">
+      <div className="center-wrapper">
+        <div className="auth-card" role="region" aria-labelledby="reset-loading-title">
+          <div className="card-header">
+            <h1 id="reset-loading-title" className="card-title">Set a new password</h1>
+            <p className="card-desc">Loading reset form...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <div className="auth-root">
+      <Suspense fallback={<ResetPasswordFallback />}>
+        <ResetPasswordContent />
+      </Suspense>
 
       <style jsx>{`
         .auth-root {
