@@ -168,33 +168,33 @@ function ResetPasswordFallback() {
 
 export default function ResetPasswordPage() {
   return (
-    <div className="auth-root">
+    <div className="auth-root reset-password">
       <Suspense fallback={<ResetPasswordFallback />}>
         <ResetPasswordContent />
       </Suspense>
 
-      <style jsx>{`
-        .auth-root {
+      <style jsx global>{`
+        .reset-password {
           min-height: 100vh;
           background: var(--background, #fbfbfd);
           color: var(--foreground, #1b1b26);
           font-family: Inter, system-ui, -apple-system, sans-serif;
         }
 
-        .auth-main {
+        .reset-password .auth-main {
           max-width: 960px;
           margin: 0 auto;
           padding: 32px 20px;
         }
 
-        .back-row {
+        .reset-password .back-row {
           width: 100%;
           display: flex;
           justify-content: flex-start;
           margin-bottom: 20px;
         }
 
-        .back-link {
+        .reset-password .back-link {
           display: inline-flex;
           align-items: center;
           gap: 6px;
@@ -208,27 +208,27 @@ export default function ResetPasswordPage() {
           transition: background-color 0.2s ease, transform 0.15s ease;
         }
 
-        .back-link:hover {
+        .reset-password .back-link:hover {
           background: color-mix(in oklch, var(--primary) 85%, black);
           transform: translateY(-1px);
         }
 
-        .back-link:active {
+        .reset-password .back-link:active {
           transform: translateY(0);
         }
 
-        .back-icon {
+        .reset-password .back-icon {
           width: 16px;
           height: 16px;
           stroke-width: 2;
         }
 
-        .center-wrapper {
+        .reset-password .center-wrapper {
           display: flex;
           justify-content: center;
         }
 
-        .auth-card {
+        .reset-password .auth-card {
           width: 100%;
           max-width: 460px;
           padding: 0;
@@ -238,44 +238,44 @@ export default function ResetPasswordPage() {
           box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
         }
 
-        .card-header {
+        .reset-password .card-header {
           padding: 24px 26px 16px;
         }
 
-        .card-title {
+        .reset-password .card-title {
           margin: 0;
           font-size: 22px;
         }
 
-        .card-desc {
+        .reset-password .card-desc {
           font-size: 13px;
           color: var(--muted-foreground, #6b6b76);
           margin-top: 6px;
         }
 
-        .card-body {
+        .reset-password .card-body {
           padding: 20px 26px 26px;
         }
 
-        .form {
+        .reset-password .form {
           display: flex;
           flex-direction: column;
           gap: 18px;
         }
 
-        .form-row {
+        .reset-password .form-row {
           display: flex;
           flex-direction: column;
           gap: 6px;
         }
 
-        .label {
+        .reset-password .label {
           font-size: 13px;
           font-weight: 500;
           color: var(--foreground, #1b1b26);
         }
 
-        .input {
+        .reset-password .input {
           width: 100%;
           height: 46px;
           padding: 12px 14px;
@@ -286,18 +286,18 @@ export default function ResetPasswordPage() {
           color: var(--foreground, #1b1b26);
         }
 
-        .input::placeholder {
+        .reset-password .input::placeholder {
           color: #9a9aa2;
         }
 
-        .input:focus {
+        .reset-password .input:focus {
           outline: none;
           border-color: var(--primary, #0033cc);
           background: #ffffff;
           box-shadow: 0 0 0 3px rgba(0, 51, 204, 0.15);
         }
 
-        .primary-button {
+        .reset-password .primary-button {
           height: 44px;
           border-radius: 10px;
           border: none;
@@ -307,12 +307,12 @@ export default function ResetPasswordPage() {
           cursor: pointer;
         }
 
-        .primary-button:disabled {
+        .reset-password .primary-button:disabled {
           opacity: 0.65;
           cursor: not-allowed;
         }
 
-        .error {
+        .reset-password .error {
           background: var(--destructive, #d9534f);
           color: #fff;
           padding: 8px 10px;
@@ -320,23 +320,23 @@ export default function ResetPasswordPage() {
           font-size: 13px;
         }
 
-        .footer-text {
+        .reset-password .footer-text {
           text-align: center;
           font-size: 13px;
           color: var(--muted-foreground, #6b6b76);
         }
 
-        .link {
+        .reset-password .link {
           color: var(--primary, #5a3eb8);
           font-weight: 600;
           text-decoration: none;
         }
 
-        .link:hover {
+        .reset-password .link:hover {
           text-decoration: underline;
         }
 
-        .sent-panel {
+        .reset-password .sent-panel {
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -344,18 +344,18 @@ export default function ResetPasswordPage() {
           text-align: center;
         }
 
-        .sent-icon {
+        .reset-password .sent-icon {
           width: 40px;
           height: 40px;
           color: var(--primary, #5a3eb8);
         }
 
-        .sent-title {
+        .reset-password .sent-title {
           margin: 0;
           font-size: 18px;
         }
 
-        .sent-copy {
+        .reset-password .sent-copy {
           margin: 0;
           font-size: 13px;
           color: var(--muted-foreground, #6b6b76);
