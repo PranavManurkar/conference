@@ -6,10 +6,14 @@ const logos: string[] = [
   "/jeol.png",
   "/logo13.png",
   "/logo14.jpg",
+    "/CSIR-Logo.png",
   "/logo15.png",
   "/logo16.png",
   "/logo17.png",
   "/logo18.png",
+ 
+  "/logo_kam.jpeg",
+  "/logo_lss.jpeg",
 ]
 
 function chunk<T>(arr: T[], size: number): T[][] {
@@ -35,10 +39,20 @@ export default function OurSponsorsPage() {
                       <img
                         src={logo}
                         alt={`Sponsor ${ri * 3 + ci + 1}`}
-                        style={{ 
-                          maxWidth: ri === 0 ? 300 : 240, 
-                          maxHeight: ri === 0 ? 150 : 120, 
-                          objectFit: "contain" 
+                        style={{
+                          maxWidth:
+                            logo === "/CSIR-Logo.png"
+                              ? 320
+                              : ri === 0
+                                ? 300
+                                : 240,
+                          maxHeight:
+                            logo === "/CSIR-Logo.png"
+                              ? 170
+                              : ri === 0
+                                ? 150
+                                : 120,
+                          objectFit: "contain",
                         }}
                       />
                     </td>
