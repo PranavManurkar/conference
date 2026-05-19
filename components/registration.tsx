@@ -153,6 +153,12 @@ asChild size="lg" className="bg-[var(--primary-foreground)] text-[var(--primary)
         <ArrowRight className="ml-2 h-4 w-4" />
       </Link>
     </Button>
+    <Button asChild size="lg" className="bg-[var(--primary-foreground)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)]">
+      <Link href="/auth/forgot-password">
+        Forgot Password
+        <ArrowRight className="ml-2 h-4 w-4" />
+      </Link>
+    </Button>
   </div>
 </div>
         {/* End of How to Register section */}

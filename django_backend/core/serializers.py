@@ -2,6 +2,10 @@
 from rest_framework import serializers
 from .models import CustomUser, Registration, WorkshopRegistration
 from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import DjangoUnicodeDecodeError, force_str
+from django.utils.http import urlsafe_base64_decode
 from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
@@ -91,6 +95,41 @@ class EmailTokenObtainPairSerializer(serializers.Serializer):
                 "last_name": getattr(user, "last_name", ""),
             },
         }
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    uid = serializers.CharField()
+    token = serializers.CharField()
+    new_password = serializers.CharField(write_only=True, min_length=8)
+
+    def validate_new_password(self, value):
+        validate_password(value)
+        return value
+
+    def save(self):
+        uid = self.validated_data["uid"]
+        token = self.validated_data["token"]
+        new_password = self.validated_data["new_password"]
+
+        try:
+            user_id = force_str(urlsafe_base64_decode(uid))
+            user = User.objects.get(pk=user_id)
+        except (User.DoesNotExist, TypeError, ValueError, OverflowError, DjangoUnicodeDecodeError):
+            raise serializers.ValidationError({"detail": "Invalid reset link."})
+
+        if not default_token_generator.check_token(user, token):
+            raise serializers.ValidationError({"detail": "Invalid or expired reset link."})
+
+        if not user.is_active:
+            raise serializers.ValidationError({"detail": "Inactive account."})
+
+        user.set_password(new_password)
+        user.save(update_fields=["password"])
+        return user
 
 class RegistrationSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)

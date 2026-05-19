@@ -5,6 +5,8 @@ from .views import (
     CheckByEmailView,
     AdminUpdateStatusView,
     register_view,
+    PasswordResetRequestView,
+    PasswordResetConfirmView,
     RegistrationViewSet,
     LogoutView,
     WorkshopRegistrationCreateView,
@@ -23,5 +25,7 @@ urlpatterns = [
     path("workshop-registrations/lookup/", WorkshopRegistrationLookupView.as_view(), name="workshop-registration-lookup"),
     path("workshop-registrations/submit-transaction/", WorkshopTransactionSubmitView.as_view(), name="workshop-transaction-submit"),
     path("auth/register/", register_view, name="register"),
+    path("auth/password-reset/", PasswordResetRequestView.as_view(), name="password-reset"),
+    path("auth/password-reset/confirm/", PasswordResetConfirmView.as_view(), name="password-reset-confirm"),
     path("auth/logout/", LogoutView.as_view(), name="auth-logout"),
 ]

@@ -12,11 +12,15 @@ from .serializers import (
     RegisterSerializer,
     RegistrationSerializer,
     EmailTokenObtainPairSerializer,
+    PasswordResetRequestSerializer,
+    PasswordResetConfirmSerializer,
     WorkshopRegistrationSerializer,
 )
 from core.utils.email_utils import send_conference_submission_email, send_workshop_registration_email
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import PasswordResetForm
+from django.conf import settings
 from rest_framework_simplejwt.views import TokenViewBase
 from rest_framework.views import APIView
 
@@ -50,6 +54,60 @@ def register_view(request):
         "refresh": str(refresh),
     }
     return Response(data, status=status.HTTP_201_CREATED)
+
+
+def get_frontend_base_url(request):
+    base_url = getattr(settings, "FRONTEND_BASE_URL", "").strip()
+    if base_url:
+        return base_url.rstrip("/")
+    if getattr(settings, "DEBUG", False):
+        return "http://localhost:3000"
+    if request is not None:
+        return request.build_absolute_uri("/").rstrip("/")
+    return ""
+
+
+class PasswordResetRequestView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = PasswordResetRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        email = serializer.validated_data["email"]
+        form = PasswordResetForm({"email": email})
+
+        if form.is_valid():
+            frontend_base_url = get_frontend_base_url(request)
+            reset_url_base = f"{frontend_base_url}/auth/reset-password" if frontend_base_url else "/auth/reset-password"
+
+            form.save(
+                request=request,
+                use_https=request.is_secure(),
+                from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
+                subject_template_name="core/emails/password_reset_subject.txt",
+                email_template_name="core/emails/password_reset_email.txt",
+                html_email_template_name="core/emails/password_reset_email.html",
+                extra_email_context={
+                    "reset_url_base": reset_url_base,
+                    "support_email": getattr(settings, "CONFERENCE_CONTACT_EMAIL", "contact@conference.com"),
+                },
+            )
+
+        return Response(
+            {"detail": "If an account exists, a reset link has been sent."},
+            status=status.HTTP_200_OK,
+        )
+
+
+class PasswordResetConfirmView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = PasswordResetConfirmSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"detail": "Password reset successful."}, status=status.HTTP_200_OK)
 
 class IsOwnerOrAdmin(permissions.BasePermission):
     """

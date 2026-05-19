@@ -76,7 +76,7 @@ export default function LoginPage() {
                 <div className="form-row">
                   <div className="password-label-row">
                     <label htmlFor="password" className="label">Password</label>
-                    {/* <Link href="/auth/forgot-password" className="forgot-link">Forgot?</Link> */}
+                    <Link href="/auth/forgot-password" className="forgot-link">Forgot?</Link>
                   </div>
                   <input
                     id="password"

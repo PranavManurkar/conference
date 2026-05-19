@@ -249,6 +249,9 @@ DEFAULT_FROM_EMAIL = os.getenv(
     'Conference Team <noreply@conference.com>'
 )
 
+# Frontend base URL for password reset links
+FRONTEND_BASE_URL = os.getenv('FRONTEND_BASE_URL', '')
+
 # === LOCAL SETTINGS OVERRIDE (for development) ===
 try:
     from .local_settings import *

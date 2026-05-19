@@ -4,35 +4,52 @@ import type React from "react";
 
 import { useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { requestPasswordReset } from "@/lib/auth";
+import { confirmPasswordReset } from "@/lib/auth";
 
-export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "sent">("idle");
+export default function ResetPasswordPage() {
+  const searchParams = useSearchParams();
+  const uid = searchParams.get("uid") || "";
+  const token = searchParams.get("token") || "";
+
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const [error, setError] = useState<string | null>(null);
+
+  const linkMissing = !uid || !token;
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null);
 
-    const trimmedEmail = email.trim();
-    if (!trimmedEmail) {
-      setError("Please enter a valid email address.");
+    if (linkMissing) {
+      setError("This reset link is missing required information.");
+      return;
+    }
+
+    if (!password || password.length < 8) {
+      setError("Please enter a password with at least 8 characters.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
       return;
     }
 
     setStatus("loading");
-    const { success, error: requestError } = await requestPasswordReset(trimmedEmail);
+    const { success, error: requestError } = await confirmPasswordReset(uid, token, password);
 
     if (!success) {
-      setError(requestError || "Something went wrong. Please try again.");
+      setError(requestError || "Unable to reset your password.");
       setStatus("idle");
       return;
     }
 
-    setStatus("sent");
+    setStatus("success");
   };
 
   return (
@@ -42,76 +59,88 @@ export default function ForgotPasswordPage() {
           <Button asChild>
             <Link href="/auth/login" className="back-link">
               <ArrowLeft className="back-icon" />
-              Back
+              Back to login
             </Link>
           </Button>
         </div>
 
         <div className="center-wrapper">
-          <div className="auth-card" role="region" aria-labelledby="forgot-title">
+          <div className="auth-card" role="region" aria-labelledby="reset-title">
             <div className="card-header">
-              <h1 id="forgot-title" className="card-title">Forgot your password?</h1>
+              <h1 id="reset-title" className="card-title">Set a new password</h1>
               <p className="card-desc">
-                Enter your registered email and we will send a reset link from 2dmtg@iiti.ac.in.
+                Choose a strong password to protect your 2DMTG Conference account.
               </p>
             </div>
 
             <div className="card-body">
-              {status === "sent" ? (
+              {status === "success" ? (
                 <div className="sent-panel" aria-live="polite">
                   <CheckCircle className="sent-icon" />
-                  <h2 className="sent-title">Check your inbox</h2>
-                  <p className="sent-copy">
-                    If your email is on file, you will receive a reset link shortly. Use the latest
-                    link you receive.
-                  </p>
-                  <button
-                    type="button"
-                    className="secondary-button"
-                    onClick={() => setStatus("idle")}
-                  >
-                    Send another link
-                  </button>
+                  <h2 className="sent-title">Password updated</h2>
+                  <p className="sent-copy">Your password has been reset. You can now log in.</p>
                   <Link href="/auth/login" className="link">
-                    Return to login
+                    Go to login
                   </Link>
                 </div>
               ) : (
                 <form className="form" onSubmit={handleSubmit} noValidate>
                   <div className="form-row">
-                    <label htmlFor="email" className="label">
-                      Email address
+                    <label htmlFor="password" className="label">
+                      New password
                     </label>
                     <input
-                      id="email"
-                      type="email"
-                      autoComplete="email"
+                      id="password"
+                      type="password"
+                      autoComplete="new-password"
                       required
                       className="input"
-                      placeholder="you@example.com"
-                      value={email}
-                      onChange={(event) => setEmail(event.target.value)}
-                      aria-describedby="email-help"
+                      placeholder="Enter a new password"
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
                     />
-                    <p id="email-help" className="help-text">
-                      We will send a reset link to this address.
-                    </p>
                   </div>
 
-                  {error && (
+                  <div className="form-row">
+                    <label htmlFor="confirmPassword" className="label">
+                      Confirm password
+                    </label>
+                    <input
+                      id="confirmPassword"
+                      type="password"
+                      autoComplete="new-password"
+                      required
+                      className="input"
+                      placeholder="Repeat your new password"
+                      value={confirmPassword}
+                      onChange={(event) => setConfirmPassword(event.target.value)}
+                    />
+                  </div>
+
+                  {linkMissing && (
+                    <div className="error" role="alert">
+                      This reset link is incomplete. Please request a new link.
+                    </div>
+                  )}
+
+                  {error && !linkMissing && (
                     <div className="error" role="alert">
                       {error}
                     </div>
                   )}
 
-                  <button type="submit" className="primary-button" disabled={status === "loading"}>
-                    {status === "loading" ? "Sending link..." : "Send reset link"}
+                  <button
+                    type="submit"
+                    className="primary-button"
+                    disabled={status === "loading" || linkMissing}
+                  >
+                    {status === "loading" ? "Updating password..." : "Reset password"}
                   </button>
 
                   <div className="footer-text">
-                    Remembered it?{" "}
-                    <Link href="/auth/login" className="link">
-                      Log in here
+                    Need a new link?{" "}
+                    <Link href="/auth/forgot-password" className="link">
+                      Request again
                     </Link>
                   </div>
                 </form>
@@ -178,7 +207,7 @@ export default function ForgotPasswordPage() {
 
         .auth-card {
           width: 100%;
-          max-width: 420px;
+          max-width: 460px;
           padding: 0;
           background: #ffffff;
           border-radius: 16px;
@@ -245,12 +274,6 @@ export default function ForgotPasswordPage() {
           box-shadow: 0 0 0 3px rgba(0, 51, 204, 0.15);
         }
 
-        .help-text {
-          margin: 0;
-          font-size: 12px;
-          color: var(--muted-foreground, #6b6b76);
-        }
-
         .primary-button {
           height: 44px;
           border-radius: 10px;
@@ -264,16 +287,6 @@ export default function ForgotPasswordPage() {
         .primary-button:disabled {
           opacity: 0.65;
           cursor: not-allowed;
-        }
-
-        .secondary-button {
-          height: 40px;
-          border-radius: 10px;
-          border: 1px solid var(--border, #e6e6ea);
-          background: #ffffff;
-          color: var(--foreground, #1b1b26);
-          font-weight: 600;
-          cursor: pointer;
         }
 
         .error {

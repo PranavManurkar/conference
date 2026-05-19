@@ -121,6 +121,12 @@ export default function SignUpPage() {
                   {isLoading ? "Creating account..." : "Sign Up"}
                 </button>
 
+                <div className="secondary-row">
+                  <Link href="/auth/forgot-password" className="secondary-button">
+                    Forgot your password?
+                  </Link>
+                </div>
+
                 <div className="footer-text">
                   Already have an account?{" "}
                   <Link href="/auth/login" className="link">
@@ -312,6 +318,32 @@ export default function SignUpPage() {
         .primary-button:disabled {
           opacity: 0.65;
           cursor: not-allowed;
+        }
+
+        .secondary-row {
+          display: flex;
+          justify-content: center;
+        }
+
+        .secondary-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          height: 40px;
+          padding: 0 14px;
+          border-radius: 10px;
+          border: 1px solid var(--border, #e6e6ea);
+          background: #ffffff;
+          color: var(--foreground, #1b1b26);
+          font-size: 13px;
+          font-weight: 600;
+          text-decoration: none;
+          transition: border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .secondary-button:hover {
+          border-color: var(--primary, #5a3eb8);
+          color: var(--primary, #5a3eb8);
         }
 
         .error {

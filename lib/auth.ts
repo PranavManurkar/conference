@@ -261,6 +261,33 @@ export async function requestPasswordReset(
   }
 }
 
+export async function confirmPasswordReset(
+  uid: string,
+  token: string,
+  newPassword: string
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    const response = await fetch(`${DJANGO_API_URL}/api/auth/password-reset/confirm/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid, token, new_password: newPassword }),
+    })
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}))
+      return {
+        success: false,
+        error: data.detail || data.new_password?.[0] || "Unable to reset password.",
+      }
+    }
+
+    return { success: true, error: null }
+  } catch (err) {
+    console.error("Password reset confirm error:", err)
+    return { success: false, error: "Network error. Please try again." }
+  }
+}
+
 // immediate, synchronous local logout (good UX)
 export function logout(): void {
   clearTokens()
