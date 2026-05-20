@@ -834,8 +834,8 @@ export default function DashboardClient({ user }: { user: User }) {
                           <SelectValue placeholder="Select period" />
                         </SelectTrigger>
                         <SelectContent className="bg-white">
-                          <SelectItem value="Early Bird">Early Bird (until May 5, 2026)</SelectItem>
-                          <SelectItem value="Final">Final (after May 5, 2026)</SelectItem>
+                          <SelectItem value="Early Bird">Early Bird (until May 20, 2026)</SelectItem>
+                          <SelectItem value="Final">Final (after May 20, 2026)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
