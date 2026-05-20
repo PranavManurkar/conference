@@ -123,7 +123,7 @@ export default function DashboardClient({ user }: { user: User }) {
     designation: "",
     country: "",
     delegate_type: "",
-    registration_period: "",
+    registration_period: "Final",
     participant_region: "",
     food_preference: "",
     beverage_choice: "",
@@ -231,7 +231,7 @@ export default function DashboardClient({ user }: { user: User }) {
     fetchRegistrationStatus()
   }, [user, userEmail])
 
-  const calculatePaymentAmount = () => {
+  const calculatePaymentAmount = (periodOverride?: "Early Bird" | "Final") => {
     type Region = "Indian" | "SAARC" | "Non-SAARC"
     type Period = "Early Bird" | "Final"
     type Delegate = "UG/PG Student" | "Research Scholar" | "Faculty" | "Industry"
@@ -275,11 +275,12 @@ export default function DashboardClient({ user }: { user: User }) {
     }
 
     const { delegate_type, registration_period, participant_region, accompanying_persons } = formData
+    const period = periodOverride ?? (registration_period as Period)
 
-    if (delegate_type && registration_period && participant_region) {
-      const base = fees[delegate_type as Delegate]?.[registration_period as Period]?.[participant_region as Region] || 0
+    if (delegate_type && participant_region && period) {
+      const base = fees[delegate_type as Delegate]?.[period]?.[participant_region as Region] || 0
       const acc =
-        (accompany[delegate_type as Delegate]?.[registration_period as Period]?.[participant_region as Region] || 0) *
+        (accompany[delegate_type as Delegate]?.[period]?.[participant_region as Region] || 0) *
         (accompanying_persons || 0)
       return base + acc
     }
@@ -465,7 +466,7 @@ export default function DashboardClient({ user }: { user: User }) {
           designation: "",
           country: "",
           delegate_type: "",
-          registration_period: "",
+          registration_period: "Final",
           participant_region: "",
           transaction_id: "",
           payment_date: "",
@@ -824,20 +825,14 @@ export default function DashboardClient({ user }: { user: User }) {
                       <Label className="text-sm font-semibold text-gray-700">
                         Registration Period <span className="text-red-500">*</span>
                       </Label>
-                      <Select
-                        value={formData.registration_period}
-                        onValueChange={(v) => setFormData({ ...formData, registration_period: v })}
-                        disabled={!canEdit}
-                        required
-                      >
-                        <SelectTrigger className="h-12 border-2">
-                          <SelectValue placeholder="Select period" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white">
-                          <SelectItem value="Early Bird">Early Bird (until May 20, 2026)</SelectItem>
-                          <SelectItem value="Final">Final (after May 20, 2026)</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Input
+                        id="registration_period"
+                        value="Final (after May 20, 2026)"
+                        disabled
+                        readOnly
+                        className="h-12 border-2 bg-gray-50"
+                      />
+                      <p className="text-xs text-gray-500">Early Bird rates are shown below for reference.</p>
                     </div>
                     {/* Participant Region */}
                     <div className="space-y-2">
@@ -1067,12 +1062,14 @@ export default function DashboardClient({ user }: { user: User }) {
                     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border-2 border-blue-200 shadow-lg">
                       <div className="flex items-center justify-between flex-wrap gap-4">
                         <div>
-                          <p className="text-sm font-bold text-blue-900 uppercase tracking-wide mb-1">
-                            Registration Fee
-                          </p>
+                          <p className="text-sm font-bold text-blue-900 uppercase tracking-wide mb-1">Registration Fee (Final)</p>
                           <p className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                             {formData.participant_region === "Indian" ? "₹" : "$"}
-                            {calculatePaymentAmount()}
+                            {calculatePaymentAmount("Final")}
+                          </p>
+                          <p className="text-xs text-blue-700 font-medium mt-2">
+                            Early Bird (until May 20, 2026): {formData.participant_region === "Indian" ? "₹" : "$"}
+                            {calculatePaymentAmount("Early Bird")}
                           </p>
                         </div>
                         <div className="bg-white/80 px-4 py-3 rounded-xl border border-blue-200">
