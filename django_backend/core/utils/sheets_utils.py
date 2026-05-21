@@ -410,3 +410,436 @@ def append_approved_user_to_sheet(registration_instance):
         else:
             logger.error(f"Both Google Sheet and Excel backup failed for registration {registration_instance.id}")
             return False
+
+
+def get_workshop_sheet_range():
+    """
+    Returns the sheet range string for the Workshop tab.
+
+    Returns:
+        str: Workshop sheet range (e.g., "Workshop!A1")
+    """
+    return getattr(settings, "GOOGLE_SHEETS_WORKSHOP_RANGE", "Workshop!A1")
+
+
+def get_existing_workshop_ids(service):
+    """
+    Reads column A (workshop registration IDs) from Workshop tab to prevent duplicates.
+
+    Args:
+        service: Authenticated Google Sheets API service
+
+    Returns:
+        set: Set of existing workshop registration IDs from column A
+    """
+    try:
+        sheet_id = settings.GOOGLE_SHEETS_ID
+        result = service.spreadsheets().values().get(
+            spreadsheetId=sheet_id,
+            range="Workshop!A:A"
+        ).execute()
+
+        values = result.get("values", [])
+        existing_ids = {str(row[0]) for row in values[1:] if row}
+
+        logger.debug(f"Found {len(existing_ids)} existing workshop IDs in sheet")
+        return existing_ids
+
+    except Exception as e:
+        logger.error(f"Failed to read existing workshop IDs: {str(e)}")
+        return set()
+
+
+def build_workshop_header_row():
+    """
+    Dynamically builds header row from WorkshopRegistration model fields.
+    Payment-related fields are placed at the end.
+
+    Returns:
+        list: Header row for Workshop tab
+    """
+    from core.models import WorkshopRegistration
+
+    fields = list(WorkshopRegistration._meta.fields)
+    field_names = [field.name for field in fields]
+
+    def is_payment_field(name):
+        lowered = name.lower()
+        return "transaction" in lowered or "payment" in lowered or "fee" in lowered
+
+    payment_field_names = [name for name in field_names if is_payment_field(name)]
+    non_payment_field_names = [name for name in field_names if name not in payment_field_names]
+
+    ordered_names = []
+    for preferred in ["id", "full_name", "email", "workshop_id", "workshop_title", "status", "created_at"]:
+        if preferred in non_payment_field_names:
+            ordered_names.append(preferred)
+
+    for name in non_payment_field_names:
+        if name not in ordered_names:
+            ordered_names.append(name)
+
+    ordered_names.extend(payment_field_names)
+
+    header_row = []
+    for name in ordered_names:
+        field = next((f for f in fields if f.name == name), None)
+        if field is None:
+            header_row.append(name)
+        else:
+            header_row.append(field.verbose_name.replace("_", " ").title())
+
+    header_row.append("Last Updated")
+
+    logger.debug(f"Built workshop header row with {len(header_row)} columns")
+    return header_row
+
+
+def build_workshop_data_row(workshop_instance):
+    """
+    Builds data row for workshop registration matching header order.
+
+    Args:
+        workshop_instance: WorkshopRegistration model instance
+
+    Returns:
+        list: Data row with values in header order
+    """
+    from core.models import WorkshopRegistration
+
+    fields = list(WorkshopRegistration._meta.fields)
+    field_names = [field.name for field in fields]
+
+    def is_payment_field(name):
+        lowered = name.lower()
+        return "transaction" in lowered or "payment" in lowered or "fee" in lowered
+
+    payment_field_names = [name for name in field_names if is_payment_field(name)]
+    non_payment_field_names = [name for name in field_names if name not in payment_field_names]
+
+    ordered_names = []
+    for preferred in ["id", "full_name", "email", "workshop_id", "workshop_title", "status", "created_at"]:
+        if preferred in non_payment_field_names:
+            ordered_names.append(preferred)
+
+    for name in non_payment_field_names:
+        if name not in ordered_names:
+            ordered_names.append(name)
+
+    ordered_names.extend(payment_field_names)
+
+    data_row = []
+    for name in ordered_names:
+        value = getattr(workshop_instance, name, None)
+
+        lowered = name.lower()
+        if "transaction_id" in lowered:
+            data_row.append(str(value) if str(value).strip() else "PENDING")
+            continue
+
+        if "screenshot" in lowered:
+            data_row.append("Uploaded ✓" if value else "Not Uploaded ✗")
+            continue
+
+        if lowered == "status" or "payment_status" in lowered:
+            status_value = str(value).strip()
+            data_row.append(f"★ {status_value}" if status_value else "★ PENDING")
+            continue
+
+        if value is None:
+            data_row.append("")
+            continue
+
+        if isinstance(value, (datetime,)):
+            data_row.append(value.isoformat())
+        elif hasattr(value, "id"):
+            data_row.append(str(value.id))
+        else:
+            data_row.append(str(value))
+
+    data_row.append(datetime.now().strftime("%d-%m-%Y %H:%M"))
+
+    logger.debug(f"Built workshop data row for ID {workshop_instance.id}")
+    return data_row
+
+
+def ensure_workshop_header_exists(service):
+    """
+    Ensures the Workshop tab has a header row.
+
+    Args:
+        service: Authenticated Google Sheets API service
+
+    Returns:
+        tuple: (success, header_created)
+    """
+    try:
+        result = service.spreadsheets().values().get(
+            spreadsheetId=settings.GOOGLE_SHEETS_ID,
+            range="Workshop!A1:Z1"
+        ).execute()
+
+        values = result.get("values", [])
+        if not values or len(values[0]) == 0:
+            header_row = build_workshop_header_row()
+            service.spreadsheets().values().update(
+                spreadsheetId=settings.GOOGLE_SHEETS_ID,
+                range="Workshop!A1",
+                valueInputOption="USER_ENTERED",
+                body={"values": [header_row]}
+            ).execute()
+            logger.info("Workshop header row written to Google Sheet")
+            return True, True
+
+        logger.debug("Workshop header row already exists")
+        return True, False
+
+    except Exception as e:
+        logger.error(f"Failed to ensure workshop header exists: {str(e)}")
+        return False, False
+
+
+def append_workshop_to_google_sheet(workshop_instance):
+    """
+    Exports workshop registration to Workshop tab with update-if-exists logic.
+    Falls back to Excel backup on failure.
+
+    Args:
+        workshop_instance: WorkshopRegistration model instance
+
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    logger.info(
+        f"Starting Workshop export for ID {workshop_instance.id} "
+        f"(Status: {workshop_instance.status})"
+    )
+
+    try:
+        service = get_sheets_service()
+        sheet_id = settings.GOOGLE_SHEETS_ID
+
+        header_ok, header_created = ensure_workshop_header_exists(service)
+        if not header_ok:
+            raise Exception("Failed to ensure Workshop header row exists")
+
+        existing_ids = get_existing_workshop_ids(service)
+        registration_id_str = str(workshop_instance.id)
+        data_row = build_workshop_data_row(workshop_instance)
+
+        if registration_id_str in existing_ids:
+            result = service.spreadsheets().values().get(
+                spreadsheetId=sheet_id,
+                range="Workshop!A:A"
+            ).execute()
+
+            values = result.get("values", [])
+            row_index = None
+            for idx, row in enumerate(values[1:], start=2):
+                if row and row[0] and str(row[0]) == registration_id_str:
+                    row_index = idx
+                    break
+
+            if row_index:
+                service.spreadsheets().values().update(
+                    spreadsheetId=sheet_id,
+                    range=f"Workshop!A{row_index}",
+                    valueInputOption="USER_ENTERED",
+                    body={"values": [data_row]}
+                ).execute()
+                logger.info(
+                    f"Workshop registration {registration_id_str} updated at row {row_index}"
+                )
+            else:
+                logger.warning(
+                    f"Workshop registration {registration_id_str} not found for update; appending"
+                )
+                service.spreadsheets().values().append(
+                    spreadsheetId=sheet_id,
+                    range=get_workshop_sheet_range(),
+                    valueInputOption="USER_ENTERED",
+                    insertDataOption="INSERT_ROWS",
+                    body={"values": [data_row]}
+                ).execute()
+        else:
+            service.spreadsheets().values().append(
+                spreadsheetId=sheet_id,
+                range=get_workshop_sheet_range(),
+                valueInputOption="USER_ENTERED",
+                insertDataOption="INSERT_ROWS",
+                body={"values": [data_row]}
+            ).execute()
+            logger.info(
+                f"Workshop registration {registration_id_str} appended to Google Sheet"
+            )
+
+        if header_created:
+            try:
+                metadata = service.spreadsheets().get(
+                    spreadsheetId=sheet_id,
+                    fields="sheets(properties(sheetId,title),conditionalFormats)"
+                ).execute()
+
+                workshop_sheet = None
+                for sheet in metadata.get("sheets", []):
+                    if sheet.get("properties", {}).get("title") == "Workshop":
+                        workshop_sheet = sheet
+                        break
+
+                if workshop_sheet and not workshop_sheet.get("conditionalFormats"):
+                    payment_start_index = None
+                    payment_end_index = None
+                    fields = [f.name for f in workshop_instance._meta.fields]
+                    payment_names = [
+                        name for name in fields
+                        if "transaction" in name.lower() or "payment" in name.lower() or "fee" in name.lower()
+                    ]
+                    ordered_fields = []
+                    for preferred in [
+                        "id", "full_name", "email", "workshop_id", "workshop_title", "status", "created_at"
+                    ]:
+                        if preferred in fields:
+                            ordered_fields.append(preferred)
+                    for name in fields:
+                        if name not in ordered_fields and name not in payment_names:
+                            ordered_fields.append(name)
+                    ordered_fields.extend(payment_names)
+
+                    payment_indices = [
+                        idx for idx, name in enumerate(ordered_fields) if name in payment_names
+                    ]
+                    if payment_indices:
+                        payment_start_index = min(payment_indices)
+                        payment_end_index = max(payment_indices) + 1
+
+                    if payment_start_index is not None and payment_end_index is not None:
+                        yellow = {
+                            "red": 1.0,
+                            "green": 1.0,
+                            "blue": 0.0
+                        }
+                        request = {
+                            "addConditionalFormatRule": {
+                                "rule": {
+                                    "ranges": [
+                                        {
+                                            "sheetId": workshop_sheet.get("properties", {}).get("sheetId"),
+                                            "startRowIndex": 0,
+                                            "endRowIndex": 1,
+                                            "startColumnIndex": payment_start_index,
+                                            "endColumnIndex": payment_end_index
+                                        }
+                                    ],
+                                    "booleanRule": {
+                                        "condition": {
+                                            "type": "CUSTOM_FORMULA",
+                                            "values": [{"userEnteredValue": "=TRUE"}]
+                                        },
+                                        "format": {
+                                            "backgroundColor": yellow
+                                        }
+                                    }
+                                },
+                                "index": 0
+                            }
+                        }
+                        service.spreadsheets().batchUpdate(
+                            spreadsheetId=sheet_id,
+                            body={"requests": [request]}
+                        ).execute()
+                        logger.info("Applied Workshop header payment column formatting")
+            except Exception as e:
+                logger.warning(f"Failed to apply Workshop header formatting: {str(e)}")
+
+        logger.info(
+            f"Workshop registration {workshop_instance.id} export completed at {datetime.now().isoformat()}"
+        )
+        return True
+
+    except Exception as e:
+        logger.error(
+            f"Failed to export workshop registration {workshop_instance.id} to Google Sheet: {str(e)}"
+        )
+        logger.info("Attempting Workshop Excel backup as fallback...")
+        return append_workshop_to_excel_backup(workshop_instance)
+
+
+def append_workshop_to_excel_backup(workshop_instance):
+    """
+    Fallback export to Excel backup when Google Sheet is unavailable.
+
+    Args:
+        workshop_instance: WorkshopRegistration model instance
+
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        from openpyxl.styles import PatternFill, Font
+
+        exports_dir = settings.BASE_DIR / "exports"
+        os.makedirs(exports_dir, exist_ok=True)
+        excel_path = exports_dir / "approved_registrations.xlsx"
+
+        header_row = build_workshop_header_row()
+        data_row = build_workshop_data_row(workshop_instance)
+        registration_id = str(workshop_instance.id)
+
+        if excel_path.exists():
+            wb = load_workbook(excel_path)
+        else:
+            wb = Workbook()
+
+        if "Workshop" in wb.sheetnames:
+            ws = wb["Workshop"]
+        else:
+            ws = wb.create_sheet(title="Workshop")
+
+        if ws.max_row == 1 and ws.max_column == 1 and ws.cell(row=1, column=1).value is None:
+            ws.append(header_row)
+
+        payment_columns = []
+        for idx, header in enumerate(header_row, start=1):
+            lowered = str(header).lower()
+            if "transaction" in lowered or "payment" in lowered or "fee" in lowered:
+                payment_columns.append(idx)
+
+        yellow = PatternFill(fill_type="solid", fgColor="FFFF00")
+        bold = Font(bold=True)
+
+        existing_row_num = None
+        for row_idx in range(2, ws.max_row + 1):
+            cell_value = ws.cell(row=row_idx, column=1).value
+            if cell_value and str(cell_value) == registration_id:
+                existing_row_num = row_idx
+                break
+
+        target_row = existing_row_num or (ws.max_row + 1)
+
+        for col_idx, value in enumerate(data_row, start=1):
+            cell = ws.cell(row=target_row, column=col_idx, value=value)
+            if col_idx in payment_columns:
+                cell.fill = yellow
+                cell.font = bold
+
+        for col_idx in payment_columns:
+            header_cell = ws.cell(row=1, column=col_idx)
+            header_cell.fill = yellow
+            header_cell.font = bold
+
+        wb.save(excel_path)
+        if existing_row_num:
+            logger.info(
+                f"Workshop registration {registration_id} updated in Excel backup"
+            )
+        else:
+            logger.info(
+                f"Workshop registration {registration_id} appended to Excel backup"
+            )
+        return True
+
+    except Exception as e:
+        logger.error(
+            f"Failed to write Workshop Excel backup for {workshop_instance.id}: {str(e)}"
+        )
+        return False

@@ -191,6 +191,11 @@ class WorkshopRegistrationAdmin(admin.ModelAdmin):
         if not change:
             try: send_workshop_registration_email(obj)
             except Exception as e: logger.error("Workshop reg email failed: %s", e)
+            try:
+                from core.utils.sheets_utils import append_workshop_to_google_sheet
+                append_workshop_to_google_sheet(obj)
+            except Exception as e:
+                logger.error(f"Workshop sheet write failed: {e}")
 
         if previous_status != obj.status:
             if obj.status == WorkshopRegistration.STATUS_APPROVED_FOR_PAYMENT:
@@ -218,6 +223,13 @@ class WorkshopRegistrationAdmin(admin.ModelAdmin):
         for registration in queryset:
             registration.status = WorkshopRegistration.STATUS_ACCEPTED
             registration.save(update_fields=["status", "updated_at"])
+            try:
+                from core.utils.sheets_utils import append_workshop_to_google_sheet
+                append_workshop_to_google_sheet(registration)
+            except Exception as e:
+                logger.error(
+                    f"Workshop payment sheet update failed: {e}"
+                )
             try: send_workshop_payment_confirmation_email(registration)
             except Exception as e: logger.error("Payment confirmation email failed: %s", e)
     mark_accepted.short_description = "Accept selected workshop registrations"
