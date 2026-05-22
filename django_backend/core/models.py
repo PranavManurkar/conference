@@ -1,5 +1,6 @@
 # core/models.py
 import logging
+import secrets
 from decimal import Decimal
 
 from django.conf import settings
@@ -108,6 +109,7 @@ class WorkshopRegistration(models.Model):
 
     workshop_id = models.PositiveIntegerField(choices=WORKSHOP_CHOICES, default=WORKSHOP_1)
     workshop_title = models.CharField(max_length=255, default="Workshop 1 - XRD & XRF Characterization")
+    registration_code = models.CharField(max_length=20, unique=True, null=True, blank=True)
     full_name = models.CharField(max_length=255)
     email = models.EmailField()
     phone = models.CharField(max_length=50)
@@ -133,7 +135,29 @@ class WorkshopRegistration(models.Model):
 
     @property
     def registration_reference(self):
-        return f"WS{self.workshop_id}-{self.pk}"
+        if self.registration_code:
+            return self.registration_code
+        if self.pk:
+            return f"WS{self.workshop_id}-{self.pk}"
+        return ""
+
+    def _generate_registration_code(self):
+        # Keep legacy WS{workshop_id}-{pk} references intact by avoiding pk collisions.
+        max_attempts = 25
+        for _ in range(max_attempts):
+            token = secrets.randbelow(1_000_000)
+            code = f"WS{self.workshop_id}-{token:06d}"
+
+            if WorkshopRegistration.objects.filter(registration_code__iexact=code).exists():
+                continue
+
+            # Avoid conflicts with legacy references like WS1-1, WS1-39, etc.
+            if WorkshopRegistration.objects.filter(pk=token, workshop_id=self.workshop_id, registration_code__isnull=True).exists():
+                continue
+
+            return code
+
+        raise ValueError("Could not generate a unique workshop registration code.")
 
     @classmethod
     def get_workshop_title(cls, workshop_id):
@@ -213,4 +237,8 @@ class WorkshopRegistration(models.Model):
         self.workshop_title = self.get_workshop_title(self.workshop_id)
 
         self.fee_amount = self.calculate_fee_amount()
+
+        # Only generate new-style codes for brand new registrations.
+        if self.pk is None and not self.registration_code:
+            self.registration_code = self._generate_registration_code()
         super().save(*args, **kwargs)

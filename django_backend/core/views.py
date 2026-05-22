@@ -200,30 +200,27 @@ class WorkshopRegistrationLookupView(APIView):
 
         queryset = WorkshopRegistration.objects.all()
 
-        if registration_reference:
-            reference = registration_reference.strip()
-            if reference.upper().startswith("WS") and "-" in reference:
-                maybe_pk = reference.rsplit("-", 1)[-1]
-                if maybe_pk.isdigit():
-                    queryset = queryset.filter(pk=int(maybe_pk))
+        reference = (registration_reference or registration_id or "").strip()
+        if reference:
+            # 1) Prefer new registration_code lookups.
+            by_code = queryset.filter(registration_code__iexact=reference)
+            if by_code.exists():
+                queryset = by_code
+            else:
+                # 2) Fallback to legacy WS{workshop_id}-{pk} or raw pk.
+                parsed_pk = None
+                ref_upper = reference.upper()
+                if ref_upper.startswith("WS") and "-" in reference:
+                    maybe_pk = reference.rsplit("-", 1)[-1]
+                    if maybe_pk.isdigit():
+                        parsed_pk = int(maybe_pk)
+                elif reference.isdigit():
+                    parsed_pk = int(reference)
+
+                if parsed_pk is not None:
+                    queryset = queryset.filter(pk=parsed_pk)
                 else:
                     queryset = queryset.none()
-            elif reference.isdigit():
-                queryset = queryset.filter(pk=int(reference))
-            else:
-                queryset = queryset.none()
-        elif registration_id:
-            reference = registration_id.strip()
-            if reference.isdigit():
-                queryset = queryset.filter(pk=int(reference))
-            elif reference.upper().startswith("WS") and "-" in reference:
-                maybe_pk = reference.rsplit("-", 1)[-1]
-                if maybe_pk.isdigit():
-                    queryset = queryset.filter(pk=int(maybe_pk))
-                else:
-                    queryset = queryset.none()
-            else:
-                queryset = queryset.none()
         if email:
             queryset = queryset.filter(email__iexact=email.strip())
 
