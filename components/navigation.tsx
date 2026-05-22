@@ -245,7 +245,7 @@ export default function Navigation() {
       </div>
       <div className="bg-[color:var(--primary)]/10 text-[color:var(--nav)] text-sm sm:text-base">
         <div className="mx-auto max-w-7xl px-4 py-3 text-center">
-          Mode of presentation (ORAL/POSTER) will be confirmed after <span className="text-red-600 font-semibold"> 21/05/2026 </span>.
+          Registration and Mode of presentation will be confirmed in <span className="text-red-600 font-semibold"> 3-4 </span> business days.
         </div>
       </div>
     </nav>
