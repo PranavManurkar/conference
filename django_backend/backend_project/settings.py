@@ -172,6 +172,10 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticatedOrReadOnly",),
+    "DEFAULT_THROTTLE_RATES": {
+        "workshop_lookup": "15/min",
+        "workshop_submit": "15/min",
+    },
 }
 
 SIMPLE_JWT = {

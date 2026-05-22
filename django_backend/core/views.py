@@ -23,6 +23,7 @@ from django.contrib.auth.forms import PasswordResetForm
 from django.conf import settings
 from rest_framework_simplejwt.views import TokenViewBase
 from rest_framework.views import APIView
+from .throttles import WorkshopLookupThrottle, WorkshopSubmitThrottle
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -192,6 +193,7 @@ class WorkshopRegistrationCreateView(APIView):
 
 class WorkshopRegistrationLookupView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [WorkshopLookupThrottle]
 
     def get(self, request):
         registration_id = request.query_params.get("registration_id")
@@ -201,6 +203,8 @@ class WorkshopRegistrationLookupView(APIView):
         queryset = WorkshopRegistration.objects.all()
 
         reference = (registration_reference or registration_id or "").strip()
+        if not reference or not email:
+            return Response({"detail": "registration_reference and email are required"}, status=status.HTTP_400_BAD_REQUEST)
         if reference:
             # 1) Prefer new registration_code lookups.
             by_code = queryset.filter(registration_code__iexact=reference)
@@ -234,6 +238,7 @@ class WorkshopRegistrationLookupView(APIView):
 class WorkshopTransactionSubmitView(APIView):
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, FormParser, MultiPartParser]
+    throttle_classes = [WorkshopSubmitThrottle]
 
     def patch(self, request):
         registration_id = request.data.get("registration_id")

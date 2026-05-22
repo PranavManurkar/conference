@@ -145,8 +145,8 @@ class WorkshopRegistration(models.Model):
         # Keep legacy WS{workshop_id}-{pk} references intact by avoiding pk collisions.
         max_attempts = 25
         for _ in range(max_attempts):
-            token = secrets.randbelow(1_000_000)
-            code = f"WS{self.workshop_id}-{token:06d}"
+            token = secrets.randbelow(100_000_000)
+            code = f"WS{self.workshop_id}-{token:08d}"
 
             if WorkshopRegistration.objects.filter(registration_code__iexact=code).exists():
                 continue
