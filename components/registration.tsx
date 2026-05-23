@@ -123,7 +123,7 @@ export default function Registration() {
       </div>
       <div className="font-bold text-lg mb-2">Step 3</div>
       <p className="text-[var(--primary-foreground)]/80 text-sm">
-        Pay the amount using the bank details displayed in the dashboard and submit your Transaction ID
+        Pay the amount using the bank details displayed in the dashboard and submit your Transaction ID. The payment is non refundable.
       </p>
     </div>
 
