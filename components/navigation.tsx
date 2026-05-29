@@ -49,6 +49,7 @@ export default function Navigation() {
       children: [
         { label: "International", href: "/committee/international" },
         { label: "Organizing", href: "/committee/organizing" },
+        { label: "Global Connect", href: "/committee/global-connect" },
       ],
     },
   ];
