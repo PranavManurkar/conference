@@ -15,7 +15,7 @@ export default function GlobalConnectCommittee() {
     {
       role: "Website Designing",
       members: [
-        { name: "Pranav Manurkar", affiliation: "MEMS, IIT Indore" },
+        { name: "Pranav Manurkar", affiliation: "MEMS, IIT Indore (C)" },
         { name: "Mohit Garhewal", affiliation: "MEMS, IIT Indore" },
         { name: "Rishav Sharma", affiliation: "MEMS, IIT Indore" },
       ],
@@ -58,7 +58,7 @@ export default function GlobalConnectCommittee() {
     {
       role: "Publicity and Press",
       members: [
-        { name: "Rishav Sharma", affiliation: "MEMS, IIT Indore" },
+        { name: "Rishav Sharma", affiliation: "MEMS, IIT Indore (C)" },
         { name: "Ankit Yadav", affiliation: "MEMS, IIT Indore" },
         { name: "Ajay Patil", affiliation: "MEMS, IIT Indore" },
         { name: "Gaurav Chouhan", affiliation: "UGC-DAE CSR, Indore" },
