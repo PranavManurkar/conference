@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.admin import UserAdmin
 from django.db import transaction
 from .models import CustomUser, Registration, WorkshopRegistration
-from core.utils.sheets_utils import append_approved_user_to_sheet
+from core.utils.sheets_utils import append_approved_user_to_sheet, append_workshop_to_google_sheet
 from core.utils.email_utils import (
     send_conference_approval_email,
     send_conference_rejection_email,
@@ -192,12 +192,15 @@ class WorkshopRegistrationAdmin(admin.ModelAdmin):
             try: send_workshop_registration_email(obj)
             except Exception as e: logger.error("Workshop reg email failed: %s", e)
             try:
-                from core.utils.sheets_utils import append_workshop_to_google_sheet
                 append_workshop_to_google_sheet(obj)
             except Exception as e:
                 logger.error(f"Workshop sheet write failed: {e}")
 
-        if previous_status != obj.status:
+        if change and previous_status != obj.status:
+            try:
+                append_workshop_to_google_sheet(obj)
+            except Exception as e:
+                logger.error("Workshop sheet update failed: %s", e)
             if obj.status == WorkshopRegistration.STATUS_APPROVED_FOR_PAYMENT:
                 try: send_workshop_payment_reminder_email(obj)
                 except Exception as e: logger.error("Payment reminder email failed: %s", e)
@@ -209,6 +212,10 @@ class WorkshopRegistrationAdmin(admin.ModelAdmin):
         for registration in queryset:
             registration.status = WorkshopRegistration.STATUS_APPROVED_FOR_PAYMENT
             registration.save(update_fields=["status", "updated_at"])
+            try:
+                append_workshop_to_google_sheet(registration)
+            except Exception as e:
+                logger.error("Workshop sheet update failed: %s", e)
             try: send_workshop_payment_reminder_email(registration)
             except Exception as e: logger.error("Payment reminder email failed: %s", e)
     mark_approved_for_payment.short_description = "Mark selected workshop registrations as approved for payment"
@@ -217,6 +224,10 @@ class WorkshopRegistrationAdmin(admin.ModelAdmin):
         for registration in queryset:
             registration.status = WorkshopRegistration.STATUS_REJECTED
             registration.save(update_fields=["status", "updated_at"])
+            try:
+                append_workshop_to_google_sheet(registration)
+            except Exception as e:
+                logger.error("Workshop sheet update failed: %s", e)
     mark_rejected.short_description = "Reject selected workshop registrations"
 
     def mark_accepted(self, request, queryset):
@@ -224,7 +235,6 @@ class WorkshopRegistrationAdmin(admin.ModelAdmin):
             registration.status = WorkshopRegistration.STATUS_ACCEPTED
             registration.save(update_fields=["status", "updated_at"])
             try:
-                from core.utils.sheets_utils import append_workshop_to_google_sheet
                 append_workshop_to_google_sheet(registration)
             except Exception as e:
                 logger.error(
