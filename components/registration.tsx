@@ -36,6 +36,15 @@ export default function Registration() {
       NonSaarcFinalUSD: "$500",
     },
     {
+      type: "Invited Speakers",
+      IndianEarlyINR: "₹10,000",
+      IndianFinalINR: "₹12,000",
+      SaarcEarlyUSD: "$300",
+      SaarcFinalUSD: "$400",
+      NonSaarcEarlyUSD: "$400",
+      NonSaarcFinalUSD: "$500",
+    },
+    {
       type: "Industry",
       IndianEarlyINR: "₹15,000",
       IndianFinalINR: "₹17,000",

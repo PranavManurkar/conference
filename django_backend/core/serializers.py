@@ -176,6 +176,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         oral = attrs.get("oral_presentation")
         poster = attrs.get("poster_presentation")
         transaction_screenshot = attrs.get("transaction_screenshot")
+        delegate_type = attrs.get("delegate_type")
 
         if self.instance is not None:
             if is_presenter is None:
@@ -190,6 +191,22 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 oral = self.instance.oral_presentation
             if poster is None:
                 poster = self.instance.poster_presentation
+            if delegate_type is None:
+                delegate_type = self.instance.delegate_type
+
+        if delegate_type == "Invited Speaker":
+            is_presenter = False
+            abstract_id = ""
+            cmt_id = ""
+            presentation_type = ""
+            oral = False
+            poster = False
+            attrs["is_presenter"] = False
+            attrs["abstract_id"] = ""
+            attrs["cmt_id"] = ""
+            attrs["presentation_type"] = ""
+            attrs["oral_presentation"] = False
+            attrs["poster_presentation"] = False
 
         if not cmt_id:
             cmt_id = abstract_id

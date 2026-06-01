@@ -27,6 +27,7 @@ import {
 const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || "https://tdmtg.iiti.ac.in"
 const PAYMENT_URL = "https://payu.in/web/EB3AF4CBC22FB4C90B5ABC9A52E5CAC3"
 const PAYMENT_QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(PAYMENT_URL)}`
+const INVITED_SPEAKER_TYPE = "Invited Speaker"
 
 type Registration = {
   id: string
@@ -139,6 +140,8 @@ export default function DashboardClient({ user }: { user: User }) {
     is_presenter: null, // ← null means "not yet selected"
   })
 
+  const isInvitedSpeaker = formData.delegate_type === INVITED_SPEAKER_TYPE
+
   useEffect(() => {
     const fetchRegistrationStatus = async () => {
       if (!userEmail) {
@@ -234,7 +237,7 @@ export default function DashboardClient({ user }: { user: User }) {
   const calculatePaymentAmount = (periodOverride?: "Early Bird" | "Final") => {
     type Region = "Indian" | "SAARC" | "Non-SAARC"
     type Period = "Early Bird" | "Final"
-    type Delegate = "UG/PG Student" | "Research Scholar" | "Faculty" | "Industry"
+    type Delegate = "UG/PG Student" | "Research Scholar" | "Faculty" | "Industry" | "Invited Speaker"
 
     const fees: Record<Delegate, Record<Period, Record<Region, number>>> = {
       "UG/PG Student": {
@@ -246,6 +249,10 @@ export default function DashboardClient({ user }: { user: User }) {
         Final: { Indian: 7000, SAARC: 250, "Non-SAARC": 300 },
       },
       Faculty: {
+        "Early Bird": { Indian: 10000, SAARC: 300, "Non-SAARC": 400 },
+        Final: { Indian: 12000, SAARC: 400, "Non-SAARC": 500 },
+      },
+      "Invited Speaker": {
         "Early Bird": { Indian: 10000, SAARC: 300, "Non-SAARC": 400 },
         Final: { Indian: 12000, SAARC: 400, "Non-SAARC": 500 },
       },
@@ -265,6 +272,10 @@ export default function DashboardClient({ user }: { user: User }) {
         Final: { Indian: 6000, SAARC: 210, "Non-SAARC": 250 },
       },
       Faculty: {
+        "Early Bird": { Indian: 7500, SAARC: 225, "Non-SAARC": 300 },
+        Final: { Indian: 9000, SAARC: 300, "Non-SAARC": 375 },
+      },
+      "Invited Speaker": {
         "Early Bird": { Indian: 7500, SAARC: 225, "Non-SAARC": 300 },
         Final: { Indian: 9000, SAARC: 300, "Non-SAARC": 375 },
       },
@@ -321,14 +332,14 @@ export default function DashboardClient({ user }: { user: User }) {
       return
     }
 
-    if (formData.is_presenter === null) {
+    if (formData.is_presenter === null && !isInvitedSpeaker) {
       setError("Please indicate whether you are presenting a paper (Yes or No).")
       setIsLoading(false)
       return
     }
     // ──────────────────────────────────────────────────────────────────────────
 
-    const isPresenter = formData.is_presenter === true
+    const isPresenter = !isInvitedSpeaker && formData.is_presenter === true
 
     // presenter-specific validation
     if (isPresenter) {
@@ -804,7 +815,23 @@ export default function DashboardClient({ user }: { user: User }) {
                       </Label>
                       <Select
                         value={formData.delegate_type}
-                        onValueChange={(v) => setFormData({ ...formData, delegate_type: v })}
+                        onValueChange={(value) => {
+                          const invitedSpeaker = value === INVITED_SPEAKER_TYPE
+                          setFormData({
+                            ...formData,
+                            delegate_type: value,
+                            ...(invitedSpeaker
+                              ? {
+                                  is_presenter: false,
+                                  abstract_id: "",
+                                  abstract_title: "",
+                                  presentation_type: "",
+                                  oral_presentation: false,
+                                  poster_presentation: false,
+                                }
+                              : {}),
+                          })
+                        }}
                         disabled={!canEdit}
                         required
                       >
@@ -812,7 +839,13 @@ export default function DashboardClient({ user }: { user: User }) {
                           <SelectValue placeholder="Select delegate type" />
                         </SelectTrigger>
                         <SelectContent className="bg-white">
-                          {["UG/PG Student", "Research Scholar", "Faculty", "Industry"].map((v) => (
+                          {[
+                            "UG/PG Student",
+                            "Research Scholar",
+                            "Faculty",
+                            "Industry",
+                            INVITED_SPEAKER_TYPE,
+                          ].map((v) => (
                             <SelectItem key={v} value={v}>
                               {v}
                             </SelectItem>
@@ -945,41 +978,48 @@ export default function DashboardClient({ user }: { user: User }) {
 
                   {/* ── Presenting Paper ──────────────────────────────────────────── */}
                   <div className="space-y-4 mt-6">
-                    <div className="space-y-3">
-                      <Label className="text-sm font-semibold text-gray-700">
-                        Are you presenting a paper? <span className="text-red-500">*</span>
-                      </Label>
-                      <RadioGroup
-                        // When is_presenter is null (not chosen), pass empty string so nothing is selected
-                        value={formData.is_presenter === null ? "" : formData.is_presenter ? "yes" : "no"}
-                        onValueChange={(value) =>
-                          setFormData({
-                            ...formData,
-                            is_presenter: value === "yes",
-                            abstract_id: value === "no" ? "" : formData.abstract_id,
-                            ...(value === "no" ? { oral_presentation: false, poster_presentation: false } : {}),
-                          })
-                        }
-                        disabled={!canEdit}
-                        className="flex gap-6"
-                      >
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="yes" id="presenting_yes" />
-                          <Label htmlFor="presenting_yes" className="font-normal cursor-pointer">
-                            Yes
-                          </Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="no" id="presenting_no" />
-                          <Label htmlFor="presenting_no" className="font-normal cursor-pointer">
-                            No
-                          </Label>
-                        </div>
-                      </RadioGroup>
-                    </div>
+                    {!isInvitedSpeaker ? (
+                      <div className="space-y-3">
+                        <Label className="text-sm font-semibold text-gray-700">
+                          Are you presenting a paper? <span className="text-red-500">*</span>
+                        </Label>
+                        <RadioGroup
+                          // When is_presenter is null (not chosen), pass empty string so nothing is selected
+                          value={formData.is_presenter === null ? "" : formData.is_presenter ? "yes" : "no"}
+                          onValueChange={(value) =>
+                            setFormData({
+                              ...formData,
+                              is_presenter: value === "yes",
+                              abstract_id: value === "no" ? "" : formData.abstract_id,
+                              ...(value === "no" ? { oral_presentation: false, poster_presentation: false } : {}),
+                            })
+                          }
+                          disabled={!canEdit}
+                          className="flex gap-6"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="yes" id="presenting_yes" />
+                            <Label htmlFor="presenting_yes" className="font-normal cursor-pointer">
+                              Yes
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="no" id="presenting_no" />
+                            <Label htmlFor="presenting_no" className="font-normal cursor-pointer">
+                              No
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    ) : (
+                      <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+                        <p className="text-sm font-semibold text-gray-700">Presenting Paper</p>
+                        <p className="text-sm text-gray-600">Invited speakers are registered as non-presenters.</p>
+                      </div>
+                    )}
 
                     {/* CMT ID + abstract title + presentation type — only shown when presenter = yes */}
-                    {formData.is_presenter === true && (
+                    {formData.is_presenter === true && !isInvitedSpeaker && (
                       <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
                         <div className="space-y-2">
                           <Label htmlFor="abstract_title" className="text-sm font-semibold text-gray-700">
