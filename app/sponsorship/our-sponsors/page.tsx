@@ -7,12 +7,12 @@ type Sponsor = {
 }
 
 const sizeClasses = {
-  platinum: "h-36 sm:h-44 w-full sm:w-[420px] md:w-[460px]",
-  gold: "h-28 sm:h-36 w-full sm:w-[360px]",
-  silver: "h-24 sm:h-32 w-full sm:w-[320px]",
-  bronze: "h-22 sm:h-28 w-full sm:w-[300px]",
-  award: "h-24 sm:h-32 w-full sm:w-[320px]",
-  other: "h-20 sm:h-24 w-full sm:w-[260px]",
+  platinum: "h-36 sm:h-44 w-full sm:w-auto sm:max-w-[420px]",
+  gold: "h-28 sm:h-36 w-full sm:w-auto sm:max-w-[360px]",
+  silver: "h-24 sm:h-32 w-full sm:w-auto sm:max-w-[320px]",
+  bronze: "h-22 sm:h-28 w-full sm:w-auto sm:max-w-[300px]",
+  award: "h-24 sm:h-32 w-full sm:w-auto sm:max-w-[320px]",
+  other: "h-20 sm:h-24 w-full sm:w-auto sm:max-w-[260px]",
 } as const
 
 type TierSize = keyof typeof sizeClasses
@@ -103,6 +103,10 @@ const tiers: {
         name: "E-Spin Nanotech",
         logo: "/logo18.png",
         alt: "E-Spin Nanotech logo",
+      },      {
+        name: "Therelek",
+        logo: "/therelek.jpeg",
+        alt: "Therelek logo",
       },
     ],
   },
@@ -143,13 +147,13 @@ export default function OurSponsorsPage() {
                     className="flex flex-col items-center gap-2"
                   >
                     <div
-                      className={`flex items-center justify-center rounded-xl border border-slate-200 bg-white/80 p-4 shadow-sm ${sizeClasses[tier.size]}`}
+                      className={`flex items-center justify-center rounded-xl border border-slate-200 bg-white/80 p-3 sm:p-4 shadow-sm ${sizeClasses[tier.size]}`}
                     >
                       {sponsor.logo ? (
                         <img
                           src={sponsor.logo}
                           alt={sponsor.alt ?? sponsor.name}
-                          className="max-h-full max-w-full object-contain"
+                          className="h-full w-auto max-w-full object-contain"
                           loading="lazy"
                         />
                       ) : (
