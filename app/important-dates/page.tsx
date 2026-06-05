@@ -20,8 +20,8 @@ export default function ImportantDatesPage() {
       description: "Register early and avail discounted registration fees",
     },
     {
-      date: "June 5, 2026",
-      title: "Final Registration Deadline",
+      date: "June 10, 2026",
+      title: "Final Registration Deadline (extended)",
       description: "Last date for registration at standard rates",
     },
     {
