@@ -246,8 +246,8 @@ export default function Navigation() {
       </div>
       <div className="bg-[color:var(--primary)]/10 text-[color:var(--nav)] text-sm sm:text-base">
         <div className="mx-auto max-w-7xl px-4 py-3 text-center">
-          Due to high demand, registration deadline has been extended to
-          <span className="text-red-600 font-semibold"> 10th </span> June.
+          Registration deadline has been extended until 
+          <span className="text-red-600 font-semibold"> 10th </span> June 2023. We are accepting online registrations only.
         </div>
       </div>
     </nav>
