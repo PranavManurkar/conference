@@ -34,15 +34,16 @@ export default function Navigation() {
       ],
      },
     {
-      label: "Registration/Accommodation",
+      label: "Registration-Accommodation-Dates",
       href: "/",
       children: [
         { label: "Registration", href: "/registration" },
         { label: "Accommodation", href: "/accommodation" },
+        { label: "Important Dates", href: "/important-dates" },
       ],
     },
-    { label: "Important Dates", href: "/important-dates" },
     { label: "Schedule", href: "/schedule" },
+    { label: "How to Reach", href: "/how-to-reach" },
     {
       label: "Committee",
       href: "/committee",
