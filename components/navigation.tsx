@@ -177,14 +177,14 @@ export default function Navigation() {
               ))}
             </div>
 
-            <div className="hidden lg:flex flex-shrink-0">
+            {/* <div className="hidden lg:flex flex-shrink-0">
               <Link
                 href="/registration"
                 className="px-6 py-2.5 bg-[color:var(--primary)] hover:opacity-90 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105"
               >
                 Register
               </Link>
-            </div>
+            </div> */}
           </div>
 
           {isOpen && (
