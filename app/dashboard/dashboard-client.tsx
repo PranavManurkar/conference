@@ -561,8 +561,8 @@ export default function DashboardClient({ user }: { user: User }) {
       ))}
         {reg.is_presenter && (reg.cmt_id || reg.abstract_id) && (
         <div className="bg-white p-4 rounded-xl shadow-sm border border-green-100">
-            <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">CMT ID</p>
-            <p className="font-semibold text-gray-900">{reg.cmt_id || reg.abstract_id}</p>
+            <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Abstract ID</p>
+            <p className="font-semibold text-gray-900">{reg.abstract_id}</p>
           </div>
         )}
         {reg.is_presenter && reg.abstract_title && (
