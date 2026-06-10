@@ -161,7 +161,7 @@ def ensure_header_exists(service, sheet_id, range_name):
         # Check if sheet has any data
         result = service.spreadsheets().values().get(
             spreadsheetId=sheet_id,
-            range=f"{range_name.split('!')[0]}!A1:Z1"
+            range=f"{range_name.split('!')[0]}!A1:ZZ1"
         ).execute()
         
         values = result.get("values", [])
@@ -576,7 +576,7 @@ def ensure_workshop_header_exists(service):
     try:
         result = service.spreadsheets().values().get(
             spreadsheetId=settings.GOOGLE_SHEETS_ID,
-            range="Workshop!A1:Z1"
+            range="Workshop!A1:ZZ1"
         ).execute()
 
         values = result.get("values", [])
