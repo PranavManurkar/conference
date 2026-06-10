@@ -21,7 +21,7 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **options):
         force = options.get('force', False)
-        all_registrations = Registration.objects.all().order_by('created_at')
+        all_registrations = Registration.objects.all().order_by('-created_at')
         
         self.stdout.write(f"Found {all_registrations.count()} total registration(s)")
         if all_registrations.count() == 0:
