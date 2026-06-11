@@ -540,7 +540,7 @@ const workshops: WorkshopCard[] = [
     time: "10:30 AM – 05:30 PM",
     venue: "IIT Indore",
     partners: "Malvern Panalytical",
-    status: "open",
+    status: "closed",
     description:
       "A full-day pre-conference workshop on XRD & XRF fundamentals, particle characterization, sample preparation best practices, and a live Empyrean XRD & Zetasizer demonstration.",
     hasAgenda: true,
