@@ -9,7 +9,7 @@ from core.utils.sheets_utils import append_approved_user_to_sheet
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
-    help = "Backfill Google Sheet with all approved registrations"
+    help = "Backfill Google Sheet with all registrations (all statuses: Under Process, Accepted, Rejected)"
     
     def add_arguments(self, parser):
         parser.add_argument(

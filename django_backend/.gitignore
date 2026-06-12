@@ -1,0 +1,19 @@
+# Secrets — never commit
+credentials.json
+.env
+.env.*
+
+# Django generated
+__pycache__/
+*.py[cod]
+*.pyc
+db.sqlite3
+
+# Runtime artifacts
+logs/
+exports/
+media/
+static/
+
+# Local dev overrides
+local_settings.py

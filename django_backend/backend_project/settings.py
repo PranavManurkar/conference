@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9%_#-xpb8!w1ss%8#qbw1#d3inq&5wjrfqgj#y*3(1vn34si%y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
 # Allow localhost and 127.0.0.1 (IPv4)
 ALLOWED_HOSTS = ['tdmtg.iiti.ac.in', 'www.tdmtg.iiti.ac.in', '127.0.0.1', 'localhost']
@@ -197,9 +197,10 @@ CACHES = {
 }
 
 # === GOOGLE SHEETS INTEGRATION ===
-GOOGLE_SHEETS_ID = os.getenv("GOOGLE_SHEETS_ID", "")  # Sheet ID from URL
-GOOGLE_SHEETS_RANGE = os.getenv("GOOGLE_SHEETS_RANGE", "Approvals!A:Z")  # Range name
-GOOGLE_SHEETS_CREDENTIALS_JSON = BASE_DIR / "credentials.json"  # Path to credentials file
+GOOGLE_SHEETS_ID = os.getenv("GOOGLE_SHEETS_ID", "")
+GOOGLE_SHEETS_RANGE = os.getenv("GOOGLE_SHEETS_RANGE", "Approvals!A:Z")
+GOOGLE_SHEETS_WORKSHOP_RANGE = os.getenv("GOOGLE_SHEETS_WORKSHOP_RANGE", "Workshop!A1")
+GOOGLE_SHEETS_CREDENTIALS_JSON = BASE_DIR / "credentials.json"
 
 # === LOGGING CONFIGURATION ===
 LOGGING = {
