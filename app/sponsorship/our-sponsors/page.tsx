@@ -108,6 +108,16 @@ const tiers: {
         logo: "/therelek.jpeg",
         alt: "Therelek logo",
       },
+        {
+        name: "Gnano",
+        logo: "/ganano.png",
+        alt: "Gnano logo",
+      },
+        {
+        name: "Metrohm",
+        logo: "/metrohm.png",
+        alt: "Metrohm logo",
+      },
     ],
   },
 ]
