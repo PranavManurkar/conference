@@ -64,7 +64,7 @@ export default function Awards() {
         details: [
           { label: "Number of Awards", value: "4+ awards" },
           { label: "Prize", value: "Certificate + ₹ 10,000 (or equivalent)" },
-          { label: "Total Presentation Time", value: "(10 + 3) minutes" },
+          { label: "Total Presentation Time", value: "(7 + 3) minutes" },
           { label: "Maximum Slides", value: "10 slides" },
         ],
         tagline: "Bring your ideas to the forefront, inspire the global research community, and gain international scientific visibility.",
