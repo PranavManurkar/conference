@@ -332,6 +332,7 @@ def append_approved_user_to_sheet(registration_instance):
                 spreadsheetId=sheet_id,
                 range=range_name,
                 valueInputOption="USER_ENTERED",
+                insertDataOption="INSERT_ROWS",
                 body={"values": [data_row]},
             )
         )
