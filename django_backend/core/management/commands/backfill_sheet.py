@@ -47,10 +47,12 @@ logger = logging.getLogger(__name__)
 
 # Seconds to sleep between registrations during the standard backfill.
 # append_approved_user_to_sheet makes 2-4 Google Sheets API calls internally.
-# Sleeping 2s between registrations keeps the effective rate well under the
-# 60 calls/minute quota even when each registration triggers 4 API calls:
-#   30 registrations/min × 4 calls = 120 calls spread over 60s ≈ 2 calls/sec.
-_BACKFILL_SLEEP_SECONDS = 2
+# Sleeping 4s between registrations keeps the effective rate comfortably under
+# the 60 calls/minute quota even when retries fire (each retry adds 1–8s delay,
+# bunching subsequent calls). 4s × 4 calls/reg = ~15 regs/min = ~60 API calls/min
+# at sustained worst-case — right at the limit with headroom for retry spikes.
+# At 222 registrations this takes ~15 minutes. Run during off-peak hours.
+_BACKFILL_SLEEP_SECONDS = 4
 
 
 class Command(BaseCommand):
@@ -98,6 +100,19 @@ class Command(BaseCommand):
                 "Uses a single server-side batchUpdate — instant and safe on a live sheet."
             ),
         )
+        parser.add_argument(
+            "--ids",
+            nargs="+",
+            type=int,
+            metavar="ID",
+            dest="ids",
+            default=None,
+            help=(
+                "Retry only specific registration IDs (space-separated). "
+                "Example: --ids 250 255 256 257 258 259 260 261 "
+                "Useful for re-syncing just the registrations identified by --verify as missing."
+            ),
+        )
 
     def handle(self, *args, **options):
         target = options.get("target", "google")
@@ -105,6 +120,7 @@ class Command(BaseCommand):
         dry_run = options.get("dry_run", False)
         verify = options.get("verify", False)
         do_sort = options.get("sort", False)
+        filter_ids = options.get("ids", None)  # list[int] or None
 
         # ------------------------------------------------------------------
         # --dry-run: preview only, zero writes
@@ -138,6 +154,12 @@ class Command(BaseCommand):
             F("payment_date").desc(nulls_last=True),
             "-created_at",
         )
+        if filter_ids:
+            queryset = queryset.filter(id__in=filter_ids)
+            self.stdout.write(
+                f"--ids filter active: targeting {len(filter_ids)} specific registration(s): "
+                + ", ".join(str(i) for i in sorted(filter_ids))
+            )
         total = queryset.count()
         self.stdout.write(f"Found {total} total registration(s) in the database.")
 
@@ -247,6 +269,50 @@ class Command(BaseCommand):
                     f"\n  {failed} registration(s) failed to write to Google Sheets. "
                     "They have been saved to the Excel backup (exports/approved_registrations.xlsx). "
                     "Check logs/sheets_errors.log for details, then re-run backfill to retry."
+                )
+            )
+
+        # ------------------------------------------------------------------
+        # Post-loop sheet verification: catch Excel-fallback false positives.
+        #
+        # append_approved_user_to_sheet returns True both when it writes to the
+        # Google Sheet AND when it falls back to Excel (rate-limit exhaustion).
+        # The only way to confirm the sheet actually received the rows is to
+        # re-read column A and cross-check. We do this automatically after every
+        # backfill so the operator doesn't need to run --verify separately.
+        # ------------------------------------------------------------------
+        self.stdout.write("\nRunning post-backfill sheet verification...")
+        try:
+            final_service = get_sheets_service()
+            final_sheet_ids = get_existing_registration_ids(final_service)
+            all_db_ids = set(
+                str(pk)
+                for pk in Registration.objects.values_list("id", flat=True)
+            )
+            still_missing = all_db_ids - final_sheet_ids
+            if still_missing:
+                self.stdout.write(
+                    self.style.ERROR(
+                        f"\n  POST-BACKFILL MISMATCH: {len(still_missing)} registration(s) are "
+                        f"NOT in the sheet despite the backfill reporting success.\n"
+                        "  These were written to the Excel fallback due to Google Sheets API "
+                        "rate-limit exhaustion. Re-run with --ids to target only these:\n"
+                        f"\n  python3 manage.py backfill_sheet --ids "
+                        + " ".join(sorted(still_missing, key=lambda x: int(x)))
+                    )
+                )
+            else:
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"  POST-BACKFILL VERIFY PASSED — all {len(all_db_ids)} registrations "
+                        "confirmed in sheet."
+                    )
+                )
+        except Exception as exc:
+            self.stdout.write(
+                self.style.WARNING(
+                    f"  Post-backfill verification failed ({type(exc).__name__}). "
+                    "Run --verify manually to confirm sheet state."
                 )
             )
 
