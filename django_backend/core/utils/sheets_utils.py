@@ -426,6 +426,123 @@ def append_to_excel_backup(registration_instance):
 
 
 # ---------------------------------------------------------------------------
+# Approvals sheet sort
+# ---------------------------------------------------------------------------
+
+def sort_approvals_sheet_by_payment_date(service, sheet_id, range_name):
+    """
+    Sorts the Approvals sheet tab by payment_date column, descending, NULLs last.
+
+    Uses a single batchUpdate SortRangeRequest — server-side sort, instant,
+    no data at risk. Called from the backfill_sheet management command via
+    the --sort flag. Does NOT affect the Workshop tab or any other sheet tab.
+
+    Args:
+        service: Authenticated Google Sheets API service (from get_sheets_service()).
+        sheet_id (str): The spreadsheet ID from settings.GOOGLE_SHEETS_ID.
+        range_name (str): The range string from settings.GOOGLE_SHEETS_RANGE,
+                          e.g. "Approvals!A:Z". The tab name is extracted from
+                          the part before "!".
+
+    Returns:
+        bool: True on success, False on failure.
+    """
+    tab_name = range_name.split("!")[0]
+    logger.info("Sorting Approvals sheet tab '%s' by payment_date DESC, NULLs last", tab_name)
+
+    try:
+        # Step 1: find the numeric sheetId of the Approvals tab.
+        # The batchUpdate SortRangeRequest requires the numeric sheetId, not the
+        # tab name — these are different identifiers in the Sheets API.
+        metadata = _call_with_retry(
+            service.spreadsheets().get(
+                spreadsheetId=sheet_id,
+                fields="sheets(properties(sheetId,title))",
+            )
+        )
+        numeric_sheet_id = None
+        for sheet in metadata.get("sheets", []):
+            if sheet.get("properties", {}).get("title") == tab_name:
+                numeric_sheet_id = sheet["properties"]["sheetId"]
+                break
+
+        if numeric_sheet_id is None:
+            logger.error(
+                "Tab '%s' not found in spreadsheet — cannot sort. "
+                "Check GOOGLE_SHEETS_RANGE matches the actual tab name.",
+                tab_name,
+            )
+            return False
+
+        # Step 2: find the 0-based column index of "payment_date" in the header row.
+        # build_header_row() uses raw field names from Registration._meta.fields,
+        # so the header cell for payment_date is the string "payment_date".
+        header_result = _call_with_retry(
+            service.spreadsheets().values().get(
+                spreadsheetId=sheet_id,
+                range=f"{tab_name}!1:1",
+            )
+        )
+        header_values = header_result.get("values", [[]])[0] if header_result.get("values") else []
+
+        payment_date_col_index = None
+        for idx, cell in enumerate(header_values):
+            if str(cell).strip() == "payment_date":
+                payment_date_col_index = idx
+                break
+
+        if payment_date_col_index is None:
+            logger.error(
+                "Column 'payment_date' not found in header row of tab '%s'. "
+                "Header row: %s",
+                tab_name, header_values,
+            )
+            return False
+
+        logger.info(
+            "Found 'payment_date' at column index %d (0-based) in tab '%s'",
+            payment_date_col_index, tab_name,
+        )
+
+        # Step 3: batchUpdate with SortRangeRequest.
+        # startRowIndex=1 skips the header row (0-indexed, row 1 onward = data rows).
+        # sortOrder="DESCENDING" with empty cells: Google Sheets API naturally places
+        # empty cells at the end of a descending sort — NULLs last, no extra config needed.
+        sort_request = {
+            "sortRange": {
+                "range": {
+                    "sheetId": numeric_sheet_id,
+                    "startRowIndex": 1,       # skip header (row index 0)
+                    "startColumnIndex": 0,
+                },
+                "sortSpecs": [
+                    {
+                        "dimensionIndex": payment_date_col_index,
+                        "sortOrder": "DESCENDING",
+                    }
+                ],
+            }
+        }
+        _call_with_retry(
+            service.spreadsheets().batchUpdate(
+                spreadsheetId=sheet_id,
+                body={"requests": [sort_request]},
+            )
+        )
+        logger.info(
+            "Approvals sheet sorted by payment_date DESC, NULLs last (tab='%s', col_index=%d)",
+            tab_name, payment_date_col_index,
+        )
+        return True
+
+    except Exception as exc:
+        logger.error(
+            "Failed to sort Approvals sheet by payment_date: %s", type(exc).__name__
+        )
+        return False
+
+
+# ---------------------------------------------------------------------------
 # Workshop tab helpers
 # ---------------------------------------------------------------------------
 

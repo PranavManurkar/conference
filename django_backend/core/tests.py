@@ -498,3 +498,258 @@ class UnderProcessExportTest(TestCase):
         finally:
             _registration_worker.enqueue = _registration_worker_orig
             _workshop_worker.enqueue = _workshop_worker_orig
+
+
+# ---------------------------------------------------------------------------
+# 6. Backfill command: dry-run makes no writes
+# ---------------------------------------------------------------------------
+
+class BackfillDryRunTest(TestCase):
+    """--dry-run must never call append_approved_user_to_sheet."""
+
+    @patch("core.management.commands.backfill_sheet.get_sheets_service")
+    @patch("core.management.commands.backfill_sheet.get_existing_registration_ids")
+    @patch("core.management.commands.backfill_sheet.append_approved_user_to_sheet")
+    @patch("core.management.commands.backfill_sheet.Registration")
+    def test_backfill_dry_run_no_writes(
+        self, mock_reg_cls, mock_append, mock_get_ids, mock_get_service
+    ):
+        """
+        With --dry-run:
+        - append_approved_user_to_sheet must never be called.
+        - stdout must contain 'would ADD' for IDs missing from the sheet.
+        - stdout must contain 'would UPDATE' for IDs already in the sheet.
+        """
+        from io import StringIO
+        from django.core.management import call_command
+
+        # IDs 1 and 2 are in DB; only ID 2 is in the sheet.
+        # So ID 1 → would ADD, ID 2 → would UPDATE.
+        fake_reg_1 = MagicMock()
+        fake_reg_1.id = 1
+        fake_reg_2 = MagicMock()
+        fake_reg_2.id = 2
+
+        mock_reg_cls.objects.all.return_value.order_by.return_value.__iter__ = (
+            MagicMock(return_value=iter([fake_reg_1, fake_reg_2]))
+        )
+        mock_get_ids.return_value = {"2"}  # only ID 2 is already in the sheet
+        mock_get_service.return_value = MagicMock()
+
+        out = StringIO()
+        with override_settings(GOOGLE_SHEETS_ID="fake-id", GOOGLE_SHEETS_RANGE="Approvals!A:Z"):
+            call_command("backfill_sheet", "--dry-run", stdout=out)
+
+        output = out.getvalue()
+        mock_append.assert_not_called()
+        self.assertIn("would ADD", output)
+        self.assertIn("would UPDATE", output)
+        self.assertIn("1", output)   # ID 1 flagged as would ADD
+        self.assertIn("2", output)   # ID 2 flagged as would UPDATE
+
+
+# ---------------------------------------------------------------------------
+# 7. Backfill command: --verify detects missing registrations
+# ---------------------------------------------------------------------------
+
+class BackfillVerifyTest(TestCase):
+    """--verify must detect IDs in DB that are absent from the sheet."""
+
+    @patch("core.management.commands.backfill_sheet.get_sheets_service")
+    @patch("core.management.commands.backfill_sheet.get_existing_registration_ids")
+    @patch("core.management.commands.backfill_sheet.Registration")
+    def test_backfill_verify_detects_missing(
+        self, mock_reg_cls, mock_get_ids, mock_get_service
+    ):
+        """
+        --verify with 3 IDs in DB and only 2 in the sheet must print
+        MISMATCH DETECTED and list the missing ID.
+        """
+        from io import StringIO
+        from django.core.management import call_command
+
+        # DB has IDs 10, 11, 12; sheet only has 10 and 11.
+        mock_reg_cls.objects.values_list.return_value = [10, 11, 12]
+        mock_get_ids.return_value = {"10", "11"}      # ID 12 is missing
+        mock_get_service.return_value = MagicMock()
+
+        out = StringIO()
+        with override_settings(GOOGLE_SHEETS_ID="fake-id", GOOGLE_SHEETS_RANGE="Approvals!A:Z"):
+            call_command("backfill_sheet", "--verify", stdout=out)
+
+        output = out.getvalue()
+        self.assertIn("MISMATCH DETECTED", output)
+        self.assertIn("12", output)
+
+
+# ---------------------------------------------------------------------------
+# 8. Backfill command: sleep is 2 seconds (not 1)
+# ---------------------------------------------------------------------------
+
+class BackfillSleepIntervalTest(TestCase):
+    """The backfill loop must sleep 2 seconds between registrations."""
+
+    @patch("core.management.commands.backfill_sheet.time.sleep")
+    @patch("core.management.commands.backfill_sheet.get_sheets_service")
+    @patch("core.management.commands.backfill_sheet.get_existing_registration_ids")
+    @patch("core.management.commands.backfill_sheet.append_approved_user_to_sheet")
+    @patch("core.management.commands.backfill_sheet.Registration")
+    def test_backfill_sleep_is_two_seconds(
+        self, mock_reg_cls, mock_append, mock_get_ids, mock_get_service, mock_sleep
+    ):
+        """
+        For N registrations, time.sleep must be called N times with argument 2
+        (not 1 — the old value that caused rate-limit failures).
+        """
+        from io import StringIO
+        from django.core.management import call_command
+
+        regs = [MagicMock(id=i) for i in range(1, 4)]   # 3 registrations
+        mock_reg_cls.objects.all.return_value.order_by.return_value.__iter__ = (
+            MagicMock(return_value=iter(regs))
+        )
+        mock_reg_cls.objects.all.return_value.order_by.return_value.count.return_value = 3
+        mock_get_ids.return_value = set()
+        mock_get_service.return_value = MagicMock()
+        mock_append.return_value = True
+
+        out = StringIO()
+        with override_settings(GOOGLE_SHEETS_ID="fake-id", GOOGLE_SHEETS_RANGE="Approvals!A:Z"):
+            call_command("backfill_sheet", stdout=out)
+
+        # time.sleep must have been called exactly 3 times, always with 2.
+        self.assertEqual(mock_sleep.call_count, 3)
+        for c in mock_sleep.call_args_list:
+            self.assertEqual(
+                c.args[0], 2,
+                f"Expected sleep(2) but got sleep({c.args[0]}). "
+                "The 1-second sleep was the root cause of rate-limit failures; "
+                "do not revert this to 1."
+            )
+
+
+# ---------------------------------------------------------------------------
+# 9. sort_approvals_sheet_by_payment_date calls batchUpdate correctly
+# ---------------------------------------------------------------------------
+
+class SortApprovalsFunctionTest(TestCase):
+    """sort_approvals_sheet_by_payment_date must call batchUpdate with a SortRangeRequest."""
+
+    def test_sort_function_calls_batch_update(self):
+        """
+        Given a mocked service where:
+        - spreadsheets().get() returns a sheet with sheetId=42 and title "Approvals"
+        - spreadsheets().values().get() returns a header row containing "payment_date"
+          at column index 2
+        sort_approvals_sheet_by_payment_date() must:
+        1. Call batchUpdate exactly once.
+        2. The request must be a sortRange with dimensionIndex=2 and sortOrder="DESCENDING".
+        3. Return True.
+        """
+        from core.utils.sheets_utils import sort_approvals_sheet_by_payment_date
+
+        service = MagicMock()
+
+        # Mock spreadsheets().get() → returns metadata with sheetId=42
+        metadata_response = {
+            "sheets": [
+                {"properties": {"sheetId": 42, "title": "Approvals"}}
+            ]
+        }
+        service.spreadsheets.return_value.get.return_value.execute.return_value = (
+            metadata_response
+        )
+
+        # Mock spreadsheets().values().get() → header row: id, full_name, payment_date, ...
+        header_response = {"values": [["id", "full_name", "payment_date", "status"]]}
+        service.spreadsheets.return_value.values.return_value.get.return_value.execute.return_value = (
+            header_response
+        )
+
+        # Mock batchUpdate
+        batch_response = {}
+        service.spreadsheets.return_value.batchUpdate.return_value.execute.return_value = (
+            batch_response
+        )
+
+        with override_settings(GOOGLE_SHEETS_ID="fake-id", GOOGLE_SHEETS_RANGE="Approvals!A:Z"):
+            result = sort_approvals_sheet_by_payment_date(
+                service, "fake-id", "Approvals!A:Z"
+            )
+
+        self.assertTrue(result)
+
+        # batchUpdate must have been called exactly once.
+        service.spreadsheets.return_value.batchUpdate.assert_called_once()
+        call_kwargs = service.spreadsheets.return_value.batchUpdate.call_args
+        body = call_kwargs.kwargs.get("body") or call_kwargs.args[0] if call_kwargs.args else call_kwargs.kwargs["body"]
+
+        requests = body.get("requests", [])
+        self.assertEqual(len(requests), 1)
+        sort_req = requests[0]["sortRange"]
+
+        # sheetId must be the numeric ID (42), not the tab name.
+        self.assertEqual(sort_req["range"]["sheetId"], 42)
+        # Header row (index 0) must be skipped.
+        self.assertEqual(sort_req["range"]["startRowIndex"], 1)
+        # Must sort by payment_date column (index 2 in the mocked header).
+        self.assertEqual(sort_req["sortSpecs"][0]["dimensionIndex"], 2)
+        self.assertEqual(sort_req["sortSpecs"][0]["sortOrder"], "DESCENDING")
+
+
+# ---------------------------------------------------------------------------
+# 10. Backfill stdout distinguishes OK-added / OK-updated / FAILED outcomes
+# ---------------------------------------------------------------------------
+
+class BackfillStdoutOutcomesTest(TestCase):
+    """
+    The backfill loop must print distinct labels for added, updated, and failed
+    registrations — the operator must be able to see at a glance what happened.
+    """
+
+    @patch("core.management.commands.backfill_sheet.time.sleep")
+    @patch("core.management.commands.backfill_sheet.get_sheets_service")
+    @patch("core.management.commands.backfill_sheet.get_existing_registration_ids")
+    @patch("core.management.commands.backfill_sheet.append_approved_user_to_sheet")
+    @patch("core.management.commands.backfill_sheet.Registration")
+    def test_backfill_stdout_distinguishes_outcomes(
+        self, mock_reg_cls, mock_append, mock_get_ids, mock_get_service, mock_sleep
+    ):
+        """
+        Three registrations:
+        - ID 1: not in sheet, append succeeds → [OK - ADDED to Sheet]
+        - ID 2: already in sheet, append succeeds → [OK - UPDATED in Sheet]
+        - ID 3: not in sheet, append fails → [FAILED]
+
+        Also asserts FAILED count appears in the final summary.
+        """
+        from io import StringIO
+        from django.core.management import call_command
+
+        reg1 = MagicMock(id=1)
+        reg2 = MagicMock(id=2)
+        reg3 = MagicMock(id=3)
+
+        mock_reg_cls.objects.all.return_value.order_by.return_value.__iter__ = (
+            MagicMock(return_value=iter([reg1, reg2, reg3]))
+        )
+        mock_reg_cls.objects.all.return_value.order_by.return_value.count.return_value = 3
+        # ID 2 is already in sheet; IDs 1 and 3 are not.
+        mock_get_ids.return_value = {"2"}
+        mock_get_service.return_value = MagicMock()
+
+        # ID 1 succeeds, ID 2 succeeds, ID 3 fails.
+        mock_append.side_effect = [True, True, False]
+
+        out = StringIO()
+        with override_settings(GOOGLE_SHEETS_ID="fake-id", GOOGLE_SHEETS_RANGE="Approvals!A:Z"):
+            call_command("backfill_sheet", stdout=out)
+
+        output = out.getvalue()
+        self.assertIn("OK - ADDED to Sheet", output)
+        self.assertIn("OK - UPDATED in Sheet", output)
+        self.assertIn("FAILED", output)
+        # Summary must show 1 failure.
+        self.assertIn("Failed", output)
+        # The failed ID (3) should appear in the output line.
+        self.assertIn("3", output)
