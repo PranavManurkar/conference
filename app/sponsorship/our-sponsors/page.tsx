@@ -103,7 +103,13 @@ const tiers: {
         name: "E-Spin Nanotech",
         logo: "/logo18.png",
         alt: "E-Spin Nanotech logo",
-      },      {
+      },   
+      {
+        name: "Comsol",
+        logo: "/Comsol.jpeg",
+        alt: "Metrohm logo",
+      },
+      {
         name: "Therelek",
         logo: "/therelek.jpeg",
         alt: "Therelek logo",
@@ -116,6 +122,12 @@ const tiers: {
         {
         name: "Metrohm",
         logo: "/metrohm.png",
+        alt: "Metrohm logo",
+      },
+       
+       {
+        name: "ITPL",
+        logo: "/itpl.jpeg",
         alt: "Metrohm logo",
       },
     ],
