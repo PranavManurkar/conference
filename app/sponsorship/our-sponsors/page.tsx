@@ -106,8 +106,8 @@ const tiers: {
       },   
       {
         name: "Comsol",
-        logo: "/Comsol.jpeg",
-        alt: "Metrohm logo",
+        logo: "/comsol.jpeg",
+        alt: "Comsol logo",
       },
       {
         name: "Therelek",
@@ -128,7 +128,7 @@ const tiers: {
        {
         name: "ITPL",
         logo: "/itpl.jpeg",
-        alt: "Metrohm logo",
+        alt: "ITPL logo",
       },
     ],
   },
