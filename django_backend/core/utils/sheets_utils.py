@@ -350,8 +350,8 @@ def append_approved_user_to_sheet(registration_instance):
 
     except Exception as exc:
         logger.error(
-            "SHEET_SYNC_FALLBACK registration_id=%s model=Registration reason=%s",
-            reg_id, type(exc).__name__,
+            "SHEET_SYNC_FALLBACK registration_id=%s model=Registration reason=%s detail=%s",
+            reg_id, type(exc).__name__, exc,
         )
         if append_to_excel_backup(registration_instance):
             logger.info(
