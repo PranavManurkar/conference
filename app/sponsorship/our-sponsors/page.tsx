@@ -75,63 +75,35 @@ const tiers: {
     sponsors: [{ name: "Wiley", logo: "/logo13.png", alt: "Wiley logo" }],
   },
   {
-    id: "other",
-    label: "Other Sponsors",
-    size: "other",
-    gradient: "from-slate-50 via-white to-slate-100",
-    sponsors: [
-      { name: "DRDO", logo: "/logo14.jpg", alt: "DRDO logo" },
-      { name: "CSIR", logo: "/CSIR-Logo.png", alt: "CSIR logo" },
-      {
-        name: "Trokut Solutions",
-        logo: "/logo17.png",
-        alt: "Trokut Solutions logo",
-      },
-      {
-        name: "Laser Spectra Services",
-        logo: "/logo_lss.jpeg",
-        alt: "Laser Spectra Services logo",
-      },
-      { name: "KAN-THT", logo: "/logo_kam.jpeg", alt: "KAM-THt logo" },
-      {
-        name: "Micromeritics",
-        logo: "/logo15.png",
-        alt: "Micromeritics logo",
-      },
-      { name: "SciAps", logo: "/logo16.png", alt: "SciAps logo" },
-      {
-        name: "E-Spin Nanotech",
-        logo: "/logo18.png",
-        alt: "E-Spin Nanotech logo",
-      },   
-      {
-        name: "Comsol",
-        logo: "/comsol.jpeg",
-        alt: "Comsol logo",
-      },
-      {
-        name: "Therelek",
-        logo: "/therelek.jpeg",
-        alt: "Therelek logo",
-      },
-        {
-        name: "Gnano",
-        logo: "/ganano.png",
-        alt: "Gnano logo",
-      },
-        {
-        name: "Metrohm",
-        logo: "/metrohm.png",
-        alt: "Metrohm logo",
-      },
-       
-       {
-        name: "ITPL",
-        logo: "/itpl.jpeg",
-        alt: "ITPL logo",
-      },
-    ],
-  },
+  id: "other",
+  label: "Other Sponsors",
+  size: "other",
+  gradient: "from-slate-50 via-white to-slate-100",
+  sponsors: [
+    { name: "DRDO", logo: "/logo14.jpg", alt: "DRDO logo" },
+    { name: "CSIR", logo: "/CSIR-Logo.png", alt: "CSIR logo" },
+    { name: "Trokut Solutions", logo: "/logo17.png", alt: "Trokut Solutions logo" },
+    { name: "Laser Spectra Services", logo: "/logo_lss.jpeg", alt: "Laser Spectra Services logo" },
+    { name: "KAN-THT", logo: "/logo_kam.jpeg", alt: "KAM-THT logo" },
+    { name: "Micromeritics", logo: "/logo15.png", alt: "Micromeritics logo" },
+    { name: "SciAps", logo: "/logo16.png", alt: "SciAps logo" },
+    { name: "E-Spin Nanotech", logo: "/logo18.png", alt: "E-Spin Nanotech logo" },
+    { name: "Comsol", logo: "/comsol.jpeg", alt: "Comsol logo" },
+    { name: "Therelek", logo: "/therelek.jpeg", alt: "Therelek logo" },
+    { name: "Gnano", logo: "/ganano.png", alt: "Gnano logo" },
+    { name: "Metrohm", logo: "/metrohm.png", alt: "Metrohm logo" },
+    { name: "ITPL", logo: "/itpl.jpeg", alt: "ITPL logo" },
+    { name: "Ants Innovations Private Limited", logo: "/new_logo/Ants Innovations Private Limited.png", alt: "Ants Innovations Private Limited logo" },
+    { name: "Dynotech Instruments Pvt Ltd", logo: "/new_logo/Dynotech Instruments Pvt Ltd.png", alt: "Dynotech Instruments Pvt Ltd logo" },
+    { name: "Icon Analytical Solutions LLP", logo: "/new_logo/Icon Analytical Solutions LLP ..png", alt: "Icon Analytical Solutions LLP logo" },
+    { name: "Optimized Solutions Limited", logo: "/new_logo/Optimized Solutions Limited.png", alt: "Optimized Solutions Limited logo" },
+    { name: "Samyak Computer ", logo: "/new_logo/Samyak Computer N.jpeg", alt: "Samyak Computer N logo" },
+    { name: "Shri Traders", logo: "/new_logo/Shri Traders.png", alt: "Shri Traders logo" },
+    { name: "Specialise Products Private Limited", logo: "/new_logo/Specialise Products Private Limited.PNG", alt: "Specialise Products Private Limited logo" },
+    { name: "Slash Computer", logo: "/new_logo/slash Computer.jpeg", alt: "Slash Computer logo" },
+  ],
+},
+
 ]
 
 export default function OurSponsorsPage() {
