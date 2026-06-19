@@ -4,6 +4,7 @@ type Sponsor = {
   name: string
   logo?: string
   alt?: string
+  imgClass?: string
 }
 
 const sizeClasses = {
@@ -54,6 +55,12 @@ const tiers: {
         name: "ANRF",
         logo: "/logo12.png",
         alt: "Anusandhan National Research Foundation logo",
+      },
+      {
+        name: "BRNS",
+        logo: "/new_logo/brns.jpeg",
+        alt: "Board of Research In Nuclear Science logo",
+        imgClass: "h-full w-full object-contain scale-125",
       },
     ],
   },
@@ -147,7 +154,7 @@ export default function OurSponsorsPage() {
                         <img
                           src={sponsor.logo}
                           alt={sponsor.alt ?? sponsor.name}
-                          className="h-full w-auto max-w-full object-contain"
+                          className={sponsor.imgClass ?? "h-full w-auto max-w-full object-contain"}
                           loading="lazy"
                         />
                       ) : (
