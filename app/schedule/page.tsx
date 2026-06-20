@@ -1,19 +1,7 @@
 "use client"
 
 import { useState } from "react"
-
-// ─── Color legend data ────────────────────────────────────────────────────────
-const LEGEND = [
-  { label: "Plenary Talk (PT)", bg: "bg-green-200", border: "border-green-400" },
-  { label: "Invited Talk (IT)", bg: "bg-[#90EE90]", border: "border-green-500" },
-  { label: "Contributary Talk (CT)", bg: "bg-orange-200", border: "border-orange-400" },
-  { label: "Thesis Presentation", bg: "bg-cyan-300", border: "border-cyan-500" },
-  { label: "Oral Presentation", bg: "bg-[#FFDAB9]", border: "border-orange-300" },
-  { label: "Poster Presentation", bg: "bg-fuchsia-400", border: "border-fuchsia-600" },
-  { label: "Meals", bg: "bg-gray-300", border: "border-gray-500" },
-  { label: "Tea Break", bg: "bg-yellow-300", border: "border-yellow-500" },
-  { label: "Travel", bg: "bg-purple-400", border: "border-purple-600" },
-]
+import { Download } from "lucide-react"
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 type CellType =
@@ -25,6 +13,7 @@ type CellType =
   | "break"
   | "invited"
   | "contributary"
+  | "industry"
   | "lunch"
   | "oral"
   | "thesis"
@@ -52,7 +41,7 @@ interface ScheduleRow {
 // ─── Schedule Data ────────────────────────────────────────────────────────────
 const day0: ScheduleRow[] = [
   {
-    time: "4:00 – 6:00 pm",
+    time: "04:00 – 06:00 pm",
     type: "registration",
     content: "Registration",
     colSpan: true,
@@ -61,140 +50,215 @@ const day0: ScheduleRow[] = [
 ]
 
 const day1: ScheduleRow[] = [
-  { time: "8:00 – 9:15 am", type: "registration", content: "Registration", colSpan: true, highlight: true },
-  { time: "9:00 – 9:30 am", type: "breakfast", content: "Breakfast", colSpan: true },
-  { time: "9:30 – 11:00 am", type: "inauguration", content: "Inauguration + Inaugural talk", colSpan: true },
+  { time: "08:00 – 09:15 am", type: "registration", content: "Registration", colSpan: true, highlight: true },
+  { time: "09:00 – 09:30 am", type: "breakfast", content: "Breakfast", colSpan: true },
+  { time: "09:30 – 11:00 am", type: "inauguration", content: "Inauguration + Inaugural talk", colSpan: true },
   { time: "11:00 – 11:30 am", type: "tea", content: "High Tea", colSpan: true, highlight: true },
-  { time: "11:30 – 12:10 pm", type: "plenary", content: "PT 1.", colSpan: true },
-  { time: "12:10 – 12:15", type: "break", content: "Break", colSpan: true },
+  { time: "11:30 – 12:10 pm", type: "plenary", content: "2DPL01 Prof. S. B. Ogale", colSpan: true },
+  { time: "12:10 – 12:15 pm", type: "break", content: "Break", colSpan: true },
   {
-    time: "12:15 – 12:45 am",
+    time: "12:15 – 12:45 pm",
     type: "invited",
     content: "",
-    sessions: { A: "IT1.", B: "IT2.", C: "IT3.", D: "IT4." },
+    sessions: { 
+      A: "2DIT01 Prof. Sandip Ghosh", 
+      B: "2DIT02 Gopinadhan Kalon", 
+      C: "2DIT03 Prof. Soon Hyung Kang", 
+      D: "2DIT04 Prof. Sumeet Walia" 
+    },
   },
   {
     time: "12:45 – 01:15 pm",
     type: "invited",
     content: "",
-    sessions: { A: "IT5.", B: "IT6.", C: "IT7.", D: "IT8." },
+    sessions: { 
+      A: "2DIT05 Prof. Yogendra Mishra", 
+      B: "2DIT06 Prof. Pavan Nukala", 
+      C: "2DIT07 Dr. Sandip Patil", 
+      D: "2DIT08 Dr. Vikas Thakare" 
+    },
   },
   { time: "01:15 – 02:15 pm", type: "lunch", content: "Lunch", colSpan: true },
-  { time: "02:15 – 02:55 pm", type: "plenary", content: "PT 2.", colSpan: true },
+  { time: "02:15 – 02:55 pm", type: "plenary", content: "2DPL02 Prof. J. H. Kim", colSpan: true },
   { time: "02:55 – 03:00 pm", type: "break", content: "Break", colSpan: true },
   {
-    time: "03:00 – 3:30 pm",
+    time: "03:00 – 03:30 pm",
     type: "invited",
     content: "",
-    sessions: { A: "IT9.", B: "IT10.", C: "IT11.", D: "IT12." },
+    sessions: { 
+      A: "2DIT09 Prof. Chandra S. Sharma", 
+      B: "2DIT10 Prof. Priya Mahadevan", 
+      C: "2DIT11 Prof. Somnath C. Roy", 
+      D: "2DIT12 Dr. Dhiraj Bhatia" 
+    },
   },
   {
-    time: "3:30 – 4:00 pm",
+    time: "03:30 – 04:00 pm",
     type: "invited",
     content: "",
-    sessions: { A: "IT13.", B: "IT14.", C: "IT15.", D: "IT16." },
+    sessions: { 
+      A: "2DIT13 Dr. Varun Natu", 
+      B: "2DIT 14 Prof. Samaresh Das", 
+      C: "2DIT15 Prof. Ashish Mishra", 
+      D: "2DIT16 Dr. Nanasaheb. D. Thorat" 
+    },
   },
-  { time: "4:00 – 4:15 pm", type: "tea", content: "Tea break", colSpan: true, highlight: true },
+  { time: "04:00 – 04:15 pm", type: "tea", content: "Tea break", colSpan: true, highlight: true },
   {
-    time: "4:15 – 5:45 pm",
+    time: "04:15 – 05:45 pm",
     type: "oral",
     content: "",
-    sessions: { A: "Oral", B: "Oral", C: "Oral", D: "Oral" },
+    sessions: { 
+      A: "2DOA01, 2DOA02, 2DOA03,\n2DOA04, 2DOA05, 2DOA06,\n2DOA07, 2DOA08, 2DOA09", 
+      B: "2DOB01, 2DOB02, 2DOB03,\n2DOB04, 2DOB05, 2DOB06,\n2DOB07, 2DOA13, 2DOC16", 
+      C: "2DOC13, 2DOC01, 2DOC02,\n2DOC03, 2DOC04, 2DOC05,\n2DOC06, 2DOC07, 2DOC14", 
+      D: "2DOD01, 2DOD02, 2DOD03,\n2DOD04, 2DOD05, 2DOD06,\n2DOD07, 2DOD08, 2DOD09" 
+    },
   },
   {
-    time: "5:45 – 6:15 pm",
+    time: "05:45 – 06:15 pm",
     type: "invited",
     content: "",
-    sessions: { A: "IT17.", B: "IT18.", C: "IT19.", D: "CT 1. / CT 2." },
+    sessions: { 
+      A: "2DIT17 Prof. Babak Anasori", 
+      B: "2DIT18 Prof. Anirudha V. Sumant", 
+      C: "2DIT19 Prof. Vilas Pol", 
+      D: "2DCT01 Dr. Sarika Verma\n2DCT02 Dr. Tanmoy Paul" 
+    },
   },
-  { time: "Till Dinner", type: "thesis", content: "Thesis Poster presentation (Stage 1)", colSpan: true },
-  { time: "7:30pm onwards", type: "dinner", content: "Dinner", colSpan: true },
+  { time: "Till Dinner", type: "thesis", content: "Thesis Poster Presentation: 2DTH01 to 2DTH17", colSpan: true },
+  { time: "07:30 pm onwards", type: "dinner", content: "Dinner", colSpan: true },
 ]
 
 const day2: ScheduleRow[] = [
-  { time: "9:00 – 9:30 am", type: "breakfast", content: "Breakfast", colSpan: true },
-  { time: "9:30 – 10:10 am", type: "plenary", content: "PT 3.", colSpan: true },
-  { time: "10:10 – 10:30 am", type: "invited", content: "IP1.", colSpan: true },
-  { time: "10:30 – 10:50 am", type: "invited", content: "IP2.", colSpan: true },
+  { time: "09:00 – 09:30 am", type: "breakfast", content: "Breakfast", colSpan: true },
+  { time: "09:30 – 10:10 am", type: "plenary", content: "2DPL03 Prof. Bikramjit Basu", colSpan: true },
+  { time: "10:10 – 10:30 am", type: "industry", content: "2DIL01 Kevin Yang (AdNaNo-Tek, Taiwan, Industry Talk)", colSpan: true },
+  { time: "10:30 – 10:50 am", type: "industry", content: "2DIL02 Dr. B. Karthik (Thermo Scientific, Industry Talk)", colSpan: true },
   { time: "10:50 – 11:05 am", type: "tea", content: "Tea Break", colSpan: true, highlight: true },
   {
     time: "11:05 – 11:35 am",
     type: "invited",
     content: "",
-    sessions: { A: "IT20.", B: "IT21.", C: "IT22.", D: "IT23." },
+    sessions: { 
+      A: "2DIT20 Prof. P. S. Alegaonkar", 
+      B: "2DIT21 Dr. Anjana Dogra", 
+      C: "2DIT22 Prof. Rajendra Dhaka", 
+      D: "2DIT23 Prof. Pratap Sahoo" 
+    },
   },
   {
     time: "11:35 – 12:05 pm",
     type: "invited",
     content: "",
-    sessions: { A: "IT24.", B: "IT25.", C: "IT26.", D: "IT27." },
+    sessions: { 
+      A: "2DIT24 Dr. Tanushree Choudhury", 
+      B: "2DIT25 Prof. B. Ranjit K. Nanda", 
+      C: "2DIT26 Dr. N. Sriram Gopal", 
+      D: "2DIT27 Prof. Saket Asthana" 
+    },
   },
-  { time: "12:05 – 1:35 pm", type: "thesis", content: "Thesis Oral presentation (Stage 2)", colSpan: true },
-  { time: "1:35 – 2:30 pm", type: "lunch", content: "Lunch", colSpan: true },
-  { time: "2:30 – 3:10 pm", type: "plenary", content: "PT 4.", colSpan: true },
-  { time: "3:10 – 3:30 pm", type: "invited", content: "IP3.", colSpan: true },
-  { time: "3:30 – 3:50 pm", type: "invited", content: "IP4.", colSpan: true },
-  { time: "3:50 – 4:05 pm", type: "tea", content: "Tea break", colSpan: true, highlight: true },
+  { time: "12:05 – 01:35 pm", type: "thesis", content: "Thesis Oral presentation: 2DTH01 to 2DTH17", colSpan: true },
+  { time: "01:35 – 02:30 pm", type: "lunch", content: "Lunch", colSpan: true },
+  { time: "02:30 – 03:10 pm", type: "plenary", content: "2DPL04 Prof. K. Pillai Vijayamohanan", colSpan: true },
+  { time: "03:10 – 03:30 pm", type: "industry", content: "2DIL03 Dr. Mangesh Mahajan (Sponsored talk by industry)", colSpan: true },
+  { time: "03:30 – 03:50 pm", type: "industry", content: "2DIL04 Dr. Rohini Kitture (Sponsored talk by Wiley)", colSpan: true },
+  { time: "03:50 – 04:05 pm", type: "tea", content: "Tea break", colSpan: true, highlight: true },
   {
-    time: "4:05 – 4:35 pm",
+    time: "04:05 – 04:35 pm",
     type: "invited",
     content: "",
-    sessions: { A: "IT28.", B: "IT29.", C: "IT30.", D: "IT31." },
+    sessions: { 
+      A: "2DIT28 Prof. Dhanvir S. Rana", 
+      B: "2DIT29 Dr. C. Kamal", 
+      C: "2DIT30 Dr. Ashutosh K Singh", 
+      D: "2DIT31 Dr. Sanjay K Rai" 
+    },
   },
   {
-    time: "4:35 – 5:05 pm",
+    time: "04:35 – 05:05 pm",
     type: "invited",
     content: "",
-    sessions: { A: "IT32.", B: "IT33.", C: "IT34.", D: "IT35." },
+    sessions: { 
+      A: "2DIT32 Dr. Himal Bhatt", 
+      B: "2DIT33 Prof. Biswarup Pathak", 
+      C: "2DIT34 Dr. Nishad Deshpande", 
+      D: "2DIT35 Dr. S. D. Koushik" 
+    },
   },
   {
-    time: "5:05 – 5:20 pm",
+    time: "05:05 – 05:20 pm",
     type: "contributary",
     content: "",
-    sessions: { A: "CT3.", B: "CT4.", C: "CT5.", D: "CT6." },
+    sessions: { 
+      A: "2DCT03 Dr. Vidyadhar Singh", 
+      B: "2DCT04 Dr. Manoj K. Gupta", 
+      C: "2DCT05 Dr. J. P. Yadav", 
+      D: "2DCT06 Dr. Harishchandra Singh" 
+    },
   },
-  { time: "5:20 – 6:45 pm", type: "poster", content: "Poster Presentation", colSpan: true },
-  { time: "6:45 – 7:45 pm", type: "travel", content: "Travel toward Gala dinner", colSpan: true },
-  { time: "8:00 pm onwards", type: "dinner", content: "Gala Dinner", colSpan: true, highlight: true },
+  { time: "05:20 – 06:45 pm", type: "poster", content: "Poster Presentation: 2DPA01 to 2DPA15, 2DPB01 to 2DPB08, 2DPC01 to 2DPC22, 2DPD01 to 2DPD14", colSpan: true },
+  { time: "06:45 – 07:45 pm", type: "travel", content: "Travel", colSpan: true },
+  { time: "08:00 pm onwards", type: "dinner", content: "Gala Dinner", colSpan: true, highlight: true },
 ]
 
 const day3: ScheduleRow[] = [
-  { time: "9:00 – 9:30 am", type: "breakfast", content: "Breakfast", colSpan: true },
-  { time: "9:30 – 10:10 am", type: "plenary", content: "PT 5.", colSpan: true },
-  { time: "10:10 – 10:50 am", type: "plenary", content: "PT 6.", colSpan: true },
-  { time: "10:50 – 11:05 am", type: "tea", content: "Tea Break", colSpan: true, highlight: true },
+  { time: "09:00 – 09:30 am", type: "breakfast", content: "Breakfast", colSpan: true },
   {
-    time: "11:05 – 11:35 am",
+    time: "09:30 – 10:00 am",
     type: "invited",
     content: "",
-    sessions: { A: "IT36.", B: "IT37.", C: "IT38.", D: "IT39." },
+    sessions: { 
+      A: "2DIT36 Prof. Suman K. Pal", 
+      B: "2DIT37 Dr. Rajamani Raghunathan", 
+      C: "2DIT38 Prof. Toshihiro Moriga", 
+      D: "2DIT39 Prof. Abha Misra" 
+    },
   },
   {
-    time: "11:35 – 12:05 pm",
+    time: "10:00 – 10:30 am",
     type: "invited",
     content: "",
-    sessions: { A: "IT40.", B: "IT41.", C: "IT42.", D: "IT43." },
+    sessions: { 
+      A: "2DIT40 Prof. Rajendra Dhayal", 
+      B: "2DIT41 Dr. Murli Devraj", 
+      C: "2DIT42 Prof. Pankaj Koinkar", 
+      D: "2DIT43 Dr. K. D. M. Rao" 
+    },
   },
   {
-    time: "12:05 – 12:20 pm",
+    time: "10:35 – 10:50 am",
     type: "contributary",
     content: "",
-    sessions: { A: "CT7.", B: "CT8.", C: "CT9.", D: "CT10." },
+    sessions: { 
+      A: "2DCT07 Dr. Anupma Thakur", 
+      B: "2DCT08 Dr. Kingshuk Roy", 
+      C: "2DCT09 Dr. Manav Saxena", 
+      D: "2DCT10 Dr. Varun Harbola" 
+    },
   },
   {
-    time: "12:20 – 01:20 pm",
+    time: "10:50 – 11:50 am",
     type: "oral",
     content: "",
-    sessions: { A: "Oral", B: "Oral", C: "Oral", D: "Oral" },
+    sessions: { 
+      A: "2DOA10, 2DOA11, 2DOA12,\n2DOA14, 2DOA15, 2DOA16,\n2DOA17, 2DOA18, 2DOD16", 
+      B: "2DOC15, 2DOC18, 2DOC19", 
+      C: "2DOC08, 2DOC09, 2DOC10,\n2DOC11, 2DOC12, 2DOC17", 
+      D: "2DOD10, 2DOD11, 2DOD12,\n2DOD13, 2DOD14, 2DOD15" 
+    },
   },
-  { time: "1:20 – 2:30 pm", type: "lunch", content: "Lunch", colSpan: true },
-  { time: "2:30 – 3:40pm", type: "poster", content: "Poster Presentation", colSpan: true },
-  { time: "3:45 onwards", type: "valedictory", content: "Valedictory", colSpan: true },
+  { time: "11:50 – 12:05 pm", type: "tea", content: "Tea Break", colSpan: true, highlight: true },
+  { time: "12:05 – 12:45 pm", type: "plenary", content: "2DPL05 Prof. Yuan-Ron Ma", colSpan: true },
+  { time: "12:45 – 01:25 pm", type: "plenary", content: "2DPL06 Prof. Umesh V. Waghmare", colSpan: true },
+  { time: "01:25 – 02:30 pm", type: "lunch", content: "Lunch", colSpan: true },
+  { time: "02:00 – 03:30 pm", type: "poster", content: "Poster Presentation: 2DPA16 to 2DPA30, 2DPB09 to 2DPB16, 2DPC23 to 2DPC43, 2DPD15 to 2DPD28", colSpan: true },
+  { time: "03:45 pm onwards", type: "valedictory", content: "Valedictory Function", colSpan: true },
 ]
 
 // ─── Cell Styling ────────────────────────────────────────────────────────────
 function getCellStyle(type: CellType, highlight?: boolean): string {
-  const base = "text-sm font-medium"
+  const base = "text-sm font-medium whitespace-pre-wrap leading-relaxed"
   switch (type) {
     case "registration":
       return `${base} bg-[color:var(--nav)] text-white font-bold`
@@ -206,6 +270,8 @@ function getCellStyle(type: CellType, highlight?: boolean): string {
       return `${base} bg-gray-100 text-gray-800`
     case "plenary":
       return `${base} bg-green-200 text-green-900`
+    case "industry":
+      return `${base} bg-blue-200 text-blue-900 font-semibold`
     case "tea":
       return `${base} bg-yellow-300 text-yellow-900 font-semibold`
     case "break":
@@ -244,10 +310,10 @@ function ScheduleRowComponent({ row }: { row: ScheduleRow }) {
   if (row.colSpan || !row.sessions) {
     return (
       <tr>
-        <td className="px-3 py-2 text-xs font-semibold text-[color:var(--nav)]/70 whitespace-nowrap border-b border-gray-200 bg-white min-w-[130px]">
+        <td className="px-3 py-2 text-xs font-semibold text-[color:var(--nav)]/70 whitespace-nowrap border-b border-gray-200 bg-white min-w-[130px] align-top">
           {row.time}
         </td>
-        <td colSpan={4} className={`px-4 py-2 border-b border-gray-200 text-center ${cellStyle}`}>
+        <td colSpan={4} className={`px-4 py-3 border-b border-gray-200 text-center align-middle ${cellStyle}`}>
           {row.content}
         </td>
       </tr>
@@ -256,11 +322,11 @@ function ScheduleRowComponent({ row }: { row: ScheduleRow }) {
 
   return (
     <tr>
-      <td className="px-3 py-2 text-xs font-semibold text-[color:var(--nav)]/70 whitespace-nowrap border-b border-gray-200 bg-white min-w-[130px]">
+      <td className="px-3 py-2 text-xs font-semibold text-[color:var(--nav)]/70 whitespace-nowrap border-b border-gray-200 bg-white min-w-[130px] align-top">
         {row.time}
       </td>
       {(["A", "B", "C", "D"] as const).map((hall) => (
-        <td key={hall} className={`px-3 py-2 border-b border-gray-200 text-center ${cellStyle}`}>
+        <td key={hall} className={`px-3 py-3 border-b border-gray-200 text-center align-middle ${cellStyle}`}>
           {row.sessions?.[hall] ?? ""}
         </td>
       ))}
@@ -302,6 +368,7 @@ function DayTable({ rows }: { rows: ScheduleRow[] }) {
 function Legend() {
   const items = [
     { label: "Plenary Talk (PT)", cls: "bg-green-200 border-green-400" },
+    { label: "Industry Talk / Sponsored (IL)", cls: "bg-blue-200 border-blue-400" },
     { label: "Invited Talk (IT)", cls: "bg-[#90EE90] border-green-500" },
     { label: "Contributary Talk (CT)", cls: "bg-orange-200 border-orange-400" },
     { label: "Thesis Presentation", cls: "bg-cyan-200 border-cyan-500" },
@@ -366,18 +433,29 @@ export default function SchedulePage() {
   return (
     <main className="min-h-screen bg-[color:var(--primary-foreground)]">
       {/* ── Page Header ─────────────────────────────────────────────────── */}
-      <div className="bg-[color:var(--nav)] text-white py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-1 w-12 bg-[color:var(--primary)] rounded mb-4" />
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">
-            Conference <span className="text-[color:var(--primary)]">Schedule</span>
-          </h1>
-          <p className="text-white/70 text-base max-w-2xl">
-            Tentative program schedule for 2D MatTechGlobal 2026 at IIT Indore · June 23–26, 2026
-          </p>
-          <p className="text-white/50 text-xs mt-2 italic">
-            * Schedule is tentative and subject to revision
-          </p>
+      <div className="bg-[color:var(--nav)] text-white py-10 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+          <div>
+            <div className="h-1 w-12 bg-[color:var(--primary)] rounded mb-4" />
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">
+              Conference <span className="text-[color:var(--primary)]">Schedule</span>
+            </h1>
+            <p className="text-white/70 text-base max-w-2xl">
+              Tentative program schedule for 2D MatTechGlobal 2026 at IIT Indore · June 23–26, 2026
+            </p>
+            <p className="text-white/50 text-xs mt-2 italic">
+              * Schedule is tentative and subject to revision
+            </p>
+          </div>
+          
+          <a 
+            href="/Final_Schedule_2DMTG_2026.pdf" 
+            download 
+            className="flex items-center gap-2 bg-[color:var(--primary)] hover:opacity-90 text-white px-5 py-3 rounded-xl font-bold transition-all shadow-lg"
+          >
+            <Download className="w-5 h-5" />
+            Download PDF
+          </a>
         </div>
       </div>
 
@@ -448,7 +526,7 @@ export default function SchedulePage() {
 
         {/* ── Note ─────────────────────────────────────────────────────────── */}
         <div className="mt-6 bg-[color:var(--primary)]/5 border border-[color:var(--primary)]/20 rounded-xl p-4 text-sm text-[color:var(--nav)]/70">
-          <strong className="text-[color:var(--primary)]">Note:</strong> PT = Plenary Talk, IT = Invited Talk, CT = Contributary Talk, IP = Invited Presentation.
+          <strong className="text-[color:var(--primary)]">Note:</strong> PT = Plenary Talk, IT = Invited Talk, CT = Contributary Talk, IL = Industry/Sponsored Talk.
         </div>
       </div>
     </main>
