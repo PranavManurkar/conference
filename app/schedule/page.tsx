@@ -6,6 +6,7 @@ import { Download } from "lucide-react"
 // ─── Types ───────────────────────────────────────────────────────────────────
 type CellType =
   | "header"
+  | "chairperson"
   | "registration"
   | "breakfast"
   | "plenary"
@@ -54,8 +55,20 @@ const day1: ScheduleRow[] = [
   { time: "09:00 – 09:30 am", type: "breakfast", content: "Breakfast", colSpan: true },
   { time: "09:30 – 11:00 am", type: "inauguration", content: "Inauguration + Inaugural talk", colSpan: true },
   { time: "11:00 – 11:30 am", type: "tea", content: "High Tea", colSpan: true, highlight: true },
+  { time: "Chairperson", type: "chairperson", content: "Prof. A. K Raychaudhuri", colSpan: true },
   { time: "11:30 – 12:10 pm", type: "plenary", content: "2DPL01 Prof. S. B. Ogale", colSpan: true },
   { time: "12:10 – 12:15 pm", type: "break", content: "Break", colSpan: true },
+  {
+    time: "Chairpersons",
+    type: "chairperson",
+    content: "",
+    sessions: { 
+      A: "Prof. A. K Raychaudhuri\nProf. Rajesh Kumar", 
+      B: "Prof. Somnath C. Roy\nDr. Archana Lakhani", 
+      C: "Prof. Priya Mahadevan\nDr. Venkata Vamsi Koruprolu", 
+      D: "Dr. Rajeev Rawat\nProf. Pankaj Koinkar" 
+    },
+  },
   {
     time: "12:15 – 12:45 pm",
     type: "invited",
@@ -79,8 +92,20 @@ const day1: ScheduleRow[] = [
     },
   },
   { time: "01:15 – 02:15 pm", type: "lunch", content: "Lunch", colSpan: true },
+  { time: "Chairperson", type: "chairperson", content: "Prof. Sandip Ghosh", colSpan: true },
   { time: "02:15 – 02:55 pm", type: "plenary", content: "2DPL02 Prof. J. H. Kim", colSpan: true },
   { time: "02:55 – 03:00 pm", type: "break", content: "Break", colSpan: true },
+  {
+    time: "Chairpersons",
+    type: "chairperson",
+    content: "",
+    sessions: { 
+      A: "Prof. Sandip Ghosh\nDr. Srinibas Satapathy", 
+      B: "Prof. Gopinadhan Kalon\nProf. Biswarup Pathak", 
+      C: "Dr. Anjana Dogra\nDr. Mukul Gupta", 
+      D: "Dr. Vikas Thakare\nProf. Prashant Kodgire" 
+    },
+  },
   {
     time: "03:00 – 03:30 pm",
     type: "invited",
@@ -105,6 +130,17 @@ const day1: ScheduleRow[] = [
   },
   { time: "04:00 – 04:15 pm", type: "tea", content: "Tea break", colSpan: true, highlight: true },
   {
+    time: "Chairpersons",
+    type: "chairperson",
+    content: "",
+    sessions: { 
+      A: "Prof. Yogendra Mishra\nProf. Ashish Mishra", 
+      B: "Prof. Soon Hyung Kang\nDr. Himal Bhatt", 
+      C: "Dr. J. P. Yadav\nDr. Vidyadhar Singh", 
+      D: "Prof. Sumeet Walia\nDr. Rohini Kitture" 
+    },
+  },
+  {
     time: "04:15 – 05:45 pm",
     type: "oral",
     content: "",
@@ -126,16 +162,28 @@ const day1: ScheduleRow[] = [
       D: "2DCT01 Dr. Sarika Verma\n2DCT02 Dr. Tanmoy Paul" 
     },
   },
-  { time: "Till Dinner", type: "thesis", content: "Thesis Poster Presentation: 2DTH01 to 2DTH17", colSpan: true },
+  { time: "Till Dinner", type: "thesis", content: "Examiners: (Prof. S. B. Ogale / Prof. A. K Raychaudhuri / Prof. J. H. Kim / Prof. Yuan-Ron Ma / Prof. K. Pillai Vijayamohanan / Dr. Sunil Kumar)\n\nThesis Poster Presentation: 2DTH01 to 2DTH17", colSpan: true },
   { time: "07:30 pm onwards", type: "dinner", content: "Dinner", colSpan: true },
 ]
 
 const day2: ScheduleRow[] = [
   { time: "09:00 – 09:30 am", type: "breakfast", content: "Breakfast", colSpan: true },
+  { time: "Chairperson", type: "chairperson", content: "Prof. K. Pillai Vijayamohanan", colSpan: true },
   { time: "09:30 – 10:10 am", type: "plenary", content: "2DPL03 Prof. Bikramjit Basu", colSpan: true },
   { time: "10:10 – 10:30 am", type: "industry", content: "2DIL01 Kevin Yang (AdNaNo-Tek, Taiwan, Industry Talk)", colSpan: true },
   { time: "10:30 – 10:50 am", type: "industry", content: "2DIL02 Dr. B. Karthik (Thermo Scientific, Industry Talk)", colSpan: true },
   { time: "10:50 – 11:05 am", type: "tea", content: "Tea Break", colSpan: true, highlight: true },
+  {
+    time: "Chairpersons",
+    type: "chairperson",
+    content: "",
+    sessions: { 
+      A: "Prof. Pavan Kankar\nDr. S. D. Koushik", 
+      B: "Prof. Devendra Deshmukh\nDr. Dilip Gupta", 
+      C: "Dr. Manav Saxena\nDr. Umesh A. Kshirsagar", 
+      D: "Dr. Tarun Sharma\nProf. Parasharam M. Shirage" 
+    },
+  },
   {
     time: "11:05 – 11:35 am",
     type: "invited",
@@ -158,12 +206,24 @@ const day2: ScheduleRow[] = [
       D: "2DIT27 Prof. Saket Asthana" 
     },
   },
-  { time: "12:05 – 01:35 pm", type: "thesis", content: "Thesis Oral presentation: 2DTH01 to 2DTH17", colSpan: true },
+  { time: "12:05 – 01:35 pm", type: "thesis", content: "Examiners: (Prof. S. B. Ogale / Prof. A. K Raychaudhuri / Prof. J. H. Kim / Prof. Yuan-Ron Ma / Prof. K. Pillai Vijayamohanan / Dr. Sunil Kumar)\n\nThesis Oral presentation: 2DTH01 to 2DTH17", colSpan: true },
   { time: "01:35 – 02:30 pm", type: "lunch", content: "Lunch", colSpan: true },
+  { time: "Chairperson", type: "chairperson", content: "Prof. Bikramjit Basu", colSpan: true },
   { time: "02:30 – 03:10 pm", type: "plenary", content: "2DPL04 Prof. K. Pillai Vijayamohanan", colSpan: true },
   { time: "03:10 – 03:30 pm", type: "industry", content: "2DIL03 Dr. Mangesh Mahajan (Sponsored talk by industry)", colSpan: true },
   { time: "03:30 – 03:50 pm", type: "industry", content: "2DIL04 Dr. Rohini Kitture (Sponsored talk by Wiley)", colSpan: true },
   { time: "03:50 – 04:05 pm", type: "tea", content: "Tea break", colSpan: true, highlight: true },
+  {
+    time: "Chairpersons",
+    type: "chairperson",
+    content: "",
+    sessions: { 
+      A: "Prof. Rajendra Dhaka\nProf. M. H. Modi", 
+      B: "Prof. Preeti Bhobe\nProf. Pratap Sahoo", 
+      C: "Prof. Saket Asthana\nDr. Abhinav Raghuvanshi", 
+      D: "Prof. B. Ranjit K. Nanda\nProf. Krushna Mavani" 
+    },
+  },
   {
     time: "04:05 – 04:35 pm",
     type: "invited",
@@ -205,6 +265,17 @@ const day2: ScheduleRow[] = [
 const day3: ScheduleRow[] = [
   { time: "09:00 – 09:30 am", type: "breakfast", content: "Breakfast", colSpan: true },
   {
+    time: "Chairpersons",
+    type: "chairperson",
+    content: "",
+    sessions: { 
+      A: "Dr. S. Majumdar\nProf. I. A. Palani", 
+      B: "Prof. Pankaj Sagdeo\nDr. C. Kamal", 
+      C: "Dr. Rajib Batabyal\nDr. Himanshu Srivastava", 
+      D: "Dr. Ravindra Makde\nDr. Dinesh Shukla" 
+    },
+  },
+  {
     time: "09:30 – 10:00 am",
     type: "invited",
     content: "",
@@ -227,6 +298,17 @@ const day3: ScheduleRow[] = [
     },
   },
   {
+    time: "Chairpersons",
+    type: "chairperson",
+    content: "",
+    sessions: { 
+      A: "Prof. Suman K. Pal\nDr. Nishad Deshpande", 
+      B: "Dr. Ashutosh K Singh\nDr. Manoj Kumar Gupta", 
+      C: "Prof. J. H. Kim\nProf. Rajendra Dhayal", 
+      D: "Dr. K. D. M. Rao\nDr. Harishchandra Singh" 
+    },
+  },
+  {
     time: "10:35 – 10:50 am",
     type: "contributary",
     content: "",
@@ -242,13 +324,14 @@ const day3: ScheduleRow[] = [
     type: "oral",
     content: "",
     sessions: { 
-      A: "2DOA10, 2DOA11, 2DOA12,\n2DOA14, 2DOA15, 2DOA16,\n2DOA17, 2DOA18, 2DOD16", 
-      B: "2DOC15, 2DOC18, 2DOC19", 
+      A: "2DOA10, 2DOA11, 2DOA12,\n2DOA14, 2DOA15, 2DOA16", 
+      B: "2DOC15, 2DOC18, 2DOC19,\n2DOA17, 2DOA18, 2DOD16", 
       C: "2DOC08, 2DOC09, 2DOC10,\n2DOC11, 2DOC12, 2DOC17", 
       D: "2DOD10, 2DOD11, 2DOD12,\n2DOD13, 2DOD14, 2DOD15" 
     },
   },
   { time: "11:50 – 12:05 pm", type: "tea", content: "Tea Break", colSpan: true, highlight: true },
+  { time: "Chairperson", type: "chairperson", content: "Dr. Mangesh Borage", colSpan: true },
   { time: "12:05 – 12:45 pm", type: "plenary", content: "2DPL05 Prof. Yuan-Ron Ma", colSpan: true },
   { time: "12:45 – 01:25 pm", type: "plenary", content: "2DPL06 Prof. Umesh V. Waghmare", colSpan: true },
   { time: "01:25 – 02:30 pm", type: "lunch", content: "Lunch", colSpan: true },
@@ -260,6 +343,8 @@ const day3: ScheduleRow[] = [
 function getCellStyle(type: CellType, highlight?: boolean): string {
   const base = "text-sm font-medium whitespace-pre-wrap leading-relaxed"
   switch (type) {
+    case "chairperson":
+      return `${base} bg-blue-50 text-blue-900 italic text-xs`
     case "registration":
       return `${base} bg-[color:var(--nav)] text-white font-bold`
     case "breakfast":
@@ -441,15 +526,12 @@ export default function SchedulePage() {
               Conference <span className="text-[color:var(--primary)]">Schedule</span>
             </h1>
             <p className="text-white/70 text-base max-w-2xl">
-              Tentative program schedule for 2D MatTechGlobal 2026 at IIT Indore · June 23–26, 2026
-            </p>
-            <p className="text-white/50 text-xs mt-2 italic">
-              * Schedule is tentative and subject to revision
+              Program schedule for 2D MatTechGlobal 2026 at IIT Indore · June 23–26, 2026
             </p>
           </div>
           
           <a 
-            href="/Final_Schedule_2DMTG_2026.pdf" 
+            href="/Schedule.pdf" 
             download 
             className="flex items-center gap-2 bg-[color:var(--primary)] hover:opacity-90 text-white px-5 py-3 rounded-xl font-bold transition-all shadow-lg"
           >
