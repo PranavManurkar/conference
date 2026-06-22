@@ -52,7 +52,7 @@ const day0: ScheduleRow[] = [
 const day1: ScheduleRow[] = [
   { time: "08:00 – 09:15 am", type: "registration", content: "Registration", colSpan: true, highlight: true },
   { time: "09:00 – 09:30 am", type: "breakfast", content: "Breakfast", colSpan: true },
-  { time: "09:30 – 11:00 am", type: "inauguration", content: "Inauguration + Inaugural talk", colSpan: true },
+  { time: "09:30 – 11:00 am", type: "inauguration", content: "Inauguration + Inaugural talk (Nalanda Auditorium)", colSpan: true },
   { time: "11:00 – 11:30 am", type: "tea", content: "High Tea", colSpan: true, highlight: true },
   { time: "11:30 – 12:10 pm", type: "plenary", content: "2DPL01 Prof. S. B. Ogale", colSpan: true },
   { time: "12:10 – 12:15 pm", type: "break", content: "Break", colSpan: true },
@@ -60,22 +60,22 @@ const day1: ScheduleRow[] = [
     time: "12:15 – 12:45 pm",
     type: "invited",
     content: "",
-    sessions: { 
-      A: "2DIT01 Prof. Sandip Ghosh", 
-      B: "2DIT02 Gopinadhan Kalon", 
-      C: "2DIT03 Prof. Soon Hyung Kang", 
-      D: "2DIT04 Prof. Sumeet Walia" 
+    sessions: {
+      A: "2DIT01 Prof. Sandip Ghosh",
+      B: "2DIT02 Dr. Rajamani Raghunathan",
+      C: "2DIT03 Prof. Soon Hyung Kang",
+      D: "2DIT04 Prof. Sumeet Walia"
     },
   },
   {
     time: "12:45 – 01:15 pm",
     type: "invited",
     content: "",
-    sessions: { 
-      A: "2DIT05 Prof. Yogendra Mishra", 
-      B: "2DIT06 Prof. Pavan Nukala", 
-      C: "2DIT07 Dr. Sandip Patil", 
-      D: "2DIT08 Dr. Vikas Thakare" 
+    sessions: {
+      A: "2DIT05 Prof. Gopinadhan Kalon",
+      B: "2DIT06 Prof. Pavan Nukala",
+      C: "2DIT07 Dr. Sandip Patil",
+      D: "2DIT08 Dr. Vikas Thakare"
     },
   },
   { time: "01:15 – 02:15 pm", type: "lunch", content: "Lunch", colSpan: true },
@@ -98,7 +98,7 @@ const day1: ScheduleRow[] = [
     content: "",
     sessions: { 
       A: "2DIT13 Dr. Varun Natu", 
-      B: "2DIT 14 Prof. Samaresh Das", 
+      B: "2DIT14 Prof. Samaresh Das",
       C: "2DIT15 Prof. Ashish Mishra", 
       D: "2DIT16 Dr. Nanasaheb. D. Thorat" 
     },
@@ -141,7 +141,7 @@ const day2: ScheduleRow[] = [
     type: "invited",
     content: "",
     sessions: { 
-      A: "2DIT20 Prof. P. S. Alegaonkar", 
+      A: "2DIT20 Dr. Sanjoy Mahatha",
       B: "2DIT21 Dr. Anjana Dogra", 
       C: "2DIT22 Prof. Rajendra Dhaka", 
       D: "2DIT23 Prof. Pratap Sahoo" 
@@ -161,7 +161,7 @@ const day2: ScheduleRow[] = [
   { time: "12:05 – 01:35 pm", type: "thesis", content: "Thesis Oral presentation: 2DTH01 to 2DTH17", colSpan: true },
   { time: "01:35 – 02:30 pm", type: "lunch", content: "Lunch", colSpan: true },
   { time: "02:30 – 03:10 pm", type: "plenary", content: "2DPL04 Prof. K. Pillai Vijayamohanan", colSpan: true },
-  { time: "03:10 – 03:30 pm", type: "industry", content: "2DIL03 Dr. Mangesh Mahajan (Sponsored talk by industry)", colSpan: true },
+  { time: "03:10 – 03:30 pm", type: "industry", content: "2DIL03 Dr. Mangesh Mahajan (sponsored talk by industry)", colSpan: true },
   { time: "03:30 – 03:50 pm", type: "industry", content: "2DIL04 Dr. Rohini Kitture (Sponsored talk by Wiley)", colSpan: true },
   { time: "03:50 – 04:05 pm", type: "tea", content: "Tea break", colSpan: true, highlight: true },
   {
@@ -210,7 +210,7 @@ const day3: ScheduleRow[] = [
     content: "",
     sessions: { 
       A: "2DIT36 Prof. Suman K. Pal", 
-      B: "2DIT37 Dr. Rajamani Raghunathan", 
+      B: "2DIT37 Prof. Surajit Saha",
       C: "2DIT38 Prof. Toshihiro Moriga", 
       D: "2DIT39 Prof. Abha Misra" 
     },
@@ -221,7 +221,7 @@ const day3: ScheduleRow[] = [
     content: "",
     sessions: { 
       A: "2DIT40 Prof. Rajendra Dhayal", 
-      B: "2DIT41 Dr. Murli Devraj", 
+      B: "2DIT41 Prof. Rajesh Kumar",
       C: "2DIT42 Prof. Pankaj Koinkar", 
       D: "2DIT43 Dr. K. D. M. Rao" 
     },
@@ -233,7 +233,7 @@ const day3: ScheduleRow[] = [
     sessions: { 
       A: "2DCT07 Dr. Anupma Thakur", 
       B: "2DCT08 Dr. Kingshuk Roy", 
-      C: "2DCT09 Dr. Manav Saxena", 
+      C: "2DCT09 Dr. Manav Saxena",
       D: "2DCT10 Dr. Varun Harbola" 
     },
   },
@@ -252,7 +252,7 @@ const day3: ScheduleRow[] = [
   { time: "12:05 – 12:45 pm", type: "plenary", content: "2DPL05 Prof. Yuan-Ron Ma", colSpan: true },
   { time: "12:45 – 01:25 pm", type: "plenary", content: "2DPL06 Prof. Umesh V. Waghmare", colSpan: true },
   { time: "01:25 – 02:30 pm", type: "lunch", content: "Lunch", colSpan: true },
-  { time: "02:00 – 03:30 pm", type: "poster", content: "Poster Presentation: 2DPA16 to 2DPA30, 2DPB09 to 2DPB16, 2DPC23 to 2DPC43, 2DPD15 to 2DPD28", colSpan: true },
+  { time: "02:00 – 03:30 pm", type: "poster", content: "Poster Presentation: 2DPA16 to 2DPA31, 2DPB09 to 2DPB16, 2DPC23 to 2DPC43, 2DPD15 to 2DPD28", colSpan: true },
   { time: "03:45 pm onwards", type: "valedictory", content: "Valedictory Function", colSpan: true },
 ]
 
@@ -449,7 +449,7 @@ export default function SchedulePage() {
           </div>
           
           <a 
-            href="/Final_Schedule_2DMTG_2026.pdf" 
+            href="/Final_Schedule_2DMTG.pdf" 
             download 
             className="flex items-center gap-2 bg-[color:var(--primary)] hover:opacity-90 text-white px-5 py-3 rounded-xl font-bold transition-all shadow-lg"
           >
