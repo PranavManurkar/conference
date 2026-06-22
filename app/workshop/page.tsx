@@ -602,7 +602,7 @@ export default function WorkshopPage() {
             Each participant may register for only one workshop.
           </div>
           <div className="mt-2 inline-flex items-center rounded-full bg-[color:var(--primary)] px-4 py-2 text-lg text-white">
-            Last date of registration for any workshop: <span className="font-bold text-lg"> 15 June 2026</span>.
+            Last date of registration for any workshop: <span className="font-bold text-lg"> 20 June 2026</span>.
           </div>
         </div>
 
