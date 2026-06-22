@@ -553,7 +553,7 @@ const workshops: WorkshopCard[] = [
     time: "09:30 AM – 06:00 PM",
     venue: "Morning: IIT Indore · Afternoon: RRCAT (Indus-2)",
     partners: "RRCAT / IIT Indore",
-    status: "open",
+    status: "closed",
     description:
       "Morning lectures on XRD, XANES/EXAFS and XPS at IIT Indore, followed by travel to RRCAT (Indus-2) for hands-on beamline demonstrations and discussions.",
     hasAgenda: true,
