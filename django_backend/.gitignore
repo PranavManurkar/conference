@@ -14,7 +14,7 @@ db_local.sqlite3
 logs/
 exports/
 media/
-static/
+
 
 # Generated certificate outputs (never commit)
 certificate_previews/
