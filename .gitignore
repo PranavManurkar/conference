@@ -12,6 +12,7 @@ credentials.json
 django_backend/logs/
 django_backend/exports/
 django_backend/media/
+django_backend/certificates/
 
 # Python
 __pycache__/
@@ -36,6 +37,7 @@ ENV/
 # Development and Test Scripts
 django_backend/diag.py
 django_backend/test_sheets_connection.py
+scripts/
 
 # Temporary local test scripts
 test_emails.py

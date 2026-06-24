@@ -12,6 +12,8 @@ from .views import (
     WorkshopRegistrationCreateView,
     WorkshopRegistrationLookupView,
     WorkshopTransactionSubmitView,
+    MyCertificateView,
+    ConferenceInfoView,
 )
 
 router = DefaultRouter()
@@ -28,4 +30,6 @@ urlpatterns = [
     path("auth/password-reset/", PasswordResetRequestView.as_view(), name="password-reset"),
     path("auth/password-reset/confirm/", PasswordResetConfirmView.as_view(), name="password-reset-confirm"),
     path("auth/logout/", LogoutView.as_view(), name="auth-logout"),
+    path("certificates/my-certificate/", MyCertificateView.as_view(), name="my-certificate"),
+    path("conference-info/", ConferenceInfoView.as_view(), name="conference-info"),
 ]

@@ -753,3 +753,203 @@ class BackfillStdoutOutcomesTest(TestCase):
         self.assertIn("Failed", output)
         # The failed ID (3) should appear in the output line.
         self.assertIn("3", output)
+
+
+# ---------------------------------------------------------------------------
+# 11. Certificate endpoint tests
+# ---------------------------------------------------------------------------
+
+import datetime as _dt
+
+from django.contrib.auth import get_user_model
+from django.test import override_settings
+from django.urls import reverse
+from rest_framework.test import APIClient
+from rest_framework_simplejwt.tokens import RefreshToken as _RefreshToken
+
+from core.models import Registration as _Registration
+
+_User = get_user_model()
+
+
+def _make_user(email, password="testpass123"):
+    return _User.objects.create_user(username=email, email=email, password=password)
+
+
+def _auth_client(user):
+    client = APIClient()
+    refresh = _RefreshToken.for_user(user)
+    client.credentials(HTTP_AUTHORIZATION=f"Bearer {str(refresh.access_token)}")
+    return client
+
+
+def _make_accepted_reg(user, name="Test User", institute="Test Institute"):
+    return _Registration.objects.create(
+        user=user,
+        full_name=name,
+        email=user.email,
+        institution_organization=institute,
+        status="Accepted",
+    )
+
+
+import zoneinfo as _zi
+_IST = _zi.ZoneInfo("Asia/Kolkata")
+_PAST_DT   = _dt.datetime(2000, 1, 1, 18, 0, 0, tzinfo=_IST)   # well in the past
+_FUTURE_DT = _dt.datetime(2099, 12, 31, 18, 0, 0, tzinfo=_IST)  # well in the future
+_CERT_URL = "/api/certificates/my-certificate/"
+_INFO_URL = "/api/conference-info/"
+
+# Patch generate_certificate so tests never need the template image on disk.
+_FAKE_PNG = b'\x89PNG\r\n\x1a\n' + b'\x00' * 100  # minimal fake PNG bytes
+
+
+class CertificateSecurityTest(TestCase):
+    """
+    TEST A — only the authenticated user's own certificate is returned.
+    The endpoint has NO identity parameter; identity comes entirely from JWT.
+    """
+
+    def setUp(self):
+        self.user_a = _make_user("usera@test.com")
+        self.user_b = _make_user("userb@test.com")
+        _make_accepted_reg(self.user_a, name="User Alpha")
+        _make_accepted_reg(self.user_b, name="User Beta")
+
+    @override_settings(CERTIFICATE_AVAILABLE_FROM=_PAST_DT)
+    @patch("core.views.generate_certificate", return_value=_FAKE_PNG)
+    def test_returns_own_certificate(self, _mock_gen):
+        client = _auth_client(self.user_a)
+        response = client.get(_CERT_URL)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "image/png")
+        disposition = response["Content-Disposition"]
+        self.assertIn("User_Alpha", disposition)
+        self.assertNotIn("User_Beta", disposition)
+
+    @override_settings(CERTIFICATE_AVAILABLE_FROM=_PAST_DT)
+    def test_no_identity_param_exists(self):
+        """There is no registration_id or email param — confirm the URL pattern rejects them."""
+        client = _auth_client(self.user_a)
+        # Attempting to pass an id param should simply be ignored (returns user_a's cert)
+        with patch("core.views.generate_certificate", return_value=_FAKE_PNG):
+            response = client.get(_CERT_URL + "?registration_id=999")
+        self.assertEqual(response.status_code, 200)
+
+
+class CertificateStatusGateTest(TestCase):
+    """TEST B — only Accepted participants can download."""
+
+    def setUp(self):
+        self.user = _make_user("statusgate@test.com")
+        _Registration.objects.create(
+            user=self.user,
+            full_name="Status Gate",
+            email=self.user.email,
+            status="Under Process",
+        )
+
+    @override_settings(CERTIFICATE_AVAILABLE_FROM=_PAST_DT)
+    def test_under_process_gets_403(self):
+        client = _auth_client(self.user)
+        response = client.get(_CERT_URL)
+        self.assertEqual(response.status_code, 403)
+
+
+class CertificateDateGateTest(TestCase):
+    """TEST C — datetime gate enforcement (6 PM IST on June 26 2026)."""
+
+    def setUp(self):
+        self.user = _make_user("dategate@test.com")
+        _make_accepted_reg(self.user, name="Date Gate User")
+
+    @patch("core.views.timezone.now")
+    def test_before_release_time_returns_403(self, mock_now):
+        # now() returns a moment before CERTIFICATE_AVAILABLE_FROM
+        mock_now.return_value = _dt.datetime(2026, 6, 26, 12, 0, 0, tzinfo=_IST)
+        client = _auth_client(self.user)
+        response = client.get(_CERT_URL)
+        self.assertEqual(response.status_code, 403)
+        self.assertIn("26 June 2026", response.json()["detail"])
+
+    @patch("core.views.timezone.now")
+    @patch("core.views.generate_certificate", return_value=_FAKE_PNG)
+    def test_after_release_time_returns_200(self, _mock_gen, mock_now):
+        # now() returns a moment after CERTIFICATE_AVAILABLE_FROM
+        mock_now.return_value = _dt.datetime(2026, 6, 26, 19, 0, 0, tzinfo=_IST)
+        client = _auth_client(self.user)
+        response = client.get(_CERT_URL)
+        self.assertEqual(response.status_code, 200)
+
+
+class CertificateAuthRequiredTest(TestCase):
+    """TEST D — unauthenticated request gets 401."""
+
+    def test_unauthenticated_returns_401(self):
+        client = APIClient()
+        response = client.get(_CERT_URL)
+        self.assertEqual(response.status_code, 401)
+
+
+class CertificateNoRegistrationTest(TestCase):
+    """TEST E — authenticated user with no Registration record gets 404."""
+
+    def setUp(self):
+        self.user = _make_user("noreg@test.com")
+
+    def test_no_registration_returns_404(self):
+        client = _auth_client(self.user)
+        response = client.get(_CERT_URL)
+        self.assertEqual(response.status_code, 404)
+
+
+class CertificateOverrideTest(TestCase):
+    """
+    TEST G — certificate_override=True bypasses both the status gate and
+    the datetime gate, regardless of status or current time.
+    """
+
+    def setUp(self):
+        self.user = _make_user("override@test.com")
+        # "Under Process" status + future datetime — both gates would normally block.
+        _Registration.objects.create(
+            user=self.user,
+            full_name="Override User",
+            email=self.user.email,
+            status="Under Process",
+            certificate_override=True,
+        )
+
+    @patch("core.views.generate_certificate", return_value=_FAKE_PNG)
+    def test_certificate_override_bypasses_gates(self, _mock_gen):
+        """
+        Override=True on an Under Process registration before CERTIFICATE_AVAILABLE_FROM
+        must return HTTP 200, not 403.
+        """
+        client = _auth_client(self.user)
+        # Use the far-future datetime so without override this would definitely be blocked.
+        with override_settings(CERTIFICATE_AVAILABLE_FROM=_FUTURE_DT):
+            response = client.get(_CERT_URL)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "image/png")
+
+
+class ConferenceInfoPublicTest(TestCase):
+    """TEST F — public conference-info endpoint returns datetime fields."""
+
+    @override_settings(
+        CERTIFICATE_AVAILABLE_FROM=_dt.datetime(2026, 6, 26, 18, 0, 0, tzinfo=_IST)
+    )
+    def test_conference_info_unauthenticated(self):
+        client = APIClient()
+        response = client.get(_INFO_URL)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("certificate_available_from", data)
+        self.assertIn("certificate_available_from_display", data)
+        # ISO field must include the date and timezone offset
+        self.assertIn("2026-06-26", data["certificate_available_from"])
+        self.assertIn("+05:30", data["certificate_available_from"])
+        # Human-readable field
+        self.assertIn("26 June 2026", data["certificate_available_from_display"])
+        self.assertIn("6:00 PM IST", data["certificate_available_from_display"])

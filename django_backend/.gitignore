@@ -8,12 +8,17 @@ __pycache__/
 *.py[cod]
 *.pyc
 db.sqlite3
+db_local.sqlite3
 
 # Runtime artifacts
 logs/
 exports/
 media/
 static/
+
+# Generated certificate outputs (never commit)
+certificate_previews/
+certificates/
 
 # Local dev overrides
 local_settings.py

@@ -67,6 +67,13 @@ class Registration(models.Model):
     beverage_choice = models.CharField(max_length=50, blank=True, default="")
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default=STATUS_UNDER)
     admin_notes = models.TextField(null=True, blank=True)
+    certificate_override = models.BooleanField(
+        default=False,
+        help_text=(
+            "⚠️ TESTING ONLY — set to True only for test registrations. "
+            "Always reset to False after testing. Never enable for real participants."
+        ),
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

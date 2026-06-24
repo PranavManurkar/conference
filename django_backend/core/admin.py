@@ -22,11 +22,40 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display = ("full_name", "email", "status", "created_at")
-    list_filter = ("status", "participant_region", "delegate_type",'accompanying_persons')
+    list_display = ("full_name", "email", "status", "certificate_override", "created_at")
+    list_filter = ("status", "certificate_override", "participant_region", "delegate_type", "accompanying_persons")
     search_fields = ("full_name", "email", "transaction_id", "cmt_id", "abstract_id")
     readonly_fields = ("created_at",)
     actions = ["mark_accepted", "mark_rejected", "mark_under_process"]
+    fieldsets = (
+        (None, {
+            "fields": (
+                "user", "full_name", "email", "phone", "institution_organization",
+                "designation", "country", "delegate_type", "registration_period",
+                "participant_region", "food_preference", "beverage_choice",
+                "is_presenter", "abstract_id", "cmt_id", "abstract_title",
+                "presentation_type", "oral_presentation", "poster_presentation",
+                "accompanying_persons",
+            ),
+        }),
+        ("Payment", {
+            "fields": (
+                "payment_amount", "transaction_id", "transaction_screenshot", "payment_date",
+            ),
+        }),
+        ("Status", {
+            "fields": ("status", "admin_notes", "created_at"),
+        }),
+        ("⚠️ Testing Override", {
+            "classes": ("collapse",),
+            "fields": ("certificate_override",),
+            "description": (
+                "⚠️ TESTING ONLY — set certificate_override=True to bypass ALL certificate gates "
+                "(status + datetime) for this registration. Always reset to False after testing. "
+                "Never enable for real participants."
+            ),
+        }),
+    )
 
     def save_model(self, request, obj, form, change):
         previous_status = None

@@ -309,9 +309,110 @@ class LogoutView(APIView):
             # token could already be blacklisted/invalid — still clear client tokens
             return Response({"detail": "Invalid token or already logged out"}, status=status.HTTP_400_BAD_REQUEST)
         
+import os
+import re
+
+from django.http import FileResponse
+from django.utils import timezone
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.core.cache import cache
+
+from core.utils.certificate_utils import generate_certificate
+
+
+class MyCertificateView(APIView):
+    """
+    GET /api/certificates/my-certificate/
+
+    DO NOT add any identity-determining parameter to this endpoint.
+    Identity is resolved exclusively from request.user via JWT.
+    Adding a registration_id or email param would allow any authenticated
+    user to fetch any other user's certificate.
+
+    # LOCAL TESTING STEPS (before conference day):
+    # 1. Set CERTIFICATE_AVAILABLE_FROM_OVERRIDE=2026-01-01T00:00:00+05:30 in local .env
+    # 2. Create a test user via Django admin, set their Registration.status = "Accepted"
+    # 3. Log in as that test user on the local frontend (npm run dev)
+    # 4. Navigate to the dashboard — confirm certificate card appears at the bottom
+    # 5. Click "Download Certificate" — confirm PNG downloads with correct name/institute
+    # 6. Log in as a DIFFERENT user (non-Accepted status) — confirm certificate card is hidden
+    # 7. Test the API directly:
+    #    curl -H "Authorization: Bearer <jwt_token>" http://localhost:8000/api/certificates/my-certificate/ --output test_cert.png
+    #    open test_cert.png   (Mac) or xdg-open test_cert.png (Linux)
+    # 8. Confirm test_cert.png shows the correct name/institute for the logged-in user
+    # 9. Before deploying: remove CERTIFICATE_AVAILABLE_FROM_OVERRIDE from .env (or just don't add it to production .env)
+    # 10. Run: python3 manage.py generate_all_certificates --dry-run  ← should list all Accepted registrations
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        # 1. Resolve registration
+        registration = Registration.objects.filter(user=request.user).first()
+        if registration is None:
+            return Response(
+                {"detail": "No registration found for this account."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # 2. Status gate — bypassed when certificate_override is True
+        if registration.status != "Accepted" and not registration.certificate_override:
+            return Response(
+                {"detail": "Certificate is only available for accepted participants."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        # 3. Datetime gate — bypassed when certificate_override is True
+        if not registration.certificate_override:
+            now = timezone.now()
+            if now < settings.CERTIFICATE_AVAILABLE_FROM:
+                ist_time = settings.CERTIFICATE_AVAILABLE_FROM.strftime("%-d %B %Y at %-I:%M %p IST")
+                return Response(
+                    {"detail": f"Certificates will be available after the conference concludes on {ist_time}."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
+        # 4. Resolve field values
+        name      = registration.full_name
+        institute = registration.institution_organization or "N/A"
+        mode      = registration.presentation_type or "N/A"
+        title     = registration.abstract_title or "N/A"
+
+        # 5. Cache check + generation.
+        # Cache is permanent — to regenerate (e.g. after a name correction),
+        # delete the file from django_backend/certificates/ and the next
+        # request will regenerate it automatically.
+        cache_path = settings.BASE_DIR / "certificates" / f"{registration.id}.png"
+        if not cache_path.exists():
+            png_bytes = generate_certificate(name, institute, mode, title)
+            cache_path.parent.mkdir(parents=True, exist_ok=True)
+            cache_path.write_bytes(png_bytes)
+
+        # 6. Serve the file
+        safe_name = re.sub(r'[^\w\s-]', '', name).strip().replace(' ', '_')
+        filename  = f"{safe_name}_certificate.png"
+        response  = FileResponse(
+            open(cache_path, 'rb'),
+            content_type='image/png',
+        )
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
+
+
+class ConferenceInfoView(APIView):
+    """GET /api/conference-info/ — public, no auth required."""
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        avail = settings.CERTIFICATE_AVAILABLE_FROM
+        return Response(
+            {
+                "certificate_available_from": avail.isoformat(),
+                "certificate_available_from_display": avail.strftime("%-d %B %Y at %-I:%M %p IST"),
+            },
+            status=status.HTTP_200_OK,
+        )
+
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
