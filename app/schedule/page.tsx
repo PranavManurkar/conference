@@ -92,8 +92,8 @@ const day1: ScheduleRow[] = [
     },
   },
   { time: "01:15 – 02:15 pm", type: "lunch", content: "Lunch", colSpan: true },
-  { time: "Chairperson", type: "chairperson", content: "Prof. Sandip Ghosh", colSpan: true },
-  { time: "02:15 – 02:55 pm", type: "plenary", content: "2DPL02 Prof. J. H. Kim", colSpan: true },
+  { time: "Chairperson", type: "chairperson", content: "", sessions:{A: "Prof. Sandip Ghosh"} },
+  { time: "02:15 – 02:55 pm", type: "plenary", content: "", sessions:{A:"2DPL02 Prof. J. H. Kim"} },
   { time: "02:55 – 03:00 pm", type: "break", content: "Break", colSpan: true },
   {
     time: "Chairpersons",
