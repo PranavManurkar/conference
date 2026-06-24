@@ -23,7 +23,7 @@ export default function Hero() {
 
   const carouselImages = [
     { src: "/poster1.png", alt: "Conference banner 1" },
-    { src: "/poster2.jpeg", alt: "Conference banner 1" },
+    { src: "/poster2.jpeg", alt: "Conference banner 2" },
   ]
 
   useEffect(() => {
@@ -40,6 +40,16 @@ export default function Hero() {
     const link = document.createElement("a")
     link.href = "/Brochure for 2DMatTech-new.pdf"
     link.download = "Brochure-2DMatTech-2026.pdf"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
+  // New function for downloading the Souvenir PDF
+  const handleDownloadSouvenir = () => {
+    const link = document.createElement("a")
+    link.href = "/Abstract_book.pdf" // Ensure this matches your file in the public folder
+    link.download = "Abstract_book.pdf"
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -161,7 +171,6 @@ export default function Hero() {
                   </div>
                 </div>
 
-
               </div>
 
               {/* Bottom primary rule */}
@@ -239,7 +248,8 @@ export default function Hero() {
 
         {/* ── CTAs + tagline ─────────────────────────────────────────── */}
         <div className="mt-12 mb-3 flex flex-col items-center justify-center gap-6">
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+          {/* Added flex-wrap here so the 3 buttons don't crush each other on mobile */}
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
             <Link href="/registration" passHref legacyBehavior>
               <button
                 type="button"
@@ -254,6 +264,14 @@ export default function Hero() {
               className="border-2 border-[color:var(--primary)] text-[color:var(--primary)] hover:bg-[color:var(--primary)] hover:text-white font-bold text-lg px-6 py-3 rounded-lg transition-all duration-150 hover:shadow-lg"
             >
               Download Brochure
+            </button>
+            {/* New Souvenir Button */}
+            <button
+              type="button"
+              onClick={handleDownloadSouvenir}
+              className="border-2 border-[color:var(--primary)] text-[color:var(--primary)] hover:bg-[color:var(--primary)] hover:text-white font-bold text-lg px-6 py-3 rounded-lg transition-all duration-150 hover:shadow-lg"
+            >
+              Download Abstract book / Souvenir
             </button>
           </div>
 
