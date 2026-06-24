@@ -62,11 +62,11 @@ const day1: ScheduleRow[] = [
     time: "Chairpersons",
     type: "chairperson",
     content: "",
-    sessions: { 
-      A: "Prof. A. K Raychaudhuri\nProf. Rajesh Kumar", 
-      B: "Prof. Priya Mahadevan\nDr. Venkata Vamsi Koruprolu", 
-      C: "Prof. Somnath C. Roy\nDr. Archana Lakhani", 
-      D: "Dr. Rajeev Rawat\nProf. Pankaj Koinkar" 
+    sessions: {
+      A: "Prof. A. K Raychaudhuri\nProf. Rajesh Kumar",
+      B: "Prof. Priya Mahadevan\nDr. Venkata Vamsi Koruprolu",
+      C: "Prof. Somnath C. Roy\nDr. Archana Lakhani",
+      D: "Dr. Rajeev Rawat\nProf. Pankaj Koinkar",
     },
   },
   {
@@ -77,7 +77,7 @@ const day1: ScheduleRow[] = [
       A: "2DIT01 Prof. Sandip Ghosh",
       B: "2DIT02 Dr. Rajamani Raghunathan",
       C: "2DIT03 Prof. Soon Hyung Kang",
-      D: "2DIT04 Prof. Sumeet Walia"
+      D: "2DIT04 Prof. Sumeet Walia",
     },
   },
   {
@@ -88,7 +88,7 @@ const day1: ScheduleRow[] = [
       A: "2DIT05 Prof. Gopinadhan Kalon",
       B: "2DIT06 Prof. Pavan Nukala",
       C: "2DIT07 Dr. Sandip Patil",
-      D: "2DIT08 Dr. Vikas Thakare"
+      D: "2DIT08 Dr. Vikas Thakare",
     },
   },
   { time: "01:15 – 02:15 pm", type: "lunch", content: "Lunch", colSpan: true },
@@ -99,33 +99,33 @@ const day1: ScheduleRow[] = [
     time: "Chairpersons",
     type: "chairperson",
     content: "",
-    sessions: { 
-      A: "Prof. Sandip Ghosh\nDr. Srinibas Satapathy", 
-      B: "Prof. Pavan Nukala\nProf. Biswarup Pathak", 
-      C: "Dr. Anjana Dogra\nDr. Mukul Gupta", 
-      D: "Dr. Vikas Thakare\nProf. Prashant Kodgire" 
+    sessions: {
+      A: "Prof. Sandip Ghosh\nDr. Srinibas Satapathy",
+      B: "Prof. Pavan Nukala\nProf. Biswarup Pathak",
+      C: "Dr. Anjana Dogra\nDr. Mukul Gupta",
+      D: "Dr. Vikas Thakare\nProf. Prashant Kodgire",
     },
   },
   {
     time: "03:00 – 03:30 pm",
     type: "invited",
     content: "",
-    sessions: { 
-      A: "2DIT09 Prof. Chandra S. Sharma", 
-      B: "2DIT10 Prof. Priya Mahadevan", 
-      C: "2DIT11 Prof. Somnath C. Roy", 
-      D: "2DIT12 Dr. Dhiraj Bhatia" 
+    sessions: {
+      A: "2DIT09 Prof. Chandra S. Sharma",
+      B: "2DIT10 Prof. Priya Mahadevan",
+      C: "2DIT11 Prof. Somnath C. Roy",
+      D: "2DIT12 Dr. Dhiraj Bhatia",
     },
   },
   {
     time: "03:30 – 04:00 pm",
     type: "invited",
     content: "",
-    sessions: { 
-      A: "2DIT13 Dr. Varun Natu", 
-      B: "2DIT 14 Prof. Samaresh Das",
-      C: "2DIT15 Prof. Ashish Mishra", 
-      D: "2DIT16 Dr. Nanasaheb. D. Thorat" 
+    sessions: {
+      A: "2DIT13 Dr. Varun Natu",
+      B: "2DIT14 Prof. Samaresh Das",
+      C: "2DIT15 Prof. Ashish Mishra",
+      D: "2DIT16 Dr. Nanasaheb. D. Thorat",
     },
   },
   { time: "04:00 – 04:15 pm", type: "tea", content: "Tea break", colSpan: true, highlight: true },
@@ -133,36 +133,43 @@ const day1: ScheduleRow[] = [
     time: "Chairpersons",
     type: "chairperson",
     content: "",
-    sessions: { 
-      A: "Prof. Gopinadhan Kalon\nProf. Ashish Mishra", 
-      B: "Prof. Soon Hyung Kang\nDr. Vidyadhar Singh", 
-      C: "Dr. Himal Bhatt\nDr. J. P. Yadav", 
-      D: "Prof. Sumeet Walia\nDr. Rohini Kitture" 
+    sessions: {
+      A: "Prof. Gopinadhan Kalon\nProf. Ashish Mishra",
+      B: "Dr. Himal Bhatt\nDr. J. P. Yadav",
+      C: "Prof. Soon Hyung Kang\nDr. Vidyadhar Singh",
+      D: "Prof. Sumeet Walia\nDr. Rohini Kitture",
     },
   },
   {
     time: "04:15 – 05:45 pm",
     type: "oral",
     content: "",
-    sessions: { 
-      A: "2DOA01, 2DOA02, 2DOA03,\n2DOA04, 2DOA05, 2DOA06,\n2DOA07, 2DOA08, 2DOA09", 
-      B: "2DOB01, 2DOB02, 2DOB03,\n2DOB04, 2DOB05, 2DOB06,\n2DOB07, 2DOA13, 2DOC16", 
-      C: "2DOC13, 2DOC01, 2DOC02,\n2DOC03, 2DOC04, 2DOC05,\n2DOC06, 2DOC07, 2DOC14", 
-      D: "2DOD01, 2DOD02, 2DOD03,\n2DOD04, 2DOD05, 2DOD06,\n2DOD07, 2DOD08, 2DOD09" 
+    sessions: {
+      A: "2DOA01, 2DOA02, 2DOA03,\n2DOA04, 2DOA05, 2DOA06,\n2DOA07, 2DOA08, 2DOA09",
+      B: "2DOB01, 2DOB02, 2DOB03,\n2DOB04, 2DOB05, 2DOB06,\n2DOB07, 2DOA13, 2DOC16",
+      C: "2DOC13, 2DOC01, 2DOC02,\n2DOC03, 2DOC04, 2DOC05,\n2DOC06, 2DOC07, 2DOC14",
+      D: "2DOD01, 2DOD02, 2DOD03,\n2DOD04, 2DOD05, 2DOD06,\n2DOD07, 2DOD08, 2DOD09",
     },
   },
   {
+    // FIX: PDF shows A=IT17, B=IT18, C=IT19, D=CT01+CT02
+    // Previous code wrongly merged IT18+IT19 into B and left C empty
     time: "05:45 – 06:15 pm",
     type: "invited",
     content: "",
-    sessions: { 
-      A: "2DIT17 Prof. Babak Anasori", 
-      B: "2DIT18 Prof. Anirudha V. Sumant\n2DIT19 Prof. Vilas Pol", 
-      C: "", 
-      D: "2DCT01 Dr. Sarika Verma\n2DCT02 Dr. Tanmoy Paul" 
+    sessions: {
+      A: "2DIT17 Prof. Babak Anasori",
+      B: "2DIT18 Prof. Anirudha V. Sumant",
+      C: "2DIT19 Prof. Vilas Pol",
+      D: "2DCT01 Dr. Sarika Verma\n2DCT02 Dr. Tanmoy Paul",
     },
   },
-  { time: "Till Dinner", type: "thesis", content: "Examiners: (Prof. S. B. Ogale / Prof. A. K Raychaudhuri / Prof. J. H. Kim / Prof. Yuan-Ron Ma / Prof. K. Pillai Vijayamohanan / Dr. Sunil Kumar)\n\nThesis Poster Presentation: 2DTH01 to 2DTH17", colSpan: true },
+  {
+    time: "Till Dinner",
+    type: "thesis",
+    content: "Examiners: (Prof. S. B. Ogale / Prof. A. K Raychaudhuri / Prof. J. H. Kim / Prof. Yuan-Ron Ma / Prof. K. Pillai Vijayamohanan / Dr. Sunil Kumar)\n\nThesis Poster Presentation: 2DTH01 to 2DTH17",
+    colSpan: true,
+  },
   { time: "07:30 pm onwards", type: "dinner", content: "Dinner", colSpan: true },
 ]
 
@@ -174,14 +181,19 @@ const day2: ScheduleRow[] = [
   { time: "10:30 – 10:50 am", type: "industry", content: "2DIL02 Dr. B. Karthik (Thermo Scientific, Industry Talk)", colSpan: true },
   { time: "10:50 – 11:05 am", type: "tea", content: "Tea Break", colSpan: true, highlight: true },
   {
+    // FIX: PDF order is A=Dr. Manav Saxena/Dr. Umesh A. Kshirsagar,
+    // B=Prof. Devendra Deshmukh/Dr. Dilip Gupta,
+    // C=Dr. Tarun Sharma/Prof. Parasharam M. Shirage,
+    // D=Prof. Pavan Kankar/Dr. S. D. Koushik
+    // Previous code had A and D swapped
     time: "Chairpersons",
     type: "chairperson",
     content: "",
-    sessions: { 
-      A: "Prof. Pavan Kankar\nDr. S. D. Koushik", 
-      B: "Prof. Devendra Deshmukh\nDr. Dilip Gupta", 
-      C: "Dr. Tarun Sharma\nProf. Parasharam M. Shirage", 
-      D: "Dr. Manav Saxena\nDr. Umesh A. Kshirsagar" 
+    sessions: {
+      A: "Dr. Manav Saxena\nDr. Umesh A. Kshirsagar",
+      B: "Prof. Devendra Deshmukh\nDr. Dilip Gupta",
+      C: "Dr. Tarun Sharma\nProf. Parasharam M. Shirage",
+      D: "Prof. Pavan Kankar\nDr. S. D. Koushik",
     },
   },
   {
@@ -191,22 +203,27 @@ const day2: ScheduleRow[] = [
     sessions: {
       A: "2DIT20 Dr. Sanjoy Mahatha",
       B: "2DIT21 Dr. Anjana Dogra",
-      C: "2DIT22 Prof. Rajendra Dhaka", 
-      D: "2DIT23 Prof. Pratap Sahoo" 
+      C: "2DIT22 Prof. Rajendra Dhaka",
+      D: "2DIT23 Prof. Pratap Sahoo",
     },
   },
   {
     time: "11:35 – 12:05 pm",
     type: "invited",
     content: "",
-    sessions: { 
-      A: "2DIT24 Dr. Tanushree Choudhury", 
-      B: "2DIT25 Prof. B. Ranjit K. Nanda", 
-      C: "2DIT26 Dr. N. Sriram Gopal", 
-      D: "2DIT27 Prof. Saket Asthana" 
+    sessions: {
+      A: "2DIT24 Dr. Tanushree Choudhury",
+      B: "2DIT25 Prof. B. Ranjit K. Nanda",
+      C: "2DIT26 Dr. N. Sriram Gopal",
+      D: "2DIT27 Prof. Saket Asthana",
     },
   },
-  { time: "12:05 – 01:35 pm", type: "thesis", content: "Examiners: (Prof. S. B. Ogale / Prof. A. K Raychaudhuri / Prof. J. H. Kim / Prof. Yuan-Ron Ma / Prof. K. Pillai Vijayamohanan / Dr. Sunil Kumar)\n\nThesis Oral presentation: 2DTH01 to 2DTH17", colSpan: true },
+  {
+    time: "12:05 – 01:35 pm",
+    type: "thesis",
+    content: "Examiners: (Prof. S. B. Ogale / Prof. A. K Raychaudhuri / Prof. J. H. Kim / Prof. Yuan-Ron Ma / Prof. K. Pillai Vijayamohanan / Dr. Sunil Kumar)\n\nThesis Oral presentation: 2DTH01 to 2DTH17",
+    colSpan: true,
+  },
   { time: "01:35 – 02:30 pm", type: "lunch", content: "Lunch", colSpan: true },
   { time: "Chairperson", type: "chairperson", content: "Prof. Yuan-Ron Ma", colSpan: true },
   { time: "02:30 – 03:10 pm", type: "plenary", content: "2DPL04 Prof. K. Pillai Vijayamohanan", colSpan: true },
@@ -214,51 +231,56 @@ const day2: ScheduleRow[] = [
   { time: "03:30 – 03:50 pm", type: "industry", content: "2DIL04 Dr. Rohini Kitture (Sponsored talk by Wiley)", colSpan: true },
   { time: "03:50 – 04:05 pm", type: "tea", content: "Tea break", colSpan: true, highlight: true },
   {
+    // FIX: PDF order is A=Prof. Saket Asthana/Dr. Abhinav Raghuvanshi,
+    // B=Prof. B. Ranjit K. Nanda/Prof. Krushna Mavani,
+    // C=Prof. Rajendra Dhaka/Prof. M. H. Modi,
+    // D=Prof. Pratap Sahoo/Prof. Preeti Bhobe
+    // Previous code had all four scrambled
     time: "Chairpersons",
     type: "chairperson",
     content: "",
-    sessions: { 
-      A: "Prof. Rajendra Dhaka\nProf. M. H. Modi", 
-      B: "Prof. Preeti Bhobe\nProf. Pratap Sahoo", 
-      C: "Prof. Saket Asthana\nDr. Abhinav Raghuvanshi", 
-      D: "Prof. B. Ranjit K. Nanda\nProf. Krushna Mavani" 
+    sessions: {
+      A: "Prof. Saket Asthana\nDr. Abhinav Raghuvanshi",
+      B: "Prof. B. Ranjit K. Nanda\nProf. Krushna Mavani",
+      C: "Prof. Rajendra Dhaka\nProf. M. H. Modi",
+      D: "Prof. Pratap Sahoo\nProf. Preeti Bhobe",
     },
   },
   {
     time: "04:05 – 04:35 pm",
     type: "invited",
     content: "",
-    sessions: { 
-      A: "2DIT28 Prof. Dhanvir S. Rana", 
-      B: "2DIT29 Dr. C. Kamal", 
-      C: "2DIT30 Dr. Ashutosh K Singh", 
-      D: "2DIT31 Dr. Sanjay K Rai" 
+    sessions: {
+      A: "2DIT28 Prof. Dhanvir S. Rana",
+      B: "2DIT29 Dr. C. Kamal",
+      C: "2DIT30 Dr. Ashutosh K Singh",
+      D: "2DIT31 Dr. Sanjay K Rai",
     },
   },
   {
     time: "04:35 – 05:05 pm",
     type: "invited",
     content: "",
-    sessions: { 
-      A: "2DIT32 Dr. Himal Bhatt", 
-      B: "2DIT33 Prof. Biswarup Pathak", 
-      C: "2DIT34 Dr. Nishad Deshpande", 
-      D: "2DIT35 Dr. S. D. Koushik" 
+    sessions: {
+      A: "2DIT32 Dr. Himal Bhatt",
+      B: "2DIT33 Prof. Biswarup Pathak",
+      C: "2DIT34 Dr. Nishad Deshpande",
+      D: "2DIT35 Dr. S. D. Koushik",
     },
   },
   {
     time: "05:05 – 05:20 pm",
     type: "contributary",
     content: "",
-    sessions: { 
-      A: "2DCT03 Dr. Vidyadhar Singh", 
-      B: "2DCT04 Dr. Manoj K. Gupta", 
-      C: "2DCT05 Dr. J. P. Yadav", 
-      D: "2DCT06 Dr. Harishchandra Singh" 
+    sessions: {
+      A: "2DCT03 Dr. Vidyadhar Singh",
+      B: "2DCT04 Dr. Manoj K. Gupta",
+      C: "2DCT05 Dr. J. P. Yadav",
+      D: "2DCT06 Dr. Harishchandra Singh",
     },
   },
   { time: "05:20 – 06:45 pm", type: "poster", content: "Poster Presentation: 2DPA01 to 2DPA15, 2DPB01 to 2DPB08, 2DPC01 to 2DPC22, 2DPD01 to 2DPD14", colSpan: true },
-  { time: "06:45 – 07:45 pm", type: "travel", content: "Travel", colSpan: true },
+  { time: "06:45 – 07:45 pm", type: "travel", content: "Travel toward Gala dinner", colSpan: true },
   { time: "08:00 pm onwards", type: "dinner", content: "Gala Dinner", colSpan: true, highlight: true },
 ]
 
@@ -268,66 +290,66 @@ const day3: ScheduleRow[] = [
     time: "Chairpersons",
     type: "chairperson",
     content: "",
-    sessions: { 
-      A: "Dr. S. Majumdar\nProf. I. A. Palani", 
-      B: "Prof. Dhirendra Kumar Rai\nDr. C. Kamal", 
-      C: "Dr. Rajib Batabyal\nDr. Himanshu Srivastava", 
-      D: "Dr. Ravindra Makde\nDr. Dinesh Shukla" 
+    sessions: {
+      A: "Dr. S. Majumdar\nProf. I. A. Palani",
+      B: "Prof. Dhirendra Kumar Rai\nDr. C. Kamal",
+      C: "Dr. Rajib Batabyal\nDr. Himanshu Srivastava",
+      D: "Dr. Ravindra Makde\nDr. Dinesh Shukla",
     },
   },
   {
     time: "09:30 – 10:00 am",
     type: "invited",
     content: "",
-    sessions: { 
+    sessions: {
       A: "2DIT36 Prof. Suman K. Pal",
       B: "2DIT37 Prof. Surajit Saha",
-      C: "2DIT38 Prof. Toshihiro Moriga", 
-      D: "2DIT39 Prof. Abha Misra" 
+      C: "2DIT38 Prof. Toshihiro Moriga",
+      D: "2DIT39 Prof. Abha Misra",
     },
   },
   {
     time: "10:00 – 10:30 am",
     type: "invited",
     content: "",
-    sessions: { 
+    sessions: {
       A: "2DIT40 Prof. Rajendra Dhayal",
       B: "2DIT41 Prof. Rajesh Kumar",
-      C: "2DIT42 Prof. Pankaj Koinkar", 
-      D: "2DIT43 Dr. K. D. M. Rao" 
+      C: "2DIT42 Prof. Pankaj Koinkar",
+      D: "2DIT43 Dr. K. D. M. Rao",
     },
   },
   {
     time: "Chairpersons",
     type: "chairperson",
     content: "",
-    sessions: { 
-      A: "Prof. Suman K. Pal\nDr. Nishad Deshpande", 
-      B: "Dr. Ashutosh K Singh\nDr. Manoj Kumar Gupta", 
-      C: "Prof. J. H. Kim\nProf. Rajendra Dhayal", 
-      D: "Dr. K. D. M. Rao\nDr. Harishchandra Singh" 
+    sessions: {
+      A: "Prof. Suman K. Pal\nDr. Nishad Deshpande",
+      B: "Dr. Ashutosh K Singh\nDr. Manoj Kumar Gupta",
+      C: "Prof. J. H. Kim\nProf. Rajendra Dhayal",
+      D: "Dr. K. D. M. Rao\nDr. Harishchandra Singh",
     },
   },
   {
     time: "10:35 – 10:50 am",
     type: "contributary",
     content: "",
-    sessions: { 
-      A: "2DCT07 Dr. Anupma Thakur", 
-      B: "2DCT08 Dr. Kingshuk Roy", 
+    sessions: {
+      A: "2DCT07 Dr. Anupma Thakur",
+      B: "2DCT08 Dr. Kingshuk Roy",
       C: "2DCT09 Dr. Manav Saxena",
-      D: "2DCT10 Dr. Varun Harbola" 
+      D: "2DCT10 Dr. Varun Harbola",
     },
   },
   {
     time: "10:50 – 11:50 am",
     type: "oral",
     content: "",
-    sessions: { 
-      A: "2DOA10, 2DOA11, 2DOA12,\n2DOA14, 2DOA15, 2DOA16", 
-      B: "2DOC15, 2DOC18, 2DOC19,\n2DOA17, 2DOA18, 2DOD16", 
-      C: "2DOC08, 2DOC09, 2DOC10,\n2DOC11, 2DOC12, 2DOC17", 
-      D: "2DOD10, 2DOD11, 2DOD12,\n2DOD13, 2DOD14, 2DOD15" 
+    sessions: {
+      A: "2DOA10, 2DOA11, 2DOA12,\n2DOA14, 2DOA15, 2DOA16",
+      B: "2DOC15, 2DOC18, 2DOC19,\n2DOA17, 2DOA18, 2DOD16",
+      C: "2DOC08, 2DOC09, 2DOC10,\n2DOC11, 2DOC12, 2DOC17",
+      D: "2DOD10, 2DOD11, 2DOD12,\n2DOD13, 2DOD14, 2DOD15",
     },
   },
   { time: "11:50 – 12:05 pm", type: "tea", content: "Tea Break", colSpan: true, highlight: true },
@@ -532,7 +554,7 @@ export default function SchedulePage() {
               * Schedule is tentative and subject to revision
             </p>
           </div>
-          
+
           <a
             href="/Final_Schedule_2DMTG.pdf"
             download
