@@ -63,9 +63,24 @@ TEMPLATE_PATH = _HERE / "static" / "certificate_template.jpeg"
 # core/static/fonts/ and update these paths.
 # ---------------------------------------------------------------------------
 _FONTS = {
-    "regular": [r"C:/WINDOWS/fonts/GARA.TTF",   r"C:/WINDOWS/fonts/times.ttf"],
-    "italic":  [r"C:/WINDOWS/fonts/GARAIT.TTF",  r"C:/WINDOWS/fonts/timesi.ttf"],
-    "bold":    [r"C:/WINDOWS/fonts/GARABD.TTF",  r"C:/WINDOWS/fonts/timesbd.ttf"],
+    "regular": [
+        "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf",  # Linux
+        "/usr/share/fonts/truetype/freefont/FreeSerif.ttf",                  # Linux fallback
+        r"C:/WINDOWS/fonts/GARA.TTF",                                         # Windows dev
+        r"C:/WINDOWS/fonts/times.ttf",                                        # Windows fallback
+    ],
+    "italic": [
+        "/usr/share/fonts/truetype/liberation/LiberationSerif-Italic.ttf",
+        "/usr/share/fonts/truetype/freefont/FreeSerifItalic.ttf",
+        r"C:/WINDOWS/fonts/GARAIT.TTF",
+        r"C:/WINDOWS/fonts/timesi.ttf",
+    ],
+    "bold": [
+        "/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf",
+        "/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf",
+        r"C:/WINDOWS/fonts/GARABD.TTF",
+        r"C:/WINDOWS/fonts/timesbd.ttf",
+    ],
 }
 
 # ---------------------------------------------------------------------------
