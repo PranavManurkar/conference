@@ -64,8 +64,8 @@ const day1: ScheduleRow[] = [
     content: "",
     sessions: { 
       A: "Prof. A. K Raychaudhuri\nProf. Rajesh Kumar", 
-      B: "Prof. Somnath C. Roy\nDr. Archana Lakhani", 
-      C: "Prof. Priya Mahadevan\nDr. Venkata Vamsi Koruprolu", 
+      B: "Prof. Priya Mahadevan\nDr. Venkata Vamsi Koruprolu", 
+      C: "Prof. Somnath C. Roy\nDr. Archana Lakhani", 
       D: "Dr. Rajeev Rawat\nProf. Pankaj Koinkar" 
     },
   },
@@ -123,7 +123,7 @@ const day1: ScheduleRow[] = [
     content: "",
     sessions: { 
       A: "2DIT13 Dr. Varun Natu", 
-      B: "2DIT14 Prof. Samaresh Das",
+      B: "2DIT 14 Prof. Samaresh Das",
       C: "2DIT15 Prof. Ashish Mishra", 
       D: "2DIT16 Dr. Nanasaheb. D. Thorat" 
     },
@@ -157,8 +157,8 @@ const day1: ScheduleRow[] = [
     content: "",
     sessions: { 
       A: "2DIT17 Prof. Babak Anasori", 
-      B: "2DIT18 Prof. Anirudha V. Sumant", 
-      C: "2DIT19 Prof. Vilas Pol", 
+      B: "2DIT18 Prof. Anirudha V. Sumant\n2DIT19 Prof. Vilas Pol", 
+      C: "", 
       D: "2DCT01 Dr. Sarika Verma\n2DCT02 Dr. Tanmoy Paul" 
     },
   },
@@ -178,10 +178,10 @@ const day2: ScheduleRow[] = [
     type: "chairperson",
     content: "",
     sessions: { 
-      A: "Prof. Devendra Deshmukh\nDr. Dilip Gupta", 
-      B: "Prof. Pavan Kankar\nDr. S. D. Koushik", 
-      C: "Dr. Manav Saxena\nDr. Umesh A. Kshirsagar", 
-      D: "Dr. Tarun Sharma\nProf. Parasharam M. Shirage" 
+      A: "Prof. Pavan Kankar\nDr. S. D. Koushik", 
+      B: "Prof. Devendra Deshmukh\nDr. Dilip Gupta", 
+      C: "Dr. Tarun Sharma\nProf. Parasharam M. Shirage", 
+      D: "Dr. Manav Saxena\nDr. Umesh A. Kshirsagar" 
     },
   },
   {
@@ -218,9 +218,9 @@ const day2: ScheduleRow[] = [
     type: "chairperson",
     content: "",
     sessions: { 
-      A: "Prof. Saket Asthana\nDr. Abhinav Raghuvanshi", 
-      B: "Prof. Rajendra Dhaka\nProf. M. H. Modi", 
-      C: "Prof. Preeti Bhobe\nProf. Pratap Sahoo", 
+      A: "Prof. Rajendra Dhaka\nProf. M. H. Modi", 
+      B: "Prof. Preeti Bhobe\nProf. Pratap Sahoo", 
+      C: "Prof. Saket Asthana\nDr. Abhinav Raghuvanshi", 
       D: "Prof. B. Ranjit K. Nanda\nProf. Krushna Mavani" 
     },
   },
