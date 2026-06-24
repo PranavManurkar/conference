@@ -55,8 +55,8 @@ const day1: ScheduleRow[] = [
   { time: "09:00 – 09:30 am", type: "breakfast", content: "Breakfast", colSpan: true },
   { time: "09:30 – 11:00 am", type: "inauguration", content: "Inauguration + Inaugural talk (Nalanda Auditorium)", colSpan: true },
   { time: "11:00 – 11:30 am", type: "tea", content: "High Tea", colSpan: true, highlight: true },
-  { time: "Chairperson", type: "chairperson", content: "Prof. A. K Raychaudhuri", colSpan: true },
-  { time: "11:30 – 12:10 pm", type: "plenary", content: "2DPL01 Prof. S. B. Ogale", colSpan: true },
+  { time: "Chairperson", type: "chairperson", content: "", sessions:{A: "Prof. A. K Raychaudhuri"} },
+  { time: "11:30 – 12:10 pm", type: "plenary", content: "", sessions:{A: "2DPL01 Prof. S. B. Ogale"} },
   { time: "12:10 – 12:15 pm", type: "break", content: "Break", colSpan: true },
   {
     time: "Chairpersons",
