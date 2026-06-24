@@ -399,6 +399,62 @@ class MyCertificateView(APIView):
         return response
 
 
+class CertificateStatusView(APIView):
+    """
+    GET /api/certificates/status/
+
+    Returns whether the authenticated user is currently eligible to download
+    their certificate.  Applies the same gate logic as MyCertificateView
+    (including certificate_override bypass) but returns JSON instead of a file.
+
+    Response:
+      200  {"eligible": true,  "reason": "available",        "message": ""}
+      200  {"eligible": false, "reason": "not_accepted",     "message": "..."}
+      200  {"eligible": false, "reason": "date_not_reached", "message": "..."}
+      404  {"detail": "No registration found for this account."}
+
+    The frontend uses this as the single source of truth for whether to show
+    the download button.  It never makes its own date calculation.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        registration = Registration.objects.filter(user=request.user).first()
+        if registration is None:
+            return Response(
+                {"detail": "No registration found for this account."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if registration.status != "Accepted" and not registration.certificate_override:
+            return Response(
+                {
+                    "eligible": False,
+                    "reason": "not_accepted",
+                    "message": "Certificate is only available for accepted participants.",
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        if not registration.certificate_override:
+            now = timezone.now()
+            if now < settings.CERTIFICATE_AVAILABLE_FROM:
+                ist_time = settings.CERTIFICATE_AVAILABLE_FROM.strftime("%-d %B %Y at %-I:%M %p IST")
+                return Response(
+                    {
+                        "eligible": False,
+                        "reason": "date_not_reached",
+                        "message": f"Certificates will be available on {ist_time}.",
+                    },
+                    status=status.HTTP_200_OK,
+                )
+
+        return Response(
+            {"eligible": True, "reason": "available", "message": ""},
+            status=status.HTTP_200_OK,
+        )
+
+
 class ConferenceInfoView(APIView):
     """GET /api/conference-info/ — public, no auth required."""
     permission_classes = [AllowAny]

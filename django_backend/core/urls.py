@@ -13,6 +13,7 @@ from .views import (
     WorkshopRegistrationLookupView,
     WorkshopTransactionSubmitView,
     MyCertificateView,
+    CertificateStatusView,
     ConferenceInfoView,
 )
 
@@ -31,5 +32,6 @@ urlpatterns = [
     path("auth/password-reset/confirm/", PasswordResetConfirmView.as_view(), name="password-reset-confirm"),
     path("auth/logout/", LogoutView.as_view(), name="auth-logout"),
     path("certificates/my-certificate/", MyCertificateView.as_view(), name="my-certificate"),
+    path("certificates/status/", CertificateStatusView.as_view(), name="certificate-status"),
     path("conference-info/", ConferenceInfoView.as_view(), name="conference-info"),
 ]

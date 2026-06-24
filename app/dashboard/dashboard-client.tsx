@@ -113,10 +113,8 @@ export default function DashboardClient({ user }: { user: User }) {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [existingRegistration, setExistingRegistration] = useState<Registration | null>(null)
-  const [conferenceInfo, setConferenceInfo] = useState<{
-    certificate_available_from: string
-    certificate_available_from_display: string
-  } | null>(null)
+  const [certEligible, setCertEligible] = useState<boolean | null>(null)
+  const [certEligibleMessage, setCertEligibleMessage] = useState<string>("")
   const [certDownloading, setCertDownloading] = useState(false)
   const [certError, setCertError] = useState<string | null>(null)
 
@@ -241,15 +239,17 @@ export default function DashboardClient({ user }: { user: User }) {
   }, [user, userEmail])
 
   useEffect(() => {
-    fetch(`${DJANGO_API_URL}/api/conference-info/`)
+    if (existingRegistration?.status !== "Accepted") return
+    authFetch(`${DJANGO_API_URL}/api/certificates/status/`)
       .then((r) => r.ok ? r.json() : null)
       .then((data) => {
-        if (data?.certificate_available_from) {
-          setConferenceInfo(data)
+        if (data && typeof data.eligible === "boolean") {
+          setCertEligible(data.eligible)
+          setCertEligibleMessage(data.message ?? "")
         }
       })
-      .catch(() => {/* non-critical — certificate section just stays hidden */})
-  }, [])
+      .catch(() => {/* non-critical — certificate section stays hidden */})
+  }, [existingRegistration?.status])
 
   const handleDownloadCertificate = async () => {
     setCertDownloading(true)
@@ -1305,51 +1305,44 @@ export default function DashboardClient({ user }: { user: User }) {
           </Card>
         )}
 
-        {/* Certificate card — only rendered for Accepted users once conferenceInfo has loaded */}
-        {existingRegistration?.status === "Accepted" && conferenceInfo !== null && (() => {
-          const availableFrom = new Date(conferenceInfo.certificate_available_from)
-          const isAvailable = new Date() >= availableFrom
-          return (
-            <Card className="mt-8 border-0 shadow-xl overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-gray-50 to-blue-50 border-b">
-                <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Certificate of Participation
-                </CardTitle>
-                <CardDescription className="text-base mt-1">
-                  Your official certificate for attending 2D MatTech Global: Fundamentals to Applications.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-6">
-                {isAvailable ? (
-                  <div>
-                    <Button
-                      onClick={handleDownloadCertificate}
-                      disabled={certDownloading}
-                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-md"
-                    >
-                      {certDownloading ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Downloading...
-                        </>
-                      ) : (
-                        "Download Certificate"
-                      )}
-                    </Button>
-                    {certError && (
-                      <p className="mt-3 text-sm text-red-700">{certError}</p>
+        {/* Certificate card — only rendered for Accepted users once eligibility is known */}
+        {existingRegistration?.status === "Accepted" && certEligible !== null && (
+          <Card className="mt-8 border-0 shadow-xl overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-gray-50 to-blue-50 border-b">
+              <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Certificate of Participation
+              </CardTitle>
+              <CardDescription className="text-base mt-1">
+                Your official certificate for attending 2D MatTech Global: Fundamentals to Applications.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6">
+              {certEligible ? (
+                <div>
+                  <Button
+                    onClick={handleDownloadCertificate}
+                    disabled={certDownloading}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-md"
+                  >
+                    {certDownloading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Downloading...
+                      </>
+                    ) : (
+                      "Download Certificate"
                     )}
-                  </div>
-                ) : (
-                  <p className="text-sm text-gray-700">
-                    Certificates will be available on{" "}
-                    <span className="font-semibold">{conferenceInfo.certificate_available_from_display}</span>.
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          )
-        })()}
+                  </Button>
+                  {certError && (
+                    <p className="mt-3 text-sm text-red-700">{certError}</p>
+                  )}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-700">{certEligibleMessage}</p>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         <p className="text-center text-sm text-gray-500 mt-8">
           Need help? Contact us at{" "}

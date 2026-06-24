@@ -934,6 +934,58 @@ class CertificateOverrideTest(TestCase):
         self.assertEqual(response["Content-Type"], "image/png")
 
 
+_STATUS_URL = "/api/certificates/status/"
+
+
+class CertificateStatusOverrideTest(TestCase):
+    """
+    TEST H — /api/certificates/status/ returns eligible=true when
+    certificate_override=True, even with Under Process status and a
+    far-future CERTIFICATE_AVAILABLE_FROM.
+    """
+
+    def setUp(self):
+        self.user = _make_user("statusoverride@test.com")
+        _Registration.objects.create(
+            user=self.user,
+            full_name="Status Override User",
+            email=self.user.email,
+            status="Under Process",
+            certificate_override=True,
+        )
+
+    def test_override_returns_eligible_true(self):
+        client = _auth_client(self.user)
+        with override_settings(CERTIFICATE_AVAILABLE_FROM=_FUTURE_DT):
+            response = client.get(_STATUS_URL)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data["eligible"])
+        self.assertEqual(data["reason"], "available")
+
+
+class CertificateStatusDateGateTest(TestCase):
+    """
+    TEST I — /api/certificates/status/ returns eligible=false with
+    reason="date_not_reached" for an Accepted user before the release datetime.
+    """
+
+    def setUp(self):
+        self.user = _make_user("statusdate@test.com")
+        _make_accepted_reg(self.user, name="Date Status User")
+
+    def test_before_release_returns_date_not_reached(self):
+        client = _auth_client(self.user)
+        with override_settings(CERTIFICATE_AVAILABLE_FROM=_FUTURE_DT):
+            response = client.get(_STATUS_URL)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertFalse(data["eligible"])
+        self.assertEqual(data["reason"], "date_not_reached")
+        self.assertIn("message", data)
+        self.assertTrue(len(data["message"]) > 0)
+
+
 class ConferenceInfoPublicTest(TestCase):
     """TEST F — public conference-info endpoint returns datetime fields."""
 
