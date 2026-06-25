@@ -382,7 +382,8 @@ class MyCertificateView(APIView):
         # Cache is permanent — to regenerate (e.g. after a name correction),
         # delete the file from django_backend/certificates/ and the next
         # request will regenerate it automatically.
-        cache_path = settings.BASE_DIR / "certificates" / f"{registration.id}.png"
+        # ponytail: bump _v2 → _v3 etc. to bust cache for all users after a template change
+        cache_path = settings.BASE_DIR / "certificates" / f"{registration.id}_v2.png"
         if not cache_path.exists():
             png_bytes = generate_certificate(name, institute, mode, title)
             cache_path.parent.mkdir(parents=True, exist_ok=True)
