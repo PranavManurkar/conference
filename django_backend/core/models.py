@@ -74,6 +74,19 @@ class Registration(models.Model):
             "Always reset to False after testing. Never enable for real participants."
         ),
     )
+    certificate_blob = models.BinaryField(
+        null=True,
+        blank=True,
+        editable=False,
+        help_text="Pre-generated certificate PNG bytes."
+    )
+    certificate_template_hash = models.CharField(
+        max_length=32,
+        null=True,
+        blank=True,
+        editable=False,
+        help_text="MD5 hash of template at generation time."
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

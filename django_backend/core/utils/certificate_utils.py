@@ -45,6 +45,7 @@ SLOT POSITIONS (measured from template):
 """
 
 
+import hashlib
 import io
 import os
 import textwrap
@@ -298,6 +299,29 @@ def _generate_png(name: str, institute: str,
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
+
+_template_hash_cache: dict = {}
+
+
+def get_template_hash() -> str:
+    """
+    Return MD5 hex digest of the current certificate template file.
+    Cached in memory — clears on pm2 restart, which is exactly when
+    a new template deployment takes effect.
+    """
+    global _template_hash_cache
+    if "hash" not in _template_hash_cache:
+        if not TEMPLATE_PATH.exists():
+            raise FileNotFoundError(
+                f"Certificate template not found at {TEMPLATE_PATH}."
+            )
+        md5 = hashlib.md5()
+        with open(TEMPLATE_PATH, "rb") as f:
+            for chunk in iter(lambda: f.read(8192), b""):
+                md5.update(chunk)
+        _template_hash_cache["hash"] = md5.hexdigest()
+    return _template_hash_cache["hash"]
+
 
 def generate_certificate(
     name: str,

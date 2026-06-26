@@ -312,13 +312,13 @@ class LogoutView(APIView):
 import os
 import re
 
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponse
 from django.utils import timezone
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.core.cache import cache
 
-from core.utils.certificate_utils import generate_certificate
+from core.utils.certificate_utils import generate_certificate, get_template_hash
 
 
 class MyCertificateView(APIView):
@@ -378,26 +378,59 @@ class MyCertificateView(APIView):
         mode      = registration.presentation_type or "N/A"
         title     = registration.abstract_title or "N/A"
 
-        # 5. Cache check + generation.
-        # Cache is permanent — to regenerate (e.g. after a name correction),
-        # delete the file from django_backend/certificates/ and the next
-        # request will regenerate it automatically.
-        # ponytail: bump _v2 → _v3 etc. to bust cache for all users after a template change
-        cache_path = settings.BASE_DIR / "certificates" / f"{registration.id}_v2.png"
-        if not cache_path.exists():
-            png_bytes = generate_certificate(name, institute, mode, title)
-            cache_path.parent.mkdir(parents=True, exist_ok=True)
-            cache_path.write_bytes(png_bytes)
+        # 5. Serve pre-generated blob if fresh
+        try:
+            current_hash = get_template_hash()
+        except FileNotFoundError:
+            logger.error("Certificate template file missing on server.")
+            return Response(
+                {"detail": "Certificate temporarily unavailable."},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
 
-        # 6. Serve the file
-        safe_name = re.sub(r'[^\w\s-]', '', name).strip().replace(' ', '_')
-        filename  = f"{safe_name}_certificate.png"
-        response  = FileResponse(
-            open(cache_path, 'rb'),
-            content_type='image/png',
+        blob_is_fresh = (
+            registration.certificate_blob is not None and
+            registration.certificate_template_hash == current_hash
         )
-        response['Content-Disposition'] = f'attachment; filename="{filename}"'
-        return response
+
+        if blob_is_fresh:
+            png_bytes = bytes(registration.certificate_blob)
+            logger.info(f"Serving cached certificate for reg {registration.id}")
+        else:
+            if registration.certificate_blob:
+                logger.info(f"Template changed — regenerating for reg {registration.id}")
+            else:
+                logger.info(f"No cache — generating for reg {registration.id}")
+            try:
+                png_bytes = generate_certificate(
+                    name=name,
+                    institute=institute,
+                    presentation_mode=mode,
+                    title=title,
+                )
+                registration.certificate_blob = png_bytes
+                registration.certificate_template_hash = current_hash
+                registration.save(update_fields=["certificate_blob",
+                                                 "certificate_template_hash"])
+                logger.info(f"Certificate stored for reg {registration.id}")
+            except Exception as e:
+                logger.error(f"Generation failed for reg {registration.id}: {e}")
+                return Response(
+                    {"detail": "Certificate generation failed. Try again later."},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+
+        return HttpResponse(
+            png_bytes,
+            content_type="image/png",
+            headers={
+                "Content-Disposition": (
+                    f'attachment; filename="certificate_{registration.id}.png"'
+                ),
+                "Content-Length": len(png_bytes),
+                "Cache-Control": "private, no-store",
+            },
+        )
 
 
 class CertificateStatusView(APIView):

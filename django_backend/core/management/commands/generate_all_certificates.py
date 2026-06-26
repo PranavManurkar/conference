@@ -1,81 +1,66 @@
-"""
-Pre-generate and cache certificates for all accepted registrations.
-
-Usage:
-  python3 manage.py generate_all_certificates           # generate all missing
-  python3 manage.py generate_all_certificates --dry-run # list who would get one, no writes
-  python3 manage.py generate_all_certificates --force   # regenerate even if cached
-"""
-from django.conf import settings
 from django.core.management.base import BaseCommand
-
+from django.db import transaction
 from core.models import Registration
-from core.utils.certificate_utils import generate_certificate
+from core.utils.certificate_utils import generate_certificate, get_template_hash
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = "Pre-generate and cache PNG certificates for all Accepted registrations."
+    help = "Pre-generate certificates for all eligible registrations."
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--dry-run",
-            action="store_true",
-            help="Print what would happen without writing any files.",
+            "--force", action="store_true",
+            help="Regenerate even if blob is already fresh.",
         )
         parser.add_argument(
-            "--force",
-            action="store_true",
-            help="Regenerate even if a cached file already exists.",
+            "--id", type=int, dest="reg_id",
+            help="Generate for a single registration ID only.",
         )
 
     def handle(self, *args, **options):
-        dry_run = options["dry_run"]
-        force   = options["force"]
+        force  = options["force"]
+        reg_id = options.get("reg_id")
 
-        registrations = Registration.objects.filter(status="Accepted")
-        total = registrations.count()
-        self.stdout.write(f"Found {total} Accepted registration(s).\n")
+        current_hash = get_template_hash()
+        self.stdout.write(f"Template hash: {current_hash[:12]}…")
 
-        generated = 0
-        cached    = 0
-        failed    = 0
-
-        for reg in registrations:
-            cache_path = settings.BASE_DIR / "certificates" / f"{reg.id}.png"
-
-            if cache_path.exists() and not force:
-                if dry_run:
-                    self.stdout.write(f"[WOULD SKIP - CACHED] ID {reg.id} — {reg.full_name}")
-                else:
-                    self.stdout.write(f"[CACHED] ID {reg.id} — {reg.full_name}")
-                cached += 1
-                continue
-
-            if dry_run:
-                self.stdout.write(f"[WOULD GENERATE] ID {reg.id} — {reg.full_name}")
-                generated += 1
-                continue
-
-            try:
-                name      = reg.full_name
-                institute = reg.institution_organization or "N/A"
-                mode      = reg.presentation_type or "N/A"
-                title     = reg.abstract_title or "N/A"
-
-                png_bytes = generate_certificate(name, institute, mode, title)
-                cache_path.parent.mkdir(parents=True, exist_ok=True)
-                cache_path.write_bytes(png_bytes)
-                self.stdout.write(f"[GENERATED] ID {reg.id} — {reg.full_name}")
-                generated += 1
-            except Exception as exc:
-                self.stderr.write(f"[FAILED] ID {reg.id} — {reg.full_name} — {exc}")
-                failed += 1
-
-        prefix = "Would generate" if dry_run else "Summary"
-        self.stdout.write(
-            self.style.SUCCESS(
-                f"\n{prefix}: {generated} generated, "
-                f"{cached} already cached (skipped), "
-                f"{failed} failed"
+        qs = Registration.objects.filter(status="Accepted")
+        if reg_id:
+            qs = qs.filter(id=reg_id)
+        if not force:
+            qs = qs.exclude(
+                certificate_blob__isnull=False,
+                certificate_template_hash=current_hash,
             )
-        )
+
+        total = qs.count()
+        self.stdout.write(f"Found {total} registration(s) to process.")
+
+        success = failed = 0
+        for reg in qs.iterator():
+            try:
+                png_bytes = generate_certificate(
+                    name=reg.full_name,
+                    institute=reg.institution_organization or None,
+                    presentation_mode=reg.presentation_type or None,
+                    title=reg.abstract_title or None,
+                )
+                with transaction.atomic():
+                    reg.certificate_blob = png_bytes
+                    reg.certificate_template_hash = current_hash
+                    reg.save(update_fields=[
+                        "certificate_blob",
+                        "certificate_template_hash",
+                    ])
+                success += 1
+                self.stdout.write(f"  ✓ [{reg.id}] {reg.full_name}")
+            except Exception as e:
+                failed += 1
+                self.stderr.write(f"  ✗ [{reg.id}] {reg.full_name} — {e}")
+
+        self.stdout.write(self.style.SUCCESS(
+            f"\nDone. {success} generated, {failed} failed out of {total}."
+        ))
