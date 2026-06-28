@@ -89,11 +89,63 @@ class Registration(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # Fields whose values are rendered into the certificate PNG.
+    # Changing any of these must invalidate the cached blob.
+    _CERT_FIELDS = frozenset({
+        "full_name",
+        "institution_organization",
+        "presentation_type",
+        "abstract_title",
+    })
+
     class Meta:
         ordering = ["-created_at"]
 
     def __str__(self):
         return f"{self.full_name} ({self.email}) - {self.status}"
+
+    def save(self, *args, **kwargs):
+        """
+        Invalidate the cached certificate blob whenever any cert-relevant field
+        changes.  Works for all save paths: Django Admin, DRF viewsets, and
+        management commands.
+
+        Logic:
+        - Skip on INSERT (no existing blob to invalidate).
+        - Skip when update_fields is specified and contains no cert field
+          (e.g. save(update_fields=["status"]) from bulk actions).
+        - Otherwise fetch the current DB values of the four cert fields with
+          a single .values() query and compare.  If anything changed, null the
+          blob and hash so MyCertificateView regenerates on the next download.
+        - When update_fields IS specified but a cert field is in it, append
+          certificate_blob and certificate_template_hash to update_fields so
+          the nullification is actually persisted.
+        """
+        update_fields = kwargs.get("update_fields")
+
+        # Only relevant for existing records where a blob might be cached.
+        if self.pk and (
+            update_fields is None
+            or self._CERT_FIELDS.intersection(update_fields)
+        ):
+            old = (
+                Registration.objects
+                .filter(pk=self.pk)
+                .values(*self._CERT_FIELDS)
+                .first()
+            )
+            if old and any(getattr(self, f) != old[f] for f in self._CERT_FIELDS):
+                self.certificate_blob = None
+                self.certificate_template_hash = None
+                # If the caller restricted which fields get saved, include the
+                # two blob columns so the nullification actually hits the DB.
+                if update_fields is not None:
+                    kwargs["update_fields"] = list(update_fields) + [
+                        "certificate_blob",
+                        "certificate_template_hash",
+                    ]
+
+        super().save(*args, **kwargs)
 
 
 class WorkshopRegistration(models.Model):
