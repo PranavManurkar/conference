@@ -362,7 +362,15 @@ class MyCertificateView(APIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        # 3. Datetime gate — bypassed when certificate_override is True
+        # 3. Admin approval gate — bypassed when certificate_override is True.
+        #    Blocks participants who are Accepted but did not attend (paid but absent).
+        if not registration.certificate_approved and not registration.certificate_override:
+            return Response(
+                {"detail": "Your certificate has not been approved by the admin yet. Please contact the conference team if you believe this is an error."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        # 4. Datetime gate — bypassed when certificate_override is True
         if not registration.certificate_override:
             now = timezone.now()
             if now < settings.CERTIFICATE_AVAILABLE_FROM:
@@ -372,13 +380,13 @@ class MyCertificateView(APIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
-        # 4. Resolve field values
+        # 5. Resolve field values
         name      = registration.full_name
         institute = registration.institution_organization or "N/A"
         mode      = registration.presentation_type or "N/A"
         title     = registration.abstract_title or "N/A"
 
-        # 5. Serve pre-generated blob if fresh
+        # 6. Serve pre-generated blob if fresh
         try:
             current_hash = get_template_hash()
         except FileNotFoundError:
@@ -466,6 +474,16 @@ class CertificateStatusView(APIView):
                     "eligible": False,
                     "reason": "not_accepted",
                     "message": "Certificate is only available for accepted participants.",
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        if not registration.certificate_approved and not registration.certificate_override:
+            return Response(
+                {
+                    "eligible": False,
+                    "reason": "not_approved",
+                    "message": "Your certificate has not been approved by the admin yet. Please contact the conference team if you believe this is an error.",
                 },
                 status=status.HTTP_200_OK,
             )

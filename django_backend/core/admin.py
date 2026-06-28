@@ -22,8 +22,8 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display = ("full_name", "email", "status", "certificate_override", "created_at")
-    list_filter = ("status", "certificate_override", "participant_region", "delegate_type", "accompanying_persons")
+    list_display = ("full_name", "email", "status", "certificate_approved", "certificate_override", "created_at")
+    list_filter = ("status", "certificate_approved", "certificate_override", "participant_region", "delegate_type", "accompanying_persons")
     search_fields = ("full_name", "email", "transaction_id", "cmt_id", "abstract_id")
     readonly_fields = ("created_at",)
     actions = ["mark_accepted", "mark_rejected", "mark_under_process"]
@@ -53,6 +53,13 @@ class RegistrationAdmin(admin.ModelAdmin):
                 "⚠️ TESTING ONLY — set certificate_override=True to bypass ALL certificate gates "
                 "(status + datetime) for this registration. Always reset to False after testing. "
                 "Never enable for real participants."
+            ),
+        }),
+        ("Certificate Access", {
+            "fields": ("certificate_approved",),
+            "description": (
+                "Uncheck 'Certificate approved' to block download for participants who did not attend "
+                "despite being Accepted (e.g. paid but absent). All other gates (status, date) still apply."
             ),
         }),
     )
