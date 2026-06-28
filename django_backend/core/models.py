@@ -103,6 +103,35 @@ class Registration(models.Model):
     def __str__(self):
         return f"{self.full_name} ({self.email}) - {self.status}"
 
+    _CERT_FIELDS = frozenset({
+        "full_name",
+        "institution_organization",
+        "presentation_type",
+        "abstract_title",
+    })
+
+    def save(self, *args, **kwargs):
+        update_fields = kwargs.get("update_fields")
+        if self.pk and (
+            update_fields is None
+            or self._CERT_FIELDS.intersection(update_fields)
+        ):
+            old = (
+                Registration.objects
+                .filter(pk=self.pk)
+                .values(*self._CERT_FIELDS)
+                .first()
+            )
+            if old and any(getattr(self, f) != old[f] for f in self._CERT_FIELDS):
+                self.certificate_blob = None
+                self.certificate_template_hash = None
+                if update_fields is not None:
+                    kwargs["update_fields"] = list(update_fields) + [
+                        "certificate_blob",
+                        "certificate_template_hash",
+                    ]
+        super().save(*args, **kwargs)
+
 
 class WorkshopRegistration(models.Model):
     WORKSHOP_1 = 1
