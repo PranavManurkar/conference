@@ -27,11 +27,13 @@ class Registration(models.Model):
     PRESENTATION_ORAL = "oral"
     PRESENTATION_POSTER = "poster"
     PRESENTATION_THESIS = "thesis"
-
+    PRESENTATION_INVITED = "invited"
+    
     PRESENTATION_CHOICES = [
         (PRESENTATION_ORAL, "Oral"),
         (PRESENTATION_POSTER, "Poster"),
         (PRESENTATION_THESIS, "Thesis"),
+        (PRESENTATION_INVITED, "Invited Talk"),
     ]
 
     STATUS_CHOICES = [
