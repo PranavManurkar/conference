@@ -27,7 +27,7 @@ class Registration(models.Model):
     PRESENTATION_ORAL = "oral"
     PRESENTATION_POSTER = "poster"
     PRESENTATION_THESIS = "thesis"
-    PRESENTATION_INVITED = "invited"
+    PRESENTATION_INVITED = "Invited Talk"
     
     PRESENTATION_CHOICES = [
         (PRESENTATION_ORAL, "Oral"),
